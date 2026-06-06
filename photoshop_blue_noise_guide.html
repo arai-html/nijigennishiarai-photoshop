@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ノイズグラデーションの作り方｜Photoshop</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-dark: #004e99;
+    --blue-mid: #0096D6;
+    --blue-light: #40c8f0;
+    --blue-pale: #e6f6fd;
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --text: #1a1a2e;
+    --text-secondary: #4a5568;
+    --border: #e2e8f0;
+    --code-bg: #eef4ff;
+    --code-text: #0056b3;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 40px 20px 80px;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  /* ヘッダー */
+  .hero {
+    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-mid) 55%, var(--blue-light) 100%);
+    border-radius: 20px;
+    padding: 48px 40px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='300' filter='url(%23n)' opacity='0.25'/%3E%3C/svg%3E");
+    opacity: 0.5;
+  }
+  .hero-content { position: relative; }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: #fff;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+  .hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+  .hero p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+  }
+  .size-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #fff;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 5px 14px;
+    border-radius: 8px;
+    margin-top: 16px;
+    font-weight: 600;
+  }
+
+  /* ステップ */
+  .steps { display: flex; flex-direction: column; gap: 24px; }
+
+  .step-card {
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .step-card:hover { box-shadow: 0 4px 24px rgba(0,150,214,0.1); }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .step-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .step-body { padding: 24px; }
+
+  .step-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+
+  code {
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-weight: 600;
+  }
+
+  /* PS モックUI */
+  .ps-mock {
+    background: #2b2b2b;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    border: 1px solid #111;
+  }
+  .ps-titlebar {
+    background: #1e1e1e;
+    padding: 6px 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ps-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .ps-dot.r { background: #ff5f56; }
+  .ps-dot.y { background: #ffbd2e; }
+  .ps-dot.g { background: #27c93f; }
+  .ps-win-title { font-size: 10px; color: #888; margin-left: 8px; font-family: 'JetBrains Mono', monospace; }
+  .ps-menubar {
+    background: #3c3c3c;
+    padding: 5px 14px;
+    display: flex;
+    gap: 18px;
+    border-bottom: 1px solid #111;
+  }
+  .ps-menu { font-size: 11px; color: #ccc; }
+  .ps-menu.active { color: #fff; }
+  .ps-body { display: flex; }
+  .ps-toolbar { background: #1f1f1f; width: 30px; border-right: 1px solid #111; padding: 8px 0; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .ps-tool-icon { width: 18px; height: 18px; background: #444; border-radius: 2px; }
+  .ps-canvas { flex: 1; background: #535353; display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .ps-dialog {
+    background: #404040;
+    border: 1px solid #666;
+    border-radius: 6px;
+    padding: 14px 18px;
+    min-width: 220px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
+  .ps-dialog-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #eee;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #555;
+    padding-bottom: 8px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .ps-field { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; gap: 10px; }
+  .ps-field-label { font-size: 10px; color: #bbb; }
+  .ps-field-input {
+    background: #222;
+    border: 1px solid #666;
+    border-radius: 3px;
+    padding: 3px 8px;
+    font-size: 10px;
+    color: #fff;
+    width: 80px;
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .ps-field-input.hl { border-color: var(--blue-mid); background: #001e3c; color: var(--blue-light); font-weight: 600; }
+  .ps-field-select {
+    background: #333;
+    border: 1px solid #666;
+    border-radius: 3px;
+    padding: 3px 6px;
+    font-size: 10px;
+    color: #fff;
+    width: 130px;
+  }
+  .ps-btns { display: flex; justify-content: flex-end; gap: 6px; margin-top: 12px; }
+  .ps-btn { background: #555; border: 1px solid #777; border-radius: 3px; padding: 4px 12px; font-size: 10px; color: #eee; cursor: default; }
+  .ps-btn.ok { background: #0078d4; border-color: #0078d4; }
+  .ps-layers { background: #252525; width: 210px; border-left: 1px solid #111; padding: 8px; }
+  .ps-layers-title { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .ps-layer { display: flex; align-items: center; gap: 7px; padding: 5px 7px; border-radius: 3px; margin-bottom: 3px; background: #3a3a3a; }
+  .ps-layer.sel { background: #1e4a7a; }
+  .ps-layer-thumb { width: 22px; height: 17px; border-radius: 2px; flex-shrink: 0; border: 1px solid #555; }
+  .ps-layer-name { font-size: 9px; color: #ddd; line-height: 1.3; }
+  .ps-layer-mode { font-size: 8px; color: #0096D6; }
+  .blend-select { font-size: 9px; background: #333; border: 1px solid #0096D6; color: #40c8f0; border-radius: 2px; padding: 2px 5px; margin-bottom: 6px; width: 100%; font-weight: 600; }
+
+  /* グラデーション */
+  .blue-grad { background: linear-gradient(135deg, #004e99 0%, #0096D6 50%, #40c8f0 100%); }
+  .blue-grad-h { background: linear-gradient(to right, #004e99 0%, #0096D6 50%, #40c8f0 100%); }
+
+  /* ノイズプレビュー */
+  .noise-preview {
+    height: 50px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .noise-preview .noise-layer {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='50'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='300' height='50' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  }
+
+  /* スライダーバー */
+  .ps-slider-track { height: 4px; background: #555; border-radius: 2px; margin: 4px 0 10px; }
+  .ps-slider-fill { height: 4px; border-radius: 2px; background: var(--blue-mid); }
+
+  /* ヒントボックス */
+  .tip {
+    background: #eff8ff;
+    border-left: 3px solid var(--blue-mid);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin-top: 16px;
+  }
+  .tip p { font-size: 13px; color: #2d5a7a; line-height: 1.7; }
+  .tip strong { color: #004e99; font-weight: 700; }
+
+  .caption {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  /* 完成プレビュー */
+  .final-preview {
+    height: 100px;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .final-preview .noise-layer {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='780' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='780' height='100' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E");
+  }
+  .final-label {
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* フッター */
+  .footer {
+    text-align: center;
+    margin-top: 48px;
+    font-size: 12px;
+    color: #94a3b8;
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 24px; }
+    .hero h1 { font-size: 22px; }
+    .ps-layers { display: none; }
+    .step-body { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Photoshop チュートリアル</div>
+      <h1>🔵 ノイズグラデーションの作り方</h1>
+      <p>ブルー系ノイズテクスチャをゼロから作成する手順書</p>
+      <div class="size-chip">800 × 800 px</div>
+    </div>
+  </div>
+
+  <!-- ステップ一覧 -->
+  <div class="steps">
+
+    <!-- STEP 1 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div class="step-title">新規ドキュメントを作成する</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><code>ファイル → 新規</code> を開き、幅・高さをそれぞれ <code>800 px</code> に設定して作成します。解像度は <code>72 ppi</code>、カラーモードは <code>RGB カラー 8bit</code>。</p>
+        <div class="ps-mock">
+          <div class="ps-titlebar">
+            <div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div>
+            <span class="ps-win-title">新規ドキュメント</span>
+          </div>
+          <div class="ps-menubar">
+            <span class="ps-menu active">ファイル</span><span class="ps-menu">編集</span><span class="ps-menu">イメージ</span><span class="ps-menu">レイヤー</span>
+          </div>
+          <div class="ps-body">
+            <div class="ps-toolbar">
+              <div class="ps-tool-icon"></div><div class="ps-tool-icon"></div><div class="ps-tool-icon"></div>
+            </div>
+            <div class="ps-canvas">
+              <div class="ps-dialog">
+                <div class="ps-dialog-title">新規ドキュメント</div>
+                <div class="ps-field"><span class="ps-field-label">幅</span><input class="ps-field-input hl" value="800 px" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">高さ</span><input class="ps-field-input hl" value="800 px" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">解像度</span><input class="ps-field-input" value="72 ppi" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">カラーモード</span><select class="ps-field-select"><option>RGB カラー 8bit</option></select></div>
+                <div class="ps-field"><span class="ps-field-label">背景コンテンツ</span><select class="ps-field-select"><option>白</option></select></div>
+                <div class="ps-btns"><button class="ps-btn">キャンセル</button><button class="ps-btn ok">作成</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="caption">↑ 幅・高さともに 800px（青くハイライトされている箇所）を入力して「作成」をクリック。</p>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div class="step-title">グラデーション塗りつぶしレイヤーを追加する</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">レイヤーパネル下部の <code>新規塗りつぶしまたは調整レイヤー（●アイコン）</code> → <code>グラデーション...</code> を選択。スタイル：<code>線形</code>、角度：<code>135°</code> に設定します。</p>
+        <div class="ps-mock">
+          <div class="ps-titlebar">
+            <div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div>
+            <span class="ps-win-title">グラデーションで塗りつぶし</span>
+          </div>
+          <div class="ps-menubar">
+            <span class="ps-menu">ファイル</span><span class="ps-menu active">レイヤー</span><span class="ps-menu">フィルター</span>
+          </div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas">
+              <div class="ps-dialog" style="min-width:260px;">
+                <div class="ps-dialog-title">グラデーションで塗りつぶし</div>
+                <div class="ps-field">
+                  <span class="ps-field-label">グラデーション</span>
+                  <div style="width:130px; height:18px; border-radius:3px; border:1px solid #888;" class="blue-grad-h"></div>
+                </div>
+                <div class="ps-field"><span class="ps-field-label">スタイル</span><select class="ps-field-select"><option>線形</option></select></div>
+                <div class="ps-field"><span class="ps-field-label">角度</span><input class="ps-field-input" value="135°" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">比率</span><input class="ps-field-input" value="120%" readonly /></div>
+                <label style="font-size:10px; color:#bbb; display:flex; align-items:center; gap:5px; margin-top:4px;"><input type="checkbox" checked /> ディザ</label>
+                <div class="ps-btns"><button class="ps-btn">キャンセル</button><button class="ps-btn ok">OK</button></div>
+              </div>
+            </div>
+            <div class="ps-layers">
+              <div class="ps-layers-title">レイヤー</div>
+              <div class="ps-layer sel">
+                <div class="ps-layer-thumb blue-grad"></div>
+                <div><div class="ps-layer-name">グラデーション塗りつぶし 1</div></div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb" style="background:#fff;"></div>
+                <div class="ps-layer-name">背景</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tip">
+          <p><strong>カラー設定：</strong>グラデーションバーをダブルクリックして色を設定。左端 <code>#004e99</code>（ネイビー）→ 中央 <code>#0096D6</code>（スカイブルー）→ 右端 <code>#40c8f0</code>（シアン）</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div class="step-title">新規レイヤーを50%グレーで塗りつぶす</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">グラデーションの上に <strong>新規レイヤー</strong> を作成。<code>編集 → 塗りつぶし</code> を開き、内容を <code>50% グレー</code> に設定して OK をクリックします。</p>
+        <div class="ps-mock">
+          <div class="ps-titlebar">
+            <div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div>
+            <span class="ps-win-title">塗りつぶし</span>
+          </div>
+          <div class="ps-menubar">
+            <span class="ps-menu">ファイル</span><span class="ps-menu active">編集</span><span class="ps-menu">イメージ</span>
+          </div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas">
+              <div class="ps-dialog">
+                <div class="ps-dialog-title">塗りつぶし</div>
+                <div class="ps-field"><span class="ps-field-label">内容</span><select class="ps-field-select"><option>50% グレー</option></select></div>
+                <div class="ps-field"><span class="ps-field-label">描画モード</span><select class="ps-field-select"><option>通常</option></select></div>
+                <div class="ps-field"><span class="ps-field-label">不透明度</span><input class="ps-field-input" value="100%" readonly /></div>
+                <div class="ps-btns"><button class="ps-btn">キャンセル</button><button class="ps-btn ok">OK</button></div>
+              </div>
+            </div>
+            <div class="ps-layers">
+              <div class="ps-layers-title">レイヤー</div>
+              <div class="ps-layer sel">
+                <div class="ps-layer-thumb" style="background:#808080;"></div>
+                <div class="ps-layer-name">レイヤー 1</div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb blue-grad"></div>
+                <div class="ps-layer-name">グラデーション塗りつぶし 1</div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb" style="background:#fff;"></div>
+                <div class="ps-layer-name">背景</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="caption">↑ 50%グレーはオーバーレイモードで透明になる性質を利用する。</p>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <div class="step-title">フィルター → ノイズ → ノイズを加える</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">グレーレイヤーを選択したまま <code>フィルター → ノイズ → ノイズを加える...</code> を開きます。量は <code>25%</code> 前後、<strong>「グレースケールノイズ」のチェックは外す</strong>のがポイントです。</p>
+        <div class="ps-mock">
+          <div class="ps-titlebar">
+            <div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div>
+            <span class="ps-win-title">ノイズを加える</span>
+          </div>
+          <div class="ps-menubar">
+            <span class="ps-menu">ファイル</span><span class="ps-menu active">フィルター</span><span class="ps-menu">表示</span>
+          </div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas">
+              <div class="ps-dialog" style="min-width:260px;">
+                <div class="ps-dialog-title">ノイズを加える</div>
+                <div class="noise-preview blue-grad"><div class="noise-layer"></div></div>
+                <div class="ps-field"><span class="ps-field-label">量</span><input class="ps-field-input hl" value="25 %" readonly /></div>
+                <div class="ps-slider-track"><div class="ps-slider-fill" style="width:42%;"></div></div>
+                <div style="margin-bottom:8px;">
+                  <div style="font-size:10px; color:#bbb; margin-bottom:4px;">分布方法</div>
+                  <label style="font-size:10px; color:#ddd; display:flex; align-items:center; gap:5px; margin-bottom:3px;"><input type="radio" checked /> 均等に分布</label>
+                  <label style="font-size:10px; color:#ddd; display:flex; align-items:center; gap:5px;"><input type="radio" /> ガウス分布</label>
+                </div>
+                <label style="font-size:10px; color:#ff6b6b; display:flex; align-items:center; gap:5px; font-weight:600;"><input type="checkbox" /> グレースケールノイズ ← チェックなし！</label>
+                <div class="ps-btns"><button class="ps-btn">キャンセル</button><button class="ps-btn ok">OK</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tip">
+          <p><strong>グレースケールノイズのチェックを外す理由：</strong>外すとR・G・Bそれぞれにランダムなノイズが加わり、ブルー〜シアン〜白のカラーノイズになってキラキラ感が出る。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">5</div>
+        <div class="step-title">描画モードを「オーバーレイ」に変更する</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">グレーレイヤーの描画モードのプルダウンを <code>オーバーレイ</code> に変更します。50%グレーが透明になり、ノイズだけがグラデーションに自然に重なります。</p>
+        <div class="ps-mock">
+          <div class="ps-titlebar">
+            <div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div>
+            <span class="ps-win-title">レイヤーパネル</span>
+          </div>
+          <div class="ps-menubar">
+            <span class="ps-menu">ファイル</span><span class="ps-menu">編集</span><span class="ps-menu active">レイヤー</span>
+          </div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas">
+              <div style="width:130px; height:130px; border-radius:6px; position:relative; overflow:hidden;" class="blue-grad">
+                <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22130%22 height=%22130%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.7%22 numOctaves=%223%22/%3E%3C/filter%3E%3Crect width=%22130%22 height=%22130%22 filter=%22url(%23n)%22 opacity=%220.35%22/%3E%3C/svg%3E');"></div>
+              </div>
+            </div>
+            <div class="ps-layers">
+              <div class="ps-layers-title">レイヤー</div>
+              <select class="blend-select"><option>オーバーレイ ◀ ここを変更</option></select>
+              <div class="ps-layer sel">
+                <div class="ps-layer-thumb" style="background:#808080; position:relative; overflow:hidden;"><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2222%22 height=%2217%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22/%3E%3C/filter%3E%3Crect width=%2222%22 height=%2217%22 filter=%22url(%23n)%22 opacity=%220.8%22/%3E%3C/svg%3E');"></div></div>
+                <div><div class="ps-layer-name">レイヤー 1</div><div class="ps-layer-mode">オーバーレイ</div></div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb blue-grad"></div>
+                <div class="ps-layer-name">グラデーション塗りつぶし 1</div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb" style="background:#fff;"></div>
+                <div class="ps-layer-name">背景</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="caption">↑ 左のキャンバスのように、ノイズがグラデーションに溶け込んだ見た目になればOK。</p>
+        <div class="tip">
+          <p><strong>応用：</strong>「スクリーン」モードにすると光沢・キラキラ感がより強くなる。不透明度を 60〜70% に下げると自然な仕上がりになる。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">6</div>
+        <div class="step-title">書き出して完成</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><code>ファイル → 書き出し → スクリーン用に書き出し...</code> を開き、PNG 形式で保存します。書き出しサイズが <code>800 × 800 px</code> になっていることを確認してください。</p>
+        <div class="final-preview blue-grad">
+          <div class="noise-layer"></div>
+          <span class="final-label">800 × 800 px</span>
+        </div>
+        <p class="caption">↑ 完成イメージ。ブルー〜シアンのグラデーションにノイズのキラキラ感が重なった仕上がり。</p>
+        <div class="tip">
+          <p><strong>別のカラーへの応用：</strong>グラデーションの色を変えるだけで同じ手順でピンク・パープル・グリーンなど別カラーのバリエーションが作れる。ノイズレイヤーはそのまま使い回し可能。</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /steps -->
+
+  <div class="footer">Photoshop チュートリアル｜ノイズグラデーション 800×800px</div>
+
+</div>
+</body>
+</html>
