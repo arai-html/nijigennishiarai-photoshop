@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Free Day バナー作成｜Photoshop Lesson 02</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky-dark: #0077c2;
+    --sky-mid: #00aadd;
+    --sky-light: #55d4f4;
+    --sky-pale: #e0f7ff;
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --text: #1a1a2e;
+    --text-secondary: #4a5568;
+    --border: #e2e8f0;
+    --code-bg: #eef8ff;
+    --code-text: #0062a8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 40px 20px 80px;
+  }
+
+  .container { max-width: 780px; margin: 0 auto; }
+
+  /* ヒーロー */
+  .hero {
+    background: linear-gradient(135deg, #005fa3 0%, #0099cc 45%, #55d4f4 80%, #a8ecff 100%);
+    border-radius: 20px;
+    padding: 48px 40px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='300' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");
+    opacity: 0.6;
+  }
+  /* 水しぶき風デコ */
+  .hero::after {
+    content: '💧';
+    position: absolute;
+    right: 40px;
+    top: 30px;
+    font-size: 64px;
+    opacity: 0.25;
+    transform: rotate(15deg);
+  }
+  .hero-content { position: relative; }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: #fff;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+  .hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.85); }
+  .size-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #fff;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 5px 14px;
+    border-radius: 8px;
+    margin-top: 16px;
+    font-weight: 600;
+  }
+
+  /* ゴール完成イメージ */
+  .goal-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+  .goal-label {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--sky-mid);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .goal-banner {
+    width: 100%;
+    height: 200px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #0077c2 0%, #00aadd 45%, #55d4f4 100%);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .goal-banner .noise-layer {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='780' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='780' height='200' filter='url(%23n)' opacity='0.28'/%3E%3C/svg%3E");
+  }
+  .goal-banner-text {
+    position: relative;
+    text-align: center;
+    color: #fff;
+  }
+  .goal-banner-text .brand { font-size: 11px; letter-spacing: 0.15em; opacity: 0.8; font-family: 'JetBrains Mono', monospace; margin-bottom: 4px; }
+  .goal-banner-text .main-title { font-size: 36px; font-weight: 700; line-height: 1.1; text-shadow: 0 2px 12px rgba(0,0,0,0.2); font-family: 'Dancing Script', cursive; }
+  .goal-banner-text .sub { font-size: 13px; opacity: 0.85; margin-top: 6px; }
+
+  /* ステップ */
+  .steps { display: flex; flex-direction: column; gap: 24px; }
+
+  .step-card {
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .step-card:hover { box-shadow: 0 4px 24px rgba(0,150,214,0.1); }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .step-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--sky-mid), var(--sky-light));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .step-title { font-size: 17px; font-weight: 700; color: var(--text); }
+  .step-body { padding: 24px; }
+  .step-desc {
+    font-size: 14px; color: var(--text-secondary);
+    line-height: 1.8; margin-bottom: 20px;
+  }
+
+  code {
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-weight: 600;
+  }
+
+  /* PS モックUI */
+  .ps-mock {
+    background: #2b2b2b;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    border: 1px solid #111;
+  }
+  .ps-titlebar {
+    background: #1e1e1e;
+    padding: 6px 14px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .ps-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .ps-dot.r { background: #ff5f56; }
+  .ps-dot.y { background: #ffbd2e; }
+  .ps-dot.g { background: #27c93f; }
+  .ps-win-title { font-size: 10px; color: #888; margin-left: 8px; font-family: 'JetBrains Mono', monospace; }
+  .ps-menubar {
+    background: #3c3c3c;
+    padding: 5px 14px;
+    display: flex; gap: 18px;
+    border-bottom: 1px solid #111;
+  }
+  .ps-menu { font-size: 11px; color: #ccc; }
+  .ps-menu.active { color: #fff; }
+  .ps-body { display: flex; }
+  .ps-toolbar { background: #1f1f1f; width: 30px; border-right: 1px solid #111; padding: 8px 0; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .ps-tool-icon { width: 18px; height: 18px; background: #444; border-radius: 2px; }
+  .ps-canvas { flex: 1; background: #535353; display: flex; align-items: center; justify-content: center; padding: 16px; flex-wrap: wrap; gap: 10px; }
+  .ps-dialog {
+    background: #404040;
+    border: 1px solid #666;
+    border-radius: 6px;
+    padding: 14px 18px;
+    min-width: 220px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
+  .ps-dialog-title {
+    font-size: 11px; font-weight: 600; color: #eee;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #555;
+    padding-bottom: 8px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .ps-field { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; gap: 10px; }
+  .ps-field-label { font-size: 10px; color: #bbb; }
+  .ps-field-input {
+    background: #222; border: 1px solid #666; border-radius: 3px;
+    padding: 3px 8px; font-size: 10px; color: #fff; width: 80px;
+    text-align: right; font-family: 'JetBrains Mono', monospace;
+  }
+  .ps-field-input.hl { border-color: var(--sky-mid); background: #001e3c; color: var(--sky-light); font-weight: 600; }
+  .ps-field-select {
+    background: #333; border: 1px solid #666; border-radius: 3px;
+    padding: 3px 6px; font-size: 10px; color: #fff; width: 130px;
+  }
+  .ps-btns { display: flex; justify-content: flex-end; gap: 6px; margin-top: 12px; }
+  .ps-btn { background: #555; border: 1px solid #777; border-radius: 3px; padding: 4px 12px; font-size: 10px; color: #eee; cursor: default; }
+  .ps-btn.ok { background: #0078d4; border-color: #0078d4; }
+  .ps-layers { background: #252525; width: 210px; border-left: 1px solid #111; padding: 8px; }
+  .ps-layers-title { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .ps-layer { display: flex; align-items: center; gap: 7px; padding: 5px 7px; border-radius: 3px; margin-bottom: 3px; background: #3a3a3a; }
+  .ps-layer.sel { background: #1e4a7a; }
+  .ps-layer-thumb { width: 22px; height: 17px; border-radius: 2px; flex-shrink: 0; border: 1px solid #555; }
+  .ps-layer-name { font-size: 9px; color: #ddd; line-height: 1.3; }
+  .ps-layer-mode { font-size: 8px; color: var(--sky-mid); }
+  .blend-select { font-size: 9px; background: #333; border: 1px solid var(--sky-mid); color: var(--sky-light); border-radius: 2px; padding: 2px 5px; margin-bottom: 6px; width: 100%; font-weight: 600; }
+
+  /* グラデーション */
+  .sky-grad { background: linear-gradient(135deg, #0077c2 0%, #00aadd 50%, #55d4f4 100%); }
+  .sky-grad-h { background: linear-gradient(to right, #0077c2 0%, #00aadd 50%, #55d4f4 100%); }
+
+  /* ノイズプレビュー */
+  .noise-preview {
+    height: 50px; border-radius: 5px; margin-bottom: 10px;
+    position: relative; overflow: hidden;
+  }
+  .noise-layer {
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='50'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='300' height='50' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  }
+
+  /* スライダーバー */
+  .ps-slider-track { height: 4px; background: #555; border-radius: 2px; margin: 4px 0 10px; }
+  .ps-slider-fill { height: 4px; border-radius: 2px; background: var(--sky-mid); }
+
+  /* ヒントボックス */
+  .tip {
+    background: #eff8ff;
+    border-left: 3px solid var(--sky-mid);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin-top: 16px;
+  }
+  .tip p { font-size: 13px; color: #2d5a7a; line-height: 1.7; }
+  .tip strong { color: #005fa3; font-weight: 700; }
+
+  .caption { font-size: 12px; color: #94a3b8; margin-top: 8px; font-style: italic; }
+
+  /* テキスト配置プレビュー */
+  .text-preview {
+    background: #2b2b2b;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .text-preview-banner {
+    width: 180px; height: 120px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #0077c2, #00aadd, #55d4f4);
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .text-preview-banner .noise-layer {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='120' filter='url(%23n)' opacity='0.28'/%3E%3C/svg%3E");
+  }
+  .text-preview-banner .overlay-text {
+    position: relative;
+    text-align: center;
+    color: #fff;
+    padding: 10px;
+  }
+  .overlay-text .t1 { font-size: 9px; opacity: 0.8; letter-spacing: 0.1em; }
+  .overlay-text .t2 { font-size: 20px; font-weight: 700; line-height: 1.1; text-shadow: 0 1px 6px rgba(0,0,0,0.3); font-family: 'Dancing Script', cursive; }
+  .overlay-text .t3 { font-size: 8px; opacity: 0.75; margin-top: 3px; }
+  .text-info { flex: 1; min-width: 160px; }
+  .text-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+  .text-label { font-size: 9px; color: #888; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; }
+  .text-value { font-size: 11px; color: #eee; font-family: 'JetBrains Mono', monospace; }
+  .text-value span { background: #0078d4; padding: 1px 6px; border-radius: 3px; }
+
+  /* カラーパレット */
+  .color-palette {
+    display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .color-chip {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+  }
+  .color-swatch {
+    width: 48px; height: 48px; border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .color-hex {
+    font-size: 10px; font-family: 'JetBrains Mono', monospace;
+    color: var(--text-secondary); font-weight: 600;
+  }
+  .color-name { font-size: 9px; color: #94a3b8; }
+
+  /* 完成プレビュー */
+  .final-preview {
+    height: 100px; border-radius: 12px;
+    position: relative; overflow: hidden; margin-bottom: 10px;
+  }
+  .final-preview .noise-layer {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='780' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='780' height='100' filter='url(%23n)' opacity='0.28'/%3E%3C/svg%3E");
+  }
+  .final-label {
+    position: absolute; bottom: 12px; right: 16px;
+    font-size: 11px; color: rgba(255,255,255,0.7);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* フッター */
+  .footer { text-align: center; margin-top: 48px; font-size: 12px; color: #94a3b8; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 24px; }
+    .hero h1 { font-size: 22px; }
+    .ps-layers { display: none; }
+    .step-body { padding: 16px; }
+    .text-preview { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Photoshop チュートリアル · Lesson 02</div>
+      <h1>🍺 All Free Day バナー作成</h1>
+      <p>スカイブルーのノイズ背景にテキストを配置するイベントバナー</p>
+      <div class="size-chip">800 × 800 px</div>
+    </div>
+  </div>
+
+  <!-- 完成ゴール -->
+  <div class="goal-card">
+    <div class="goal-label">🎯 完成イメージ</div>
+    <div class="goal-banner">
+      <div class="noise-layer"></div>
+      <div class="goal-banner-text">
+        <div class="brand">水と生きる SUNTORY</div>
+        <div class="main-title">All Free<br>Day</div>
+        <div class="sub">4/28（火）13:00–20:00 ／ 4/29（水・祝）9:00–20:00</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ステップ一覧 -->
+  <div class="steps">
+
+    <!-- STEP 1 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div class="step-title">新規ドキュメントを作成する</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><code>ファイル → 新規</code> を開き、幅・高さをそれぞれ <code>1080 px</code> に設定。解像度は <code>72 ppi</code>、カラーモードは <code>RGB カラー 8bit</code> で作成します。</p>
+        <div class="ps-mock">
+          <div class="ps-titlebar">
+            <div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div>
+            <span class="ps-win-title">新規ドキュメント</span>
+          </div>
+          <div class="ps-menubar">
+            <span class="ps-menu active">ファイル</span><span class="ps-menu">編集</span><span class="ps-menu">イメージ</span><span class="ps-menu">レイヤー</span>
+          </div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas">
+              <div class="ps-dialog">
+                <div class="ps-dialog-title">新規ドキュメント</div>
+                <div class="ps-field"><span class="ps-field-label">幅</span><input class="ps-field-input hl" value="800 px" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">高さ</span><input class="ps-field-input hl" value="800 px" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">解像度</span><input class="ps-field-input" value="72 ppi" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">カラーモード</span><select class="ps-field-select"><option>RGB カラー 8bit</option></select></div>
+                <div class="ps-field"><span class="ps-field-label">背景コンテンツ</span><select class="ps-field-select"><option>白</option></select></div>
+                <div class="ps-btns"><button class="ps-btn">キャンセル</button><button class="ps-btn ok">作成</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="caption">↑ 幅・高さともに 800px を入力。</p>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div class="step-title">スカイブルーのグラデーション背景を作る</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">レッスン01で学んだノイズ背景を応用します。<code>新規塗りつぶしまたは調整レイヤー → グラデーション</code> を追加。スタイル：<code>線形</code>、角度：<code>135°</code> に設定します。</p>
+
+        <div class="color-palette">
+          <div class="color-chip">
+            <div class="color-swatch" style="background:#0077c2;"></div>
+            <div class="color-hex">#0077c2</div>
+            <div class="color-name">左端（ネイビー）</div>
+          </div>
+          <div class="color-chip">
+            <div class="color-swatch" style="background:#00aadd;"></div>
+            <div class="color-hex">#00aadd</div>
+            <div class="color-name">中央（スカイ）</div>
+          </div>
+          <div class="color-chip">
+            <div class="color-swatch" style="background:#55d4f4;"></div>
+            <div class="color-hex">#55d4f4</div>
+            <div class="color-name">右端（シアン）</div>
+          </div>
+          <div class="color-chip">
+            <div class="color-swatch" style="background:#a8ecff;"></div>
+            <div class="color-hex">#a8ecff</div>
+            <div class="color-name">ハイライト</div>
+          </div>
+        </div>
+
+        <div class="ps-mock">
+          <div class="ps-titlebar">
+            <div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div>
+            <span class="ps-win-title">グラデーションで塗りつぶし</span>
+          </div>
+          <div class="ps-menubar">
+            <span class="ps-menu">ファイル</span><span class="ps-menu active">レイヤー</span><span class="ps-menu">フィルター</span>
+          </div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas">
+              <div class="ps-dialog" style="min-width:260px;">
+                <div class="ps-dialog-title">グラデーションで塗りつぶし</div>
+                <div class="ps-field">
+                  <span class="ps-field-label">グラデーション</span>
+                  <div style="width:130px; height:18px; border-radius:3px; border:1px solid #888;" class="sky-grad-h"></div>
+                </div>
+                <div class="ps-field"><span class="ps-field-label">スタイル</span><select class="ps-field-select"><option>線形</option></select></div>
+                <div class="ps-field"><span class="ps-field-label">角度</span><input class="ps-field-input" value="135°" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">比率</span><input class="ps-field-input" value="120%" readonly /></div>
+                <label style="font-size:10px; color:#bbb; display:flex; align-items:center; gap:5px; margin-top:4px;"><input type="checkbox" checked /> ディザ</label>
+                <div class="ps-btns"><button class="ps-btn">キャンセル</button><button class="ps-btn ok">OK</button></div>
+              </div>
+            </div>
+            <div class="ps-layers">
+              <div class="ps-layers-title">レイヤー</div>
+              <div class="ps-layer sel">
+                <div class="ps-layer-thumb sky-grad"></div>
+                <div><div class="ps-layer-name">グラデーション塗りつぶし 1</div></div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb" style="background:#fff;"></div>
+                <div class="ps-layer-name">背景</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tip">
+          <p><strong>Lesson 01の復習：</strong>このあとノイズレイヤーを追加（50%グレー塗りつぶし → ノイズを加える → オーバーレイ）を同じ手順で行います。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div class="step-title">ノイズレイヤーを追加する（Lesson01の復習）</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">新規レイヤーを作成し、<code>編集 → 塗りつぶし → 50%グレー</code> で塗りつぶし。<code>フィルター → ノイズ → ノイズを加える</code> で量 <code>25%</code>、グレースケールノイズのチェックは<strong>外す</strong>。描画モードを <code>オーバーレイ</code> に変更します。</p>
+        <div class="ps-mock">
+          <div class="ps-titlebar">
+            <div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div>
+            <span class="ps-win-title">レイヤーパネル – ノイズ完成状態</span>
+          </div>
+          <div class="ps-menubar">
+            <span class="ps-menu">ファイル</span><span class="ps-menu">編集</span><span class="ps-menu active">レイヤー</span>
+          </div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas">
+              <div style="width:140px; height:140px; border-radius:8px; position:relative; overflow:hidden;" class="sky-grad">
+                <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22140%22 height=%22140%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.7%22 numOctaves=%223%22/%3E%3C/filter%3E%3Crect width=%22140%22 height=%22140%22 filter=%22url(%23n)%22 opacity=%220.32%22/%3E%3C/svg%3E');"></div>
+              </div>
+            </div>
+            <div class="ps-layers">
+              <div class="ps-layers-title">レイヤー</div>
+              <select class="blend-select"><option>オーバーレイ ◀ ここ</option></select>
+              <div class="ps-layer sel">
+                <div class="ps-layer-thumb" style="background:#808080; position:relative; overflow:hidden;"><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2222%22 height=%2217%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22/%3E%3C/filter%3E%3Crect width=%2222%22 height=%2217%22 filter=%22url(%23n)%22 opacity=%220.8%22/%3E%3C/svg%3E');"></div></div>
+                <div><div class="ps-layer-name">ノイズ レイヤー 1</div><div class="ps-layer-mode">オーバーレイ</div></div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb sky-grad"></div>
+                <div class="ps-layer-name">グラデーション塗りつぶし 1</div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb" style="background:#fff;"></div>
+                <div class="ps-layer-name">背景</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="caption">↑ ノイズがグラデーションに溶け込めば背景完成。</p>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <div class="step-title">バナーのテキストパーツを配置する</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">このバナーはテキストが <strong>4つのパーツ</strong> に分かれています。それぞれ別レイヤーで作成し、フォント・サイズ・カーニングを個別に設定するのがポイントです。</p>
+
+        <!-- バナー構造マップ -->
+        <div style="background:#1a1a2e; border-radius:14px; padding:20px; margin-bottom:20px; position:relative;">
+          <div style="font-size:11px; color:#55d4f4; font-family:'JetBrains Mono',monospace; margin-bottom:12px; letter-spacing:0.05em;">バナー構造マップ（800×800px）</div>
+          <div style="position:relative; width:100%; padding-bottom:75%; border-radius:10px; overflow:hidden; background:linear-gradient(135deg,#0077c2,#00aadd,#55d4f4);">
+            <!-- ノイズ -->
+            <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22400%22 height=%22300%22 filter=%22url(%23n)%22 opacity=%220.25%22/%3E%3C/svg%3E');"></div>
+            <!-- A: 左上キャッチ -->
+            <div style="position:absolute;top:8%;left:5%;background:rgba(255,100,100,0.25);border:2px dashed #ff8080;border-radius:6px;padding:4px 8px;">
+              <div style="font-size:10px;color:#fff;font-weight:700;line-height:1.4;">心のふたを<br>開けよう</div>
+              <div style="font-size:8px;background:#ff6060;color:#fff;border-radius:3px;padding:1px 4px;margin-top:3px;display:inline-block;">A</div>
+            </div>
+            <!-- B: メインタイトル -->
+            <div style="position:absolute;top:18%;left:3%;background:rgba(255,255,100,0.18);border:2px dashed #ffe000;border-radius:8px;padding:6px 10px;">
+              <div style="font-family:'Dancing Script',cursive;font-size:28px;font-weight:700;color:#fff;line-height:1.05;text-shadow:0 2px 8px rgba(0,0,0,0.25);">All<br>Free<br>Day</div>
+              <div style="font-size:8px;background:#ccb800;color:#fff;border-radius:3px;padding:1px 4px;margin-top:3px;display:inline-block;">B</div>
+            </div>
+            <!-- C: 日付 -->
+            <div style="position:absolute;bottom:28%;left:3%;background:rgba(100,255,100,0.18);border:2px dashed #60e060;border-radius:6px;padding:4px 8px;">
+              <div style="font-size:9px;color:#fff;font-weight:700;line-height:1.5;">4/28<sub style="font-size:7px;">（火）</sub> 29<sub style="font-size:7px;">（水・祝）</sub><br><span style="font-size:8px;font-weight:400;">13:00-20:00　9:00-20:00</span></div>
+              <div style="font-size:8px;background:#40c040;color:#fff;border-radius:3px;padding:1px 4px;margin-top:2px;display:inline-block;">C</div>
+            </div>
+            <!-- D: 丸バッジ -->
+            <div style="position:absolute;bottom:5%;left:3%;width:22%;padding-bottom:22%;background:rgba(255,255,255,0.12);border:2px dashed #fff;border-radius:50%;">
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6px;">
+                <div style="font-size:7px;color:#fff;opacity:0.8;">外階段上れば</div>
+                <div style="font-size:11px;color:#fff;font-weight:700;line-height:1.1;">無料<br>開放！</div>
+                <div style="font-size:8px;background:rgba(255,255,255,0.4);color:#fff;border-radius:3px;padding:1px 4px;margin-top:2px;">D</div>
+              </div>
+            </div>
+            <!-- 右側缶エリア -->
+            <div style="position:absolute;top:5%;right:3%;bottom:5%;width:42%;background:rgba(255,255,255,0.08);border:2px dashed rgba(255,255,255,0.4);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+              <div style="text-align:center;color:rgba(255,255,255,0.6);">
+                <div style="font-size:20px;">🥤</div>
+                <div style="font-size:8px;margin-top:4px;">缶の写真<br>（切り抜き）</div>
+              </div>
+            </div>
+            <!-- 右上ロゴ -->
+            <div style="position:absolute;top:5%;right:3%;font-size:8px;color:#fff;font-weight:700;letter-spacing:0.05em;background:rgba(0,0,0,0.2);padding:3px 6px;border-radius:4px;">水と生きる SUNTORY</div>
+          </div>
+        </div>
+
+        <!-- パーツ A -->
+        <div style="border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; margin-bottom:16px;">
+          <div style="background:#fff0f0; padding:10px 16px; display:flex; align-items:center; gap:10px; border-bottom:1px solid #ffd0d0;">
+            <div style="background:#ff6060; color:#fff; font-size:11px; font-weight:700; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center;">A</div>
+            <span style="font-size:13px; font-weight:700;">「心のふたを開けよう」— キャッチコピー</span>
+          </div>
+          <div style="padding:14px 16px;">
+            <div style="display:flex; gap:20px; flex-wrap:wrap;">
+              <div style="flex:1; min-width:160px;">
+                <div class="ps-field" style="margin-bottom:6px;"><span class="ps-field-label" style="color:#555; font-size:11px;">フォント</span><code>游ゴシック / Noto Sans JP</code></div>
+                <div class="ps-field" style="margin-bottom:6px;"><span class="ps-field-label" style="color:#555; font-size:11px;">ウェイト</span><code>Light / Regular</code></div>
+                <div class="ps-field" style="margin-bottom:6px;"><span class="ps-field-label" style="color:#555; font-size:11px;">サイズ</span><code>36〜40 px</code></div>
+                <div class="ps-field" style="margin-bottom:6px;"><span class="ps-field-label" style="color:#555; font-size:11px;">カラー</span><code>#ffffff</code></div>
+                <div class="ps-field"><span class="ps-field-label" style="color:#555; font-size:11px;">トラッキング</span><code>0〜+20</code></div>
+              </div>
+              <div style="flex:1; min-width:160px; background:#f7f9fc; border-radius:8px; padding:12px; display:flex; align-items:center; justify-content:center;">
+                <div style="background:linear-gradient(135deg,#0077c2,#00aadd); width:120px; height:70px; border-radius:6px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
+                  <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%2270%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22/%3E%3C/filter%3E%3Crect width=%22120%22 height=%2270%22 filter=%22url(%23n)%22 opacity=%220.25%22/%3E%3C/svg%3E');"></div>
+                  <div style="position:relative; font-size:11px; color:#fff; font-weight:300; line-height:1.5; text-align:left; padding:8px;">心のふたを<br>開けよう</div>
+                </div>
+              </div>
+            </div>
+            <div class="tip" style="margin-top:10px;"><p><strong>ポイント：</strong>細めのウェイト（Light）で上品に見せる。文字サイズは小さめにして、メインの「All Free Day」を引き立てます。</p></div>
+          </div>
+        </div>
+
+        <!-- パーツ B -->
+        <div style="border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; margin-bottom:16px;">
+          <div style="background:#fffbe0; padding:10px 16px; display:flex; align-items:center; gap:10px; border-bottom:1px solid #ffe88a;">
+            <div style="background:#ccb800; color:#fff; font-size:11px; font-weight:700; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center;">B</div>
+            <span style="font-size:13px; font-weight:700;">「All Free Day」— メインタイトル（3行）</span>
+          </div>
+          <div style="padding:14px 16px;">
+            <p style="font-size:13px; color:#4a5568; margin-bottom:12px; line-height:1.7;"><strong>「All」「Free」「Day」は別々のテキストレイヤーで作成</strong>し、それぞれサイズと位置を微調整するのがプロの方法です。</p>
+            <div style="display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;">
+              <div style="background:#f0f8ff; border:1px solid #b8ddf5; border-radius:10px; padding:12px 16px; flex:1; min-width:120px;">
+                <div style="font-size:10px; color:#0077c2; font-family:'JetBrains Mono',monospace; margin-bottom:6px; font-weight:700;">「All」</div>
+                <div style="font-size:11px; color:#555; line-height:1.8;">
+                  フォント：筆記体系<br>
+                  サイズ：<code>200 px</code><br>
+                  トラッキング：<code>-30</code><br>
+                  カラー：<code>#ffffff</code>
+                </div>
+              </div>
+              <div style="background:#f0f8ff; border:1px solid #b8ddf5; border-radius:10px; padding:12px 16px; flex:1; min-width:120px;">
+                <div style="font-size:10px; color:#0077c2; font-family:'JetBrains Mono',monospace; margin-bottom:6px; font-weight:700;">「Free」</div>
+                <div style="font-size:11px; color:#555; line-height:1.8;">
+                  フォント：筆記体系<br>
+                  サイズ：<code>220 px</code>（最大）<br>
+                  トラッキング：<code>-30</code><br>
+                  カラー：<code>#ffffff</code>
+                </div>
+              </div>
+              <div style="background:#f0f8ff; border:1px solid #b8ddf5; border-radius:10px; padding:12px 16px; flex:1; min-width:120px;">
+                <div style="font-size:10px; color:#0077c2; font-family:'JetBrains Mono',monospace; margin-bottom:6px; font-weight:700;">「Day」</div>
+                <div style="font-size:11px; color:#555; line-height:1.8;">
+                  フォント：筆記体系<br>
+                  サイズ：<code>180 px</code><br>
+                  トラッキング：<code>-20</code><br>
+                  カラー：<code>#ffffff</code>
+                </div>
+              </div>
+            </div>
+            <!-- レイヤー構造 -->
+            <div class="ps-mock">
+              <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">レイヤーパネル — メインタイトル構造</span></div>
+              <div class="ps-body">
+                <div class="ps-canvas" style="flex-direction:column; align-items:flex-start; gap:4px; padding:12px;">
+                  <div style="font-size:9px; color:#aaa; margin-bottom:4px; font-family:'JetBrains Mono',monospace;">💡 3行を別レイヤーにすると位置調整が楽になる</div>
+                </div>
+                <div class="ps-layers" style="width:240px;">
+                  <div class="ps-layers-title">レイヤー</div>
+                  <div class="ps-layer sel">
+                    <div class="ps-layer-thumb" style="background:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; color:#0077c2; font-family:'Dancing Script',cursive; font-weight:700;">D</div>
+                    <div><div class="ps-layer-name">Day（筆記体 180px）</div></div>
+                  </div>
+                  <div class="ps-layer">
+                    <div class="ps-layer-thumb" style="background:#fff; display:flex; align-items:center; justify-content:center; font-size:10px; color:#0077c2; font-family:'Dancing Script',cursive; font-weight:700;">Fr</div>
+                    <div><div class="ps-layer-name">Free（筆記体 220px）</div></div>
+                  </div>
+                  <div class="ps-layer">
+                    <div class="ps-layer-thumb" style="background:#fff; display:flex; align-items:center; justify-content:center; font-size:10px; color:#0077c2; font-family:'Dancing Script',cursive; font-weight:700;">Al</div>
+                    <div><div class="ps-layer-name">All（筆記体 200px）</div></div>
+                  </div>
+                  <div class="ps-layer">
+                    <div class="ps-layer-thumb" style="background:#808080;"></div>
+                    <div class="ps-layer-name">ノイズ レイヤー</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tip" style="margin-top:12px;"><p><strong>カーニングのコツ：</strong>筆記体はそのままだと文字間が開きすぎることがあります。トラッキングを <code>−20〜−40</code> にするとグッと引き締まった印象に。<code>Option/Alt + ←</code> で1文字ずつ微調整できます。</p></div>
+          </div>
+        </div>
+
+        <!-- パーツ C -->
+        <div style="border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; margin-bottom:16px;">
+          <div style="background:#f0fff4; padding:10px 16px; display:flex; align-items:center; gap:10px; border-bottom:1px solid #9ae6b4;">
+            <div style="background:#40c040; color:#fff; font-size:11px; font-weight:700; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center;">C</div>
+            <span style="font-size:13px; font-weight:700;">「4/28・29 日付・時間」— 情報テキスト</span>
+          </div>
+          <div style="padding:14px 16px;">
+            <div style="display:flex; gap:20px; flex-wrap:wrap;">
+              <div style="flex:1; min-width:160px;">
+                <div class="ps-field" style="margin-bottom:6px;"><span class="ps-field-label" style="color:#555; font-size:11px;">フォント（日付大）</span><code>太めのゴシック体</code></div>
+                <div class="ps-field" style="margin-bottom:6px;"><span class="ps-field-label" style="color:#555; font-size:11px;">サイズ（4/28・29）</span><code>70〜80 px</code></div>
+                <div class="ps-field" style="margin-bottom:6px;"><span class="ps-field-label" style="color:#555; font-size:11px;">サイズ（曜日）</span><code>30 px</code>（上付き）</div>
+                <div class="ps-field" style="margin-bottom:6px;"><span class="ps-field-label" style="color:#555; font-size:11px;">サイズ（時間）</span><code>32 px</code></div>
+                <div class="ps-field"><span class="ps-field-label" style="color:#555; font-size:11px;">カラー</span><code>#ffffff</code></div>
+              </div>
+              <div style="flex:1; min-width:160px; background:#f7f9fc; border-radius:8px; padding:12px; display:flex; align-items:center; justify-content:center;">
+                <div style="background:linear-gradient(135deg,#0077c2,#00aadd); width:180px; height:70px; border-radius:6px; display:flex; align-items:center; justify-content:center; gap:16px; padding:10px;">
+                  <div style="color:#fff; text-align:left;">
+                    <div style="font-size:18px; font-weight:700; line-height:1;">4/28<span style="font-size:9px; font-weight:400;">（火）</span></div>
+                    <div style="font-size:9px; opacity:0.9;">13:00-20:00</div>
+                  </div>
+                  <div style="color:#fff; text-align:left;">
+                    <div style="font-size:18px; font-weight:700; line-height:1;">29<span style="font-size:9px; font-weight:400;">（水・祝）</span></div>
+                    <div style="font-size:9px; opacity:0.9;">9:00-20:00</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tip" style="margin-top:10px;"><p><strong>ポイント：</strong>日付の数字を大きく、曜日・時間を小さくすることで<strong>視線の流れ</strong>が生まれます。曜日は文字ツールで同じテキストボックス内でサイズを変えるか、別レイヤーで作成します。</p></div>
+          </div>
+        </div>
+
+        <!-- パーツ D -->
+        <div style="border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; margin-bottom:16px;">
+          <div style="background:#f0f4ff; padding:10px 16px; display:flex; align-items:center; gap:10px; border-bottom:1px solid #b8c8f5;">
+            <div style="background:#4466cc; color:#fff; font-size:11px; font-weight:700; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center;">D</div>
+            <span style="font-size:13px; font-weight:700;">「無料開放！」丸バッジ — 円形テキストエリア</span>
+          </div>
+          <div style="padding:14px 16px;">
+            <p style="font-size:13px; color:#4a5568; margin-bottom:12px; line-height:1.7;">丸い背景は<strong>円形シェイプ</strong>で作成し、その上にテキストを重ねます。</p>
+            <div class="ps-mock">
+              <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">丸バッジの作り方</span></div>
+              <div class="ps-body">
+                <div class="ps-canvas" style="flex-direction:column; align-items:flex-start; gap:6px; padding:14px;">
+                  <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                    <div style="width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#00aadd,#55d4f4); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; font-family:'JetBrains Mono',monospace;">1</div>
+                    <p style="font-size:11px; color:#ccc; line-height:1.6;"><code style="background:#333; color:#55d4f4; padding:1px 5px; border-radius:3px;">楕円形ツール（U）</code> で正円を描く（Shiftキー押しながら）<br>塗り：<code style="background:#333; color:#55d4f4; padding:1px 5px; border-radius:3px;">白 20%透明度</code>　線：<code style="background:#333; color:#55d4f4; padding:1px 5px; border-radius:3px;">白 60%</code></p>
+                  </div>
+                  <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                    <div style="width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#00aadd,#55d4f4); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; font-family:'JetBrains Mono',monospace;">2</div>
+                    <p style="font-size:11px; color:#ccc; line-height:1.6;">テキストレイヤーを3つ作成：<br>①「外階段上れば メインデッキ」小さめ細字<br>②「無料」大きめ太字（<code style="background:#333; color:#55d4f4; padding:1px 5px; border-radius:3px;">80px</code>）<br>③「オールフリー」極小（<code style="background:#333; color:#55d4f4; padding:1px 5px; border-radius:3px;">20px</code>）<br>④「開放！」大きめ太字（<code style="background:#333; color:#55d4f4; padding:1px 5px; border-radius:3px;">80px</code>）</p>
+                  </div>
+                  <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                    <div style="width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#00aadd,#55d4f4); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; font-family:'JetBrains Mono',monospace;">3</div>
+                    <p style="font-size:11px; color:#ccc; line-height:1.6;">円とテキストをすべて選択 → <code style="background:#333; color:#55d4f4; padding:1px 5px; border-radius:3px;">Cmd/Ctrl+G</code> でグループ化して管理しやすくする</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tip" style="margin-top:10px;"><p><strong>「無料」と「開放！」を大きく：</strong>伝えたい情報の<strong>強弱（ヒエラルキー）</strong>をつけることで、見た人が瞬時に内容を理解できます。小さい文字は補足情報、大きい文字は主役です。</p></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- STEP 5 フォント導入 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">5</div>
+        <div class="step-title">筆記体フォントをPhotoshopで使えるようにする</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Google Fonts・Adobe Fonts それぞれの方法でフォントをPhotoshopに反映させます。</p>
+
+        <!-- Adobe Fonts -->
+        <div style="margin-bottom:24px;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+            <div style="background:#eb1000; color:#fff; font-size:11px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace;">Adobe Fonts</div>
+            <span style="font-size:13px; color:#4a5568; font-weight:700;">Creative Cloudから直接追加（推奨）</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#00aadd,#55d4f4); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; font-family:'JetBrains Mono',monospace;">1</div>
+              <p style="font-size:13px; color:#4a5568; line-height:1.7;"><a href="https://fonts.adobe.com" target="_blank" style="color:#0077c2;">fonts.adobe.com</a> をブラウザで開く</p>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#00aadd,#55d4f4); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; font-family:'JetBrains Mono',monospace;">2</div>
+              <p style="font-size:13px; color:#4a5568; line-height:1.7;">使いたいフォント（例：<code>Rollerscript</code>・<code>Charcuterie</code>・<code>Adorn</code>）を検索 → フォントページを開く</p>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#00aadd,#55d4f4); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; font-family:'JetBrains Mono',monospace;">3</div>
+              <p style="font-size:13px; color:#4a5568; line-height:1.7;">右上の <strong>「アクティベート」スイッチをON</strong> にする（グレー→青になればOK）</p>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#00aadd,#55d4f4); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; font-family:'JetBrains Mono',monospace;">4</div>
+              <p style="font-size:13px; color:#4a5568; line-height:1.7;">Photoshopの文字パネルのフォント欄に <strong>フォント名を入力するとすぐ使える</strong>（再起動不要）</p>
+            </div>
+          </div>
+        <div class="tip" style="margin-top:12px;">
+            <p><strong>おすすめ筆記体フォント（Adobe Fonts）：</strong><code>Rollerscript</code>（手書きブラシ系）・<code>Charcuterie</code>（エレガント系）・<code>Adorn</code>（装飾系）。「筆記体」タグで絞り込むと似たフォントがたくさん見つかります。</p>
+          </div>
+        </div>
+
+        <!-- Google Fonts -->
+        <div>
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+            <div style="background:#4285f4; color:#fff; font-size:11px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace;">Google Fonts</div>
+            <span style="font-size:13px; color:#4a5568; font-weight:700;">ダウンロードしてインストール</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#4285f4,#34a853); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; font-family:'JetBrains Mono',monospace;">1</div>
+              <p style="font-size:13px; color:#4a5568; line-height:1.7;"><a href="https://fonts.google.com" target="_blank" style="color:#0077c2;">fonts.google.com</a> を開き、フォント（例：<code>Dancing Script</code>）を検索</p>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#4285f4,#34a853); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; font-family:'JetBrains Mono',monospace;">2</div>
+              <p style="font-size:13px; color:#4a5568; line-height:1.7;">フォントページ右上の <strong>「Download family」ボタン</strong> をクリック → ZIPファイルを保存</p>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#4285f4,#34a853); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; font-family:'JetBrains Mono',monospace;">3</div>
+              <p style="font-size:13px; color:#4a5568; line-height:1.7;">ZIPを解凍し、<code>.ttf</code> または <code>.otf</code> ファイルを取り出す</p>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#4285f4,#34a853); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; font-family:'JetBrains Mono',monospace;">4</div>
+              <p style="font-size:13px; color:#4a5568; line-height:1.7;"><strong>Mac：</strong>フォントファイルをダブルクリック → 「フォントをインストール」<br><strong>Win：</strong>右クリック → 「インストール」または「全ユーザー用にインストール」</p>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#4285f4,#34a853); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; font-family:'JetBrains Mono',monospace;">5</div>
+              <p style="font-size:13px; color:#4a5568; line-height:1.7;"><strong>Photoshopを再起動</strong> すると文字パネルにフォントが表示される</p>
+            </div>
+          </div>
+          <div class="tip" style="margin-top:12px;">
+            <p><strong>注意：</strong>インストール後は必ずPhotoshopを<strong>再起動</strong>してください。起動中のインストールは反映されません。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 6 文字の位置・カーニング調整 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">6</div>
+        <div class="step-title">文字の位置・カーニング・行間を調整する</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">テキストを入力したら、見た目を整える3つの調整を行います。<strong>カーニング（文字間隔）・行送り（行間）・位置揃え</strong>を使いこなすと、プロらしい仕上がりになります。</p>
+
+        <!-- カーニング -->
+        <div style="margin-bottom:24px;">
+          <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+            <span style="background:var(--sky-mid); color:#fff; border-radius:6px; padding:2px 10px; font-size:11px; font-family:'JetBrains Mono',monospace;">① カーニング</span>
+            文字と文字の間隔を調整
+          </div>
+          <!-- ビジュアル比較 -->
+          <div style="display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap;">
+            <div style="flex:1; min-width:140px; background:#f0f8ff; border:1px solid #b8ddf5; border-radius:10px; padding:14px; text-align:center;">
+              <div style="font-size:11px; color:#888; margin-bottom:8px; font-family:'JetBrains Mono',monospace;">トラッキング 0（調整なし）</div>
+              <div style="font-size:22px; font-family:'Dancing Script',cursive; font-weight:700; color:#0077c2; letter-spacing:0;">All Free</div>
+              <div style="font-size:10px; color:#e05; margin-top:4px;">← 詰まりすぎ</div>
+            </div>
+            <div style="flex:1; min-width:140px; background:#f0fff4; border:1px solid #9ae6b4; border-radius:10px; padding:14px; text-align:center;">
+              <div style="font-size:11px; color:#888; margin-bottom:8px; font-family:'JetBrains Mono',monospace;">トラッキング −20（推奨）</div>
+              <div style="font-size:22px; font-family:'Dancing Script',cursive; font-weight:700; color:#0077c2; letter-spacing:-0.04em;">All Free</div>
+              <div style="font-size:10px; color:#059; margin-top:4px;">← 自然に見える</div>
+            </div>
+            <div style="flex:1; min-width:140px; background:#fffaf0; border:1px solid #fbd38d; border-radius:10px; padding:14px; text-align:center;">
+              <div style="font-size:11px; color:#888; margin-bottom:8px; font-family:'JetBrains Mono',monospace;">トラッキング +50（広すぎ）</div>
+              <div style="font-size:22px; font-family:'Dancing Script',cursive; font-weight:700; color:#0077c2; letter-spacing:0.1em;">All Free</div>
+              <div style="font-size:10px; color:#e05; margin-top:4px;">← 間延びする</div>
+            </div>
+          </div>
+          <div class="ps-mock">
+            <div class="ps-titlebar">
+              <div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div>
+              <span class="ps-win-title">文字パネル – カーニング／トラッキング</span>
+            </div>
+            <div class="ps-body">
+              <div class="ps-toolbar"><div class="ps-tool-icon" style="background:#4a9fdf; color:#fff; font-size:9px; display:flex; align-items:center; justify-content:center; font-weight:700;">T</div></div>
+              <div class="ps-canvas">
+                <div class="ps-dialog" style="min-width:280px;">
+                  <div class="ps-dialog-title">文字パネル（ショートカット：書式 → 文字）</div>
+                  <div class="ps-field">
+                    <span class="ps-field-label">カーニング（2文字間）</span>
+                    <select class="ps-field-select" style="width:100px;"><option>メトリクス ▶ 自動推奨</option></select>
+                  </div>
+                  <div class="ps-field">
+                    <span class="ps-field-label">トラッキング（全体）</span>
+                    <input class="ps-field-input hl" value="-20" readonly />
+                  </div>
+                  <div style="font-size:9px; color:#aaa; margin-top:6px; line-height:1.6; font-family:'JetBrains Mono',monospace;">
+                    💡 カーニング：特定の2文字間だけ<br>
+                    💡 トラッキング：選択した文字全体に適用
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tip">
+            <p><strong>操作方法：</strong>文字ツールで2文字の間にカーソルを置き、<code>Option + ← →</code>（Mac）／<code>Alt + ← →</code>（Win）でカーニングを1単位ずつ調整できます。</p>
+          </div>
+        </div>
+
+        <!-- 行間 -->
+        <div style="margin-bottom:24px;">
+          <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+            <span style="background:var(--sky-mid); color:#fff; border-radius:6px; padding:2px 10px; font-size:11px; font-family:'JetBrains Mono',monospace;">② 行送り（行間）</span>
+            複数行テキストの縦の間隔
+          </div>
+          <div style="display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap;">
+            <div style="flex:1; min-width:140px; background:#f0f8ff; border:1px solid #b8ddf5; border-radius:10px; padding:14px; text-align:center;">
+              <div style="font-size:11px; color:#888; margin-bottom:8px; font-family:'JetBrains Mono',monospace;">行送り 自動（詰まる）</div>
+              <div style="font-family:'Dancing Script',cursive; font-weight:700; color:#0077c2; font-size:20px; line-height:1.1;">All Free<br>Day</div>
+              <div style="font-size:10px; color:#e05; margin-top:4px;">← 重なる感じ</div>
+            </div>
+            <div style="flex:1; min-width:140px; background:#f0fff4; border:1px solid #9ae6b4; border-radius:10px; padding:14px; text-align:center;">
+              <div style="font-size:11px; color:#888; margin-bottom:8px; font-family:'JetBrains Mono',monospace;">行送り 200px（ゆったり）</div>
+              <div style="font-family:'Dancing Script',cursive; font-weight:700; color:#0077c2; font-size:20px; line-height:1.6;">All Free<br>Day</div>
+              <div style="font-size:10px; color:#059; margin-top:4px;">← バランスよい</div>
+            </div>
+          </div>
+          <div class="ps-mock">
+            <div class="ps-titlebar">
+              <div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div>
+              <span class="ps-win-title">文字パネル – 行送り</span>
+            </div>
+            <div class="ps-body">
+              <div class="ps-toolbar"><div class="ps-tool-icon" style="background:#4a9fdf; color:#fff; font-size:9px; display:flex; align-items:center; justify-content:center; font-weight:700;">T</div></div>
+              <div class="ps-canvas">
+                <div class="ps-dialog" style="min-width:260px;">
+                  <div class="ps-dialog-title">文字パネル</div>
+                  <div class="ps-field"><span class="ps-field-label">フォントサイズ</span><input class="ps-field-input" value="160 px" readonly /></div>
+                  <div class="ps-field"><span class="ps-field-label">行送り（↕）</span><input class="ps-field-input hl" value="200 px" readonly /></div>
+                  <div style="font-size:9px; color:#aaa; margin-top:6px; font-family:'JetBrains Mono',monospace;">💡 フォントサイズの 1.2〜1.5倍が目安</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 位置揃え -->
+        <div>
+          <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+            <span style="background:var(--sky-mid); color:#fff; border-radius:6px; padding:2px 10px; font-size:11px; font-family:'JetBrains Mono',monospace;">③ 位置の整列</span>
+            テキストをキャンバスの中央に揃える
+          </div>
+          <div class="ps-mock">
+            <div class="ps-titlebar">
+              <div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div>
+              <span class="ps-win-title">整列パネル（ウィンドウ → 整列）</span>
+            </div>
+            <div class="ps-body">
+              <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+              <div class="ps-canvas">
+                <div class="ps-dialog" style="min-width:280px;">
+                  <div class="ps-dialog-title">整列パネル</div>
+                  <div style="font-size:10px; color:#bbb; margin-bottom:8px;">① すべてのレイヤーを選択（Cmd/Ctrl + A）<br>② 移動ツール（V）に切り替え<br>③ オプションバーの整列ボタンをクリック</div>
+                  <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <div style="background:#555; border:1px solid #777; border-radius:3px; padding:5px 8px; font-size:10px; color:#eee;">⬛ 左端揃え</div>
+                    <div style="background:#0078d4; border:1px solid #0078d4; border-radius:3px; padding:5px 8px; font-size:10px; color:#fff;">⬛ 水平中央 ◀</div>
+                    <div style="background:#555; border:1px solid #777; border-radius:3px; padding:5px 8px; font-size:10px; color:#eee;">⬛ 右端揃え</div>
+                  </div>
+                  <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;">
+                    <div style="background:#555; border:1px solid #777; border-radius:3px; padding:5px 8px; font-size:10px; color:#eee;">⬛ 上端揃え</div>
+                    <div style="background:#0078d4; border:1px solid #0078d4; border-radius:3px; padding:5px 8px; font-size:10px; color:#fff;">⬛ 垂直中央 ◀</div>
+                    <div style="background:#555; border:1px solid #777; border-radius:3px; padding:5px 8px; font-size:10px; color:#eee;">⬛ 下端揃え</div>
+                  </div>
+                  <div style="font-size:9px; color:#aaa; margin-top:8px; font-family:'JetBrains Mono',monospace;">💡 整列の基準：「キャンバス」を選択すること！</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tip">
+            <p><strong>整列の基準に注意：</strong>整列パネルで「<strong>キャンバスに整列</strong>」を選ばないと、レイヤー同士で揃えてしまいます。オプションバーのドロップダウンを確認してください。</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">7</div>
+        <div class="step-title">ドロップシャドウでテキストを目立たせる</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">テキストレイヤーを選択した状態で <code>レイヤー → レイヤースタイル → ドロップシャドウ</code> を開きます。背景と馴染むように薄めに設定するのがコツです。</p>
+        <div class="ps-mock">
+          <div class="ps-titlebar">
+            <div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div>
+            <span class="ps-win-title">レイヤースタイル – ドロップシャドウ</span>
+          </div>
+          <div class="ps-menubar">
+            <span class="ps-menu">ファイル</span><span class="ps-menu active">レイヤー</span><span class="ps-menu">フィルター</span>
+          </div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas">
+              <div class="ps-dialog" style="min-width:260px;">
+                <div class="ps-dialog-title">ドロップシャドウ</div>
+                <div class="ps-field"><span class="ps-field-label">描画モード</span><select class="ps-field-select"><option>乗算</option></select></div>
+                <div class="ps-field"><span class="ps-field-label">不透明度</span><input class="ps-field-input hl" value="40 %" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">角度</span><input class="ps-field-input" value="120°" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">距離</span><input class="ps-field-input" value="8 px" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">スプレッド</span><input class="ps-field-input" value="0 %" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">サイズ</span><input class="ps-field-input" value="16 px" readonly /></div>
+                <div class="ps-btns"><button class="ps-btn">キャンセル</button><button class="ps-btn ok">OK</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tip">
+          <p><strong>シャドウの色：</strong>黒ではなく背景の<strong>濃いブルー（#003d6b）</strong>にすると自然な影になります。不透明度は 30〜50% が目安。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">8</div>
+        <div class="step-title">書き出して完成</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><code>ファイル → 書き出し → スクリーン用に書き出し...</code> を開き、<code>PNG</code> 形式で保存します。サイズが <code>800 × 800 px</code> になっていることを確認してください。</p>
+        <div class="final-preview sky-grad">
+          <div class="noise-layer"></div>
+          <span class="final-label">800 × 800 px</span>
+        </div>
+        <p class="caption">↑ 完成イメージ。ノイズのキラキラ感が水のイメージを演出。</p>
+        <div class="tip">
+          <p><strong>応用：</strong>テキストの色を白以外（例：<code>#fff8dc</code> クリーム色）にすると、よりビール感のある雰囲気になります。Suntoryロゴの赤を差し色に使うのもおすすめ。</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /steps -->
+
+  <div class="footer">Photoshop チュートリアル · Lesson 02｜All Free Day バナー 800×800px</div>
+
+</div>
+</body>
+</html>
