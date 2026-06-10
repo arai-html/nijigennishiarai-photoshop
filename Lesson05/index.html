@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ITエンジニア転職バナー（オリジナル）｜Photoshop Lesson 05</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --text: #1a1a2e;
+    --text-secondary: #4a5568;
+    --border: #e2e8f0;
+    --code-bg: #eef6ff;
+    --code-text: #0055aa;
+    --accent: #0070f3;
+    --accent-light: #38bdf8;
+    --accent-green: #00c896;
+    --accent-dark: #003d99;
+    --navy: #0a1628;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 40px 20px 80px; }
+  .container { max-width: 780px; margin: 0 auto; }
+
+  /* ヒーロー */
+  .hero { background: linear-gradient(135deg, #0a1628 0%, #0d2347 40%, #0070f3 100%); border-radius: 20px; padding: 48px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='300' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"); }
+  .hero::after { content: '💻'; position: absolute; right: 40px; top: 30px; font-size: 64px; opacity: 0.2; }
+  .hero-content { position: relative; }
+  .hero-badge { display: inline-block; background: rgba(56,189,248,0.2); border: 1px solid rgba(56,189,248,0.5); color: #38bdf8; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+  .hero h1 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.8); }
+  .size-chip { display: inline-flex; background: rgba(56,189,248,0.15); border: 1px solid rgba(56,189,248,0.4); color: #38bdf8; font-size: 13px; font-family: 'JetBrains Mono', monospace; padding: 5px 14px; border-radius: 8px; margin-top: 16px; font-weight: 600; }
+
+  /* ゴールプレビュー */
+  .goal-card { background: #fff; border-radius: 16px; border: 1px solid var(--border); padding: 24px; margin-bottom: 32px; }
+  .goal-label { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--accent); font-weight: 600; letter-spacing: 0.08em; margin-bottom: 12px; text-transform: uppercase; }
+
+  /* バナープレビュー */
+  .banner-preview { border-radius: 12px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); }
+  .bp-main { height: 230px; background: linear-gradient(135deg, #0a1628 0%, #0d2347 50%, #0070f3 100%); position: relative; display: flex; }
+  .bp-grad { position: absolute; inset: 0; background: linear-gradient(135deg, #0a1628 0%, rgba(0,112,243,0.6) 50%, transparent 75%); }
+  .bp-noise { position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='230'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='230' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"); }
+  .bp-left { flex: 1; padding: 18px 16px; display: flex; flex-direction: column; gap: 10px; position: relative; z-index: 2; }
+  .bp-logo { font-size: 10px; color: #38bdf8; font-weight: 700; letter-spacing: 0.1em; display: flex; align-items: center; gap: 6px; }
+  .bp-logo-icon { width: 10px; height: 10px; background: #00c896; border-radius: 2px; transform: rotate(45deg); }
+  .bp-main-text { display: inline-block; }
+  .bp-main-text .big { font-size: 22px; font-weight: 900; color: #fff; line-height: 1.15; background: linear-gradient(135deg, #0070f3, #38bdf8); padding: 6px 10px; border-radius: 4px; display: inline-block; }
+  .bp-main-text .sub { font-size: 14px; font-weight: 700; color: #fff; margin-top: 4px; display: block; }
+  .bp-badges { display: flex; flex-direction: column; gap: 4px; }
+  .bp-badge { background: rgba(255,255,255,0.95); border-radius: 4px; padding: 4px 10px; font-size: 10px; font-weight: 700; color: #0a1628; display: inline-block; width: fit-content; border-left: 3px solid #00c896; }
+  .bp-right { width: 42%; position: relative; display: flex; align-items: flex-end; justify-content: center; }
+  .bp-person { font-size: 80px; line-height: 1; opacity: 0.55; }
+  .bp-cta { background: linear-gradient(to right, #00c896, #0070f3); padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .bp-cta-text { font-size: 13px; font-weight: 700; color: #fff; }
+  .bp-arrow { width: 22px; height: 22px; background: rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff; }
+  .bp-footer { background: #fff; padding: 8px 16px; display: flex; align-items: center; gap: 10px; }
+  .bp-footer-badge { background: #0a1628; color: #38bdf8; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; }
+  .bp-footer-text { font-size: 11px; font-weight: 700; color: #1a1a2e; }
+
+  /* ステップ */
+  .steps { display: flex; flex-direction: column; gap: 24px; }
+  .step-card { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; }
+  .step-card:hover { box-shadow: 0 4px 24px rgba(0,112,243,0.1); }
+  .step-header { display: flex; align-items: center; gap: 16px; padding: 20px 24px; border-bottom: 1px solid var(--border); }
+  .step-num { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #0070f3, #38bdf8); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .step-title { font-size: 17px; font-weight: 700; color: var(--text); }
+  .step-body { padding: 24px; }
+  .step-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px; }
+
+  code { background: var(--code-bg); color: var(--code-text); font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  .ps-mock { background: #2b2b2b; border-radius: 12px; overflow: hidden; margin-bottom: 12px; border: 1px solid #111; }
+  .ps-titlebar { background: #1e1e1e; padding: 6px 14px; display: flex; align-items: center; gap: 6px; }
+  .ps-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .ps-dot.r { background: #ff5f56; } .ps-dot.y { background: #ffbd2e; } .ps-dot.g { background: #27c93f; }
+  .ps-win-title { font-size: 10px; color: #888; margin-left: 8px; font-family: 'JetBrains Mono', monospace; }
+  .ps-body { display: flex; }
+  .ps-toolbar { background: #1f1f1f; width: 30px; border-right: 1px solid #111; padding: 8px 0; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .ps-tool-icon { width: 18px; height: 18px; background: #444; border-radius: 2px; }
+  .ps-canvas { flex: 1; background: #535353; display: flex; align-items: center; justify-content: center; padding: 16px; flex-wrap: wrap; gap: 10px; }
+  .ps-dialog { background: #404040; border: 1px solid #666; border-radius: 6px; padding: 14px 18px; min-width: 220px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+  .ps-dialog-title { font-size: 11px; font-weight: 600; color: #eee; margin-bottom: 12px; border-bottom: 1px solid #555; padding-bottom: 8px; font-family: 'JetBrains Mono', monospace; }
+  .ps-field { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; gap: 10px; }
+  .ps-field-label { font-size: 10px; color: #bbb; }
+  .ps-field-input { background: #222; border: 1px solid #666; border-radius: 3px; padding: 3px 8px; font-size: 10px; color: #fff; width: 80px; text-align: right; font-family: 'JetBrains Mono', monospace; }
+  .ps-field-input.hl { border-color: #0070f3; background: #001a3d; color: #38bdf8; font-weight: 600; }
+  .ps-field-input.hl-green { border-color: #00c896; background: #001a10; color: #00c896; font-weight: 600; }
+  .ps-field-select { background: #333; border: 1px solid #666; border-radius: 3px; padding: 3px 6px; font-size: 10px; color: #fff; width: 130px; }
+  .ps-btns { display: flex; justify-content: flex-end; gap: 6px; margin-top: 12px; }
+  .ps-btn { background: #555; border: 1px solid #777; border-radius: 3px; padding: 4px 12px; font-size: 10px; color: #eee; cursor: default; }
+  .ps-btn.ok { background: #0078d4; border-color: #0078d4; }
+  .ps-layers { background: #252525; width: 220px; border-left: 1px solid #111; padding: 8px; }
+  .ps-layers-title { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .ps-layer { display: flex; align-items: center; gap: 7px; padding: 5px 7px; border-radius: 3px; margin-bottom: 3px; background: #3a3a3a; }
+  .ps-layer.sel { background: #001a3d; }
+  .ps-layer-thumb { width: 22px; height: 17px; border-radius: 2px; flex-shrink: 0; border: 1px solid #555; }
+  .ps-layer-name { font-size: 9px; color: #ddd; line-height: 1.3; }
+  .ps-layer-mode { font-size: 8px; color: #38bdf8; }
+  .blend-select { font-size: 9px; background: #333; border: 1px solid #0070f3; color: #38bdf8; border-radius: 2px; padding: 2px 5px; margin-bottom: 6px; width: 100%; font-weight: 600; }
+
+  .tip { background: #eef6ff; border-left: 3px solid #0070f3; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 16px; }
+  .tip p { font-size: 13px; color: #003080; line-height: 1.7; }
+  .tip strong { color: #0055aa; font-weight: 700; }
+  .tip-green { background: #e8faf4; border-left: 3px solid #00c896; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 16px; }
+  .tip-green p { font-size: 13px; color: #004d3a; line-height: 1.7; }
+  .tip-green strong { color: #008060; font-weight: 700; }
+
+  .caption { font-size: 12px; color: #94a3b8; margin-top: 8px; font-style: italic; }
+
+  .palette { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+  .swatch-wrap { text-align: center; }
+  .swatch { width: 60px; height: 60px; border-radius: 12px; margin-bottom: 6px; }
+
+  .part-row { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+  .part-header { padding: 8px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); background: #eef6ff; }
+  .part-tag { font-size: 11px; font-weight: 700; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .part-body { padding: 10px 14px; font-size: 12px; color: var(--text-secondary); line-height: 2; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 24px; }
+    .hero h1 { font-size: 22px; }
+    .ps-layers { display: none; }
+    .step-body { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Photoshop チュートリアル · Lesson 05</div>
+      <h1>💻 ITエンジニア転職バナー<br>オリジナル制作</h1>
+      <p>Lesson 04（パソナ）の構成を応用。ターゲット・色・コピーをすべてオリジナルで作る</p>
+      <div class="size-chip">600 × 600 px</div>
+    </div>
+  </div>
+
+  <!-- 完成ゴール -->
+  <div class="goal-card">
+    <div class="goal-label">🎯 完成イメージ</div>
+    <div class="banner-preview">
+      <div class="bp-main">
+        <div class="bp-grad"></div>
+        <div class="bp-noise"></div>
+        <div class="bp-left">
+          <div class="bp-logo"><div class="bp-logo-icon"></div> TechShift</div>
+          <div class="bp-main-text">
+            <div class="big">年収100万円UP</div>
+            <div class="sub">への転職</div>
+          </div>
+          <div class="bp-badges">
+            <div class="bp-badge">リモートOK求人 多数</div>
+            <div class="bp-badge">平均年収 820万円</div>
+          </div>
+        </div>
+        <div class="bp-right">
+          <div class="bp-person">👨‍💻</div>
+        </div>
+      </div>
+      <div class="bp-cta">
+        <div class="bp-cta-text">エンジニアの3人に2人が年収アップ</div>
+        <div class="bp-arrow">▶</div>
+      </div>
+      <div class="bp-footer">
+        <div class="bp-footer-badge">IT転職</div>
+        <div class="bp-footer-text">エージェントなら TechShift Career</div>
+      </div>
+    </div>
+    <p class="caption" style="margin-top:8px;">↑ 完成イメージ。人物はFireflyまたはUnsplashで用意</p>
+  </div>
+
+  <!-- ステップ -->
+  <div class="steps">
+
+    <!-- STEP 1 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div class="step-title">企画シートを作る（Lesson04との違いを整理）</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">パソナ（Lesson04）と構成は同じですが、<strong>ターゲット・色・コピー・サービス名をすべてオリジナル</strong>に変えます。まず情報を整理しましょう。</p>
+
+        <!-- 比較表 -->
+        <div style="display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;">
+          <div style="flex:1; min-width:200px; background:#fff3ee; border-radius:12px; padding:16px; border:1px solid #fbd0b8;">
+            <div style="font-size:10px; color:#c04a00; font-family:'JetBrains Mono',monospace; margin-bottom:10px; font-weight:700;">Lesson 04（パソナ）</div>
+            <div style="font-size:12px; color:#555; line-height:2.2;">
+              ターゲット：<strong>転職希望者全般</strong><br>
+              色：<strong>オレンジ・赤</strong><br>
+              キャッチ：<strong>大手企業への転職</strong><br>
+              強み：<strong>年収700万円・福利厚生</strong><br>
+              CTA：<strong>3人に2人が年収アップ</strong>
+            </div>
+          </div>
+          <div style="flex:1; min-width:200px; background:#eef6ff; border-radius:12px; padding:16px; border:1px solid #b8d8f8;">
+            <div style="font-size:10px; color:#0055aa; font-family:'JetBrains Mono',monospace; margin-bottom:10px; font-weight:700;">Lesson 05（オリジナル）</div>
+            <div style="font-size:12px; color:#555; line-height:2.2;">
+              ターゲット：<strong>ITエンジニア</strong><br>
+              色：<strong>ネイビー×ブルー×グリーン</strong><br>
+              キャッチ：<strong>年収100万円UPへの転職</strong><br>
+              強み：<strong>リモートOK・平均年収820万</strong><br>
+              CTA：<strong>エンジニアの3人に2人が年収アップ</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- 企画シート -->
+        <div style="background:#0a1628; border-radius:14px; padding:24px; color:#f0f8ff; margin-bottom:16px;">
+          <div style="font-size:11px; color:#38bdf8; font-family:'JetBrains Mono',monospace; margin-bottom:16px; letter-spacing:0.08em;">IT転職バナー — 企画シート</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <div>
+              <div style="font-size:10px; color:#0070f3; margin-bottom:4px; font-family:'JetBrains Mono',monospace;">サービス名</div>
+              <div style="font-size:15px; font-weight:700; color:#38bdf8;">TechShift Career</div>
+            </div>
+            <div>
+              <div style="font-size:10px; color:#0070f3; margin-bottom:4px; font-family:'JetBrains Mono',monospace;">ターゲット</div>
+              <div style="font-size:13px; color:#f0f8ff;">20〜35歳のITエンジニア</div>
+            </div>
+            <div>
+              <div style="font-size:10px; color:#0070f3; margin-bottom:4px; font-family:'JetBrains Mono',monospace;">メインキャッチ</div>
+              <div style="font-size:13px; color:#f0f8ff; font-weight:700;">年収100万円UP<br>への転職</div>
+            </div>
+            <div>
+              <div style="font-size:10px; color:#0070f3; margin-bottom:4px; font-family:'JetBrains Mono',monospace;">強みバッジ×2</div>
+              <div style="font-size:13px; color:#f0f8ff;">リモートOK求人 多数<br>平均年収 820万円</div>
+            </div>
+            <div>
+              <div style="font-size:10px; color:#0070f3; margin-bottom:4px; font-family:'JetBrains Mono',monospace;">CTA帯テキスト</div>
+              <div style="font-size:13px; color:#f0f8ff;">エンジニアの3人に2人が年収アップ</div>
+            </div>
+            <div>
+              <div style="font-size:10px; color:#0070f3; margin-bottom:4px; font-family:'JetBrains Mono',monospace;">フッター</div>
+              <div style="font-size:13px; color:#f0f8ff;">IT転職 エージェントなら<br>TechShift Career</div>
+            </div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>CTAのコピーのコツ：</strong>「3人に2人が〜」のような<strong>数字を使った実績</strong>はクリック率が上がります。エンジニア向けには「リモートOK」「副業OK」「フルスタック」などの具体的なキーワードも効果的です。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div class="step-title">カラーパレットと背景を作る</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">ITエンジニア向けには<strong>ネイビー×テックブルー×グリーン</strong>の組み合わせが効果的です。信頼感と成長のイメージを同時に演出できます。</p>
+
+        <!-- カラーパレット -->
+        <div class="palette">
+          <div class="swatch-wrap">
+            <div class="swatch" style="background:#0a1628; border:1px solid rgba(255,255,255,0.1);"></div>
+            <div style="font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">#0a1628</div>
+            <div style="font-size:10px; color:#94a3b8;">ディープネイビー<br>（背景）</div>
+          </div>
+          <div class="swatch-wrap">
+            <div class="swatch" style="background:#0070f3;"></div>
+            <div style="font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">#0070f3</div>
+            <div style="font-size:10px; color:#94a3b8;">テックブルー<br>（メイン帯）</div>
+          </div>
+          <div class="swatch-wrap">
+            <div class="swatch" style="background:#38bdf8;"></div>
+            <div style="font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">#38bdf8</div>
+            <div style="font-size:10px; color:#94a3b8;">スカイブルー<br>（ロゴ・強調）</div>
+          </div>
+          <div class="swatch-wrap">
+            <div class="swatch" style="background:#00c896;"></div>
+            <div style="font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">#00c896</div>
+            <div style="font-size:10px; color:#94a3b8;">テックグリーン<br>（CTA・アクセント）</div>
+          </div>
+          <div class="swatch-wrap">
+            <div class="swatch" style="background:#ffffff; border:1px solid #e2e8f0;"></div>
+            <div style="font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">#ffffff</div>
+            <div style="font-size:10px; color:#94a3b8;">白<br>（テキスト・帯）</div>
+          </div>
+        </div>
+
+        <!-- なぜこの色？ -->
+        <div style="background:#0a1628; border-radius:12px; padding:16px 18px; margin-bottom:16px;">
+          <div style="font-size:11px; color:#38bdf8; font-family:'JetBrains Mono',monospace; margin-bottom:10px;">🎯 この色がクリックされやすい理由</div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; gap:10px;"><div style="font-size:11px; color:#0070f3; font-weight:700; flex-shrink:0; width:20px;">①</div><p style="font-size:12px; color:#d0e8ff; line-height:1.7;"><strong style="color:#38bdf8;">ネイビー</strong>：GitHub・AWS・Dockerと同系色。エンジニアが「自分向け」と直感的に感じる</p></div>
+            <div style="display:flex; gap:10px;"><div style="font-size:11px; color:#0070f3; font-weight:700; flex-shrink:0; width:20px;">②</div><p style="font-size:12px; color:#d0e8ff; line-height:1.7;"><strong style="color:#38bdf8;">グリーン</strong>：「承認」「Go」「収入増加」のポジティブな連想。CTAボタンに緑を使うとクリック率UP</p></div>
+            <div style="display:flex; gap:10px;"><div style="font-size:11px; color:#0070f3; font-weight:700; flex-shrink:0; width:20px;">③</div><p style="font-size:12px; color:#d0e8ff; line-height:1.7;"><strong style="color:#38bdf8;">白文字</strong>：ダーク背景に白は視認性が高く、スマホでも読みやすい</p></div>
+          </div>
+        </div>
+
+        <!-- 背景作成手順 -->
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">背景グラデーション — ネイビー×ブルー</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas">
+              <div class="ps-dialog" style="min-width:280px;">
+                <div class="ps-dialog-title">グラデーションで塗りつぶし</div>
+                <div class="ps-field">
+                  <span class="ps-field-label">グラデーション</span>
+                  <div style="width:130px; height:18px; border-radius:3px; border:1px solid #888; background:linear-gradient(to right,#0a1628,#0d2347,#0070f3);"></div>
+                </div>
+                <div class="ps-field"><span class="ps-field-label">スタイル</span><select class="ps-field-select"><option>線形</option></select></div>
+                <div class="ps-field"><span class="ps-field-label">角度</span><input class="ps-field-input" value="135°" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">比率</span><input class="ps-field-input" value="130%" readonly /></div>
+                <div class="ps-btns"><button class="ps-btn ok">OK</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ノイズ -->
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">ノイズを加える（テクスチャ感を出す）</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas">
+              <div class="ps-dialog" style="min-width:260px;">
+                <div class="ps-dialog-title">ノイズを加える</div>
+                <div class="ps-field"><span class="ps-field-label">量</span><input class="ps-field-input hl" value="8 %" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">分布方法</span><select class="ps-field-select"><option>ガウス</option></select></div>
+                <label style="font-size:10px; color:#bbb; display:flex; align-items:center; gap:5px;"><input type="checkbox" /> グレースケールノイズ（チェックしない）</label>
+                <div style="font-size:9px; color:#aaa; margin-top:6px; font-family:'JetBrains Mono',monospace;">💡 8%の少量ノイズでスクリーン向けの質感に</div>
+              </div>
+            </div>
+            <div class="ps-layers">
+              <div class="ps-layers-title">レイヤー</div>
+              <select class="blend-select"><option>オーバーレイ（描画モード）</option></select>
+              <div class="ps-layer sel">
+                <div class="ps-layer-thumb" style="background:#808080;"></div>
+                <div><div class="ps-layer-name">ノイズ（8%）</div><div class="ps-layer-mode">オーバーレイ</div></div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb" style="background:linear-gradient(to right,#0a1628,#0070f3);"></div>
+                <div class="ps-layer-name">グラデーション背景</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>Lesson04との違い：</strong>パソナは「赤〜オレンジ」の強いグラデーション帯でしたが、今回は<strong>背景自体をグラデーション</strong>にします。よりスマートでテック感のある印象になります。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div class="step-title">人物写真を用意して配置・切り抜き</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">ITエンジニアらしい人物写真を用意します。パソナと同じく<strong>右側に配置・左端をグラデーションでなじませる</strong>手順です。</p>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
+          <div style="background:#0a1628; border-radius:8px; padding:12px 14px; flex:1; min-width:160px;">
+            <div style="font-size:10px; color:#38bdf8; font-family:'JetBrains Mono',monospace; margin-bottom:8px;">🌐 Unsplash 検索キーワード</div>
+            <div style="font-size:12px; color:#d0e8ff; line-height:2.2;">
+              <code style="background:#001a3d; color:#38bdf8; padding:2px 6px; border-radius:3px; display:inline-block; margin-bottom:2px;">software engineer smiling</code><br>
+              <code style="background:#001a3d; color:#38bdf8; padding:2px 6px; border-radius:3px; display:inline-block; margin-bottom:2px;">developer laptop confident</code><br>
+              <code style="background:#001a3d; color:#38bdf8; padding:2px 6px; border-radius:3px; display:inline-block;">tech professional portrait</code>
+            </div>
+          </div>
+          <div style="background:#0a1628; border-radius:8px; padding:12px 14px; flex:1; min-width:160px;">
+            <div style="font-size:10px; color:#38bdf8; font-family:'JetBrains Mono',monospace; margin-bottom:8px;">✨ Fireflyプロンプト</div>
+            <div style="font-size:11px; color:#d0e8ff; line-height:1.8; font-family:'JetBrains Mono',monospace;">confident software engineer, smiling, casual business attire, dark background, photorealistic, half body</div>
+          </div>
+        </div>
+
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">人物の配置とレイヤー順序</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas" style="flex-direction:column; align-items:flex-start; gap:8px; padding:14px;">
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#0070f3,#38bdf8); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">1</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">人物写真を<code style="background:#333; color:#38bdf8; padding:1px 5px; border-radius:3px;">埋め込みを配置</code> で追加 → 右半分（300〜600px）に配置</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#0070f3,#38bdf8); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">2</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;"><code style="background:#333; color:#38bdf8; padding:1px 5px; border-radius:3px;">選択範囲 → 被写体を選択</code> → <code style="background:#333; color:#38bdf8; padding:1px 5px; border-radius:3px;">選択とマスク</code> → レイヤーマスクで切り抜き</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#0070f3,#38bdf8); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">3</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">マスクを選択 → グラデーションツール（<strong style="color:#38bdf8;">黒→透明・左方向</strong>）で左端をぼかして背景と馴染ませる</p>
+              </div>
+            </div>
+            <div class="ps-layers">
+              <div class="ps-layers-title">レイヤー順序</div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb" style="background:#fff;display:flex;align-items:center;justify-content:center;font-size:7px;color:#333;font-weight:700;">T</div>
+                <div class="ps-layer-name">テキスト・帯各種</div>
+              </div>
+              <div class="ps-layer sel">
+                <div class="ps-layer-thumb" style="background:#ccc; position:relative; overflow:hidden;"><div style="position:absolute;right:0;top:0;bottom:0;width:40%;background:#333;"></div></div>
+                <div><div class="ps-layer-name">人物写真（マスク）</div><div class="ps-layer-mode">レイヤーマスク</div></div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb" style="background:#808080;"></div>
+                <div class="ps-layer-name">ノイズ（8%）</div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb" style="background:linear-gradient(to right,#0a1628,#0070f3);"></div>
+                <div class="ps-layer-name">グラデーション背景</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tip-green"><p><strong>人物の色調を背景に合わせる：</strong>人物レイヤーに<code>色相・彩度（クリッピングマスク）</code>を追加し、彩度を <code>-10〜-20</code> にするとネイビー背景に自然に馴染みます。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <div class="step-title">メインテキスト帯を作る（ブルー帯）</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">「年収100万円UP」のブルーグラデーション帯を作ります。パソナのオレンジ帯と同じ仕組みですが、色をブルー系に変えます。</p>
+
+        <div class="part-row">
+          <div class="part-header">
+            <div class="part-tag" style="background:#0070f3; color:#fff;">B</div>
+            <span style="font-size:12px; font-weight:700;">メインテキスト帯「年収100万円UP」</span>
+          </div>
+          <div class="part-body">
+            長方形ツールで帯を描く<br>
+            塗り：<code>グラデーション（#0070f3 → #38bdf8）左→右</code><br>
+            <br>
+            「年収100万円UP」：<code>游ゴシック Black 100px #ffffff</code><br>
+            「への転職」：<code>游ゴシック Bold 70px #ffffff</code><br>
+            トラッキング：<code>0〜+10</code>
+          </div>
+        </div>
+
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">文字パネル — メインタイトル設定</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon" style="background:#4a9fdf; color:#fff; font-size:9px; display:flex; align-items:center; justify-content:center; font-weight:700;">T</div></div>
+            <div class="ps-canvas">
+              <div class="ps-dialog" style="min-width:260px;">
+                <div class="ps-dialog-title">「年収100万円UP」— 文字パネル</div>
+                <div class="ps-field"><span class="ps-field-label">フォント</span><select class="ps-field-select"><option>游ゴシック / ヒラギノ角ゴ</option></select></div>
+                <div class="ps-field"><span class="ps-field-label">ウェイト</span><select class="ps-field-select"><option>Black / Ultra Bold</option></select></div>
+                <div class="ps-field"><span class="ps-field-label">サイズ</span><input class="ps-field-input hl" value="100 px" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">カラー</span><div style="width:80px; height:18px; background:#fff; border:1px solid #888; border-radius:3px;"></div></div>
+                <div class="ps-field"><span class="ps-field-label">トラッキング</span><input class="ps-field-input" value="+10" readonly /></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>「年収100万円UP」を目立たせるコツ：</strong>「100万円」の数字部分だけ別テキストレイヤーにして、サイズを <code>120px</code> に大きくすると数字が際立ちます。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">5</div>
+        <div class="step-title">強みバッジを作る（グリーンアクセント）</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">「リモートOK求人 多数」「平均年収 820万円」の白いバッジを作ります。パソナと同じ構成ですが、<strong>左にグリーンのアクセントライン</strong>を加えてIT感を出します。</p>
+
+        <div class="part-row">
+          <div class="part-header">
+            <div class="part-tag" style="background:#00c896; color:#fff;">C</div>
+            <span style="font-size:12px; font-weight:700;">強みバッジ × 2（グリーンアクセント付き）</span>
+          </div>
+          <div class="part-body">
+            白い角丸長方形（角丸：<code>4px</code>）を2つ作成<br>
+            左端に細いグリーンの長方形（<code>#00c896</code>、幅：<code>4px</code>）を重ねる<br>
+            <br>
+            テキスト：<code>游ゴシック Bold 36px #0a1628</code>（ネイビー）<br>
+            バッジ間隔：整列パネルで均等分布
+          </div>
+        </div>
+
+        <!-- グリーンアクセントの作り方 -->
+        <div class="ps-mock" style="margin-top:12px;">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">グリーンアクセントラインの作り方</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas" style="flex-direction:column; align-items:flex-start; gap:8px; padding:14px;">
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#00c896,#0070f3); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">1</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">白い帯の左端に <code style="background:#333; color:#00c896; padding:1px 5px; border-radius:3px;">幅4px・高さ同じ</code> の細い長方形を描く</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#00c896,#0070f3); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">2</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">塗り：<code style="background:#333; color:#00c896; padding:1px 5px; border-radius:3px;">#00c896</code>（グリーン）</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#00c896,#0070f3); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">3</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">白い帯・グリーンライン・テキストの3つを<code style="background:#333; color:#00c896; padding:1px 5px; border-radius:3px;">Cmd/Ctrl+G</code> でグループ化 → 2つ目も同じ手順で</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tip-green"><p><strong>グリーンアクセントの効果：</strong>白いバッジにグリーンのラインを1本加えるだけで、パソナとは異なるオリジナル感が出ます。「承認」「Go」「安全」のイメージもプラスされます。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">6</div>
+        <div class="step-title">CTAとフッター帯を作る</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">下の2段の帯を作ります。<strong>グリーン→ブルーのグラデーション帯（CTA）</strong>と<strong>白帯（ブランド名）</strong>です。</p>
+
+        <div class="part-row">
+          <div class="part-header">
+            <div class="part-tag" style="background:#00c896; color:#fff;">E</div>
+            <span style="font-size:12px; font-weight:700;">CTA帯「エンジニアの3人に2人が年収アップ」</span>
+          </div>
+          <div class="part-body">
+            長方形ツールで横幅いっぱいの帯<br>
+            塗り：<code>グラデーション（#00c896 → #0070f3）左→右</code>　高さ：<code>60px</code><br>
+            テキスト：<code>游ゴシック Bold 32px #ffffff</code><br>
+            右端に<code>▶</code>アイコン（白い円＋テキスト）
+          </div>
+        </div>
+
+        <div class="part-row">
+          <div class="part-header" style="background:#f7f9fc;">
+            <div class="part-tag" style="background:#0a1628; color:#38bdf8;">F</div>
+            <span style="font-size:12px; font-weight:700;">フッター白帯「TechShift Career」</span>
+          </div>
+          <div class="part-body">
+            白い長方形　高さ：<code>50px</code><br>
+            左側バッジ「IT転職」：<code>#0a1628</code>背景＋<code>#38bdf8</code>テキスト<br>
+            テキスト：<code>游ゴシック Bold 26px #1a1a2e</code><br>
+            「TechShift Career」部分は太くして強調
+          </div>
+        </div>
+
+        <div class="tip"><p><strong>パソナとの違い：</strong>CTA帯をグリーン→ブルーのグラデーションにすることで、同じ構成でもパソナとは明確に違うオリジナルバナーになります。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">7</div>
+        <div class="step-title">ロゴを配置して仕上げ</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">右上にTechShiftのロゴを配置し、全体を仕上げます。</p>
+
+        <div class="part-row">
+          <div class="part-header">
+            <div class="part-tag" style="background:#0070f3; color:#fff;">A</div>
+            <span style="font-size:12px; font-weight:700;">TechShiftロゴの作り方</span>
+          </div>
+          <div class="part-body">
+            ① ダイヤ形シェイプ（<code>#00c896</code>）を小さく作る（<code>12×12px</code>・45°回転）<br>
+            ② 「TechShift」テキスト：<code>游ゴシック Bold 22px #38bdf8</code><br>
+            ③ 右上に配置（余白：<code>20px</code>）
+          </div>
+        </div>
+
+        <!-- 仕上げチェック -->
+        <div class="ps-mock" style="margin-top:16px;">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">仕上げチェックリスト</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas" style="flex-direction:column; align-items:flex-start; gap:8px; padding:14px;">
+              <div style="display:flex; gap:10px;"><div style="color:#27c93f; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:11px; color:#ccc; line-height:1.7;">「年収100万円UP」が一番目立つか</p></div>
+              <div style="display:flex; gap:10px;"><div style="color:#27c93f; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:11px; color:#ccc; line-height:1.7;">人物の切り抜きが自然か（特に髪の毛）</p></div>
+              <div style="display:flex; gap:10px;"><div style="color:#27c93f; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:11px; color:#ccc; line-height:1.7;">グリーンのアクセントが効いているか</p></div>
+              <div style="display:flex; gap:10px;"><div style="color:#27c93f; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:11px; color:#ccc; line-height:1.7;">CTA帯のテキストが読みやすいか</p></div>
+              <div style="display:flex; gap:10px;"><div style="color:#27c93f; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:11px; color:#ccc; line-height:1.7;">スマートフォンで見て文字が読めるか（最低30px以上）</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="tip-green"><p><strong>Lesson04との比較をしてみよう：</strong>同じ構成でもターゲット・色・コピーを変えるだけで、全く違う印象になります。2つを並べてみると、デザインの「型」を使いこなせていることがわかります。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">8</div>
+        <div class="step-title">PNG書き出して完成</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><code>ファイル → 書き出し → スクリーン用に書き出し...</code> を開き、<code>PNG</code> 形式で保存。サイズが <code>600 × 600 px</code> になっていることを確認してください。</p>
+        <div style="width:100%; height:70px; border-radius:12px; background:linear-gradient(135deg,#0a1628,#0070f3); position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; margin-bottom:8px;">
+          <div style="position:absolute; bottom:0; left:0; right:0; height:18px; background:linear-gradient(to right,#00c896,#0070f3);"></div>
+          <div style="position:relative; font-size:11px; color:#38bdf8; font-family:'JetBrains Mono',monospace; letter-spacing:0.1em;">600 × 600 px — PNG</div>
+        </div>
+        <p class="caption">↑ 完成。GitHubにアップしてNotionのLesson05に追加しましょう！</p>
+      </div>
+    </div>
+
+  </div><!-- /steps -->
+
+  <div style="text-align:center; margin-top:48px; font-size:12px; color:#94a3b8;">Photoshop チュートリアル · Lesson 05｜ITエンジニア転職バナー（オリジナル）600×600px</div>
+
+</div>
+</body>
+</html>
