@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>カフェオリジナルバナー制作｜Photoshop Lesson 03</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --text: #1a1a2e;
+    --text-secondary: #4a5568;
+    --border: #e2e8f0;
+    --code-bg: #f5ede0;
+    --code-text: #6b4c2a;
+    --accent: #c9a96e;
+    --accent-dark: #6b4c2a;
+    --cafe-bg: #2c1f14;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 40px 20px 80px;
+  }
+
+  .container { max-width: 780px; margin: 0 auto; }
+
+  /* ヒーロー */
+  .hero {
+    background: linear-gradient(135deg, #2c1f14 0%, #6b4c2a 50%, #8b6355 100%);
+    border-radius: 20px;
+    padding: 48px 40px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='300' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
+  }
+  .hero::after {
+    content: '☕';
+    position: absolute;
+    right: 40px;
+    top: 30px;
+    font-size: 64px;
+    opacity: 0.2;
+    transform: rotate(-10deg);
+  }
+  .hero-content { position: relative; }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(201,169,110,0.2);
+    border: 1px solid rgba(201,169,110,0.5);
+    color: #c9a96e;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+  .hero h1 { font-size: 28px; font-weight: 700; color: #f5ede0; margin-bottom: 8px; line-height: 1.3; }
+  .hero p { font-size: 14px; color: rgba(245,237,224,0.75); }
+  .size-chip {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(201,169,110,0.15);
+    border: 1px solid rgba(201,169,110,0.4);
+    color: #c9a96e;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 5px 14px;
+    border-radius: 8px;
+    margin-top: 16px;
+    font-weight: 600;
+  }
+
+  /* ゴールプレビュー */
+  .goal-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+  .goal-label {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .goal-banner {
+    width: 100%; height: 200px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2c1f14 0%, #6b4c2a 60%, #8b6355 100%);
+    position: relative; overflow: hidden;
+    display: flex;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .goal-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px 24px;
+    position: relative;
+  }
+  .goal-right {
+    width: 45%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+    opacity: 0.4;
+    position: relative;
+  }
+  .goal-noise {
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='780' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='780' height='200' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
+  }
+
+  /* ステップ */
+  .steps { display: flex; flex-direction: column; gap: 24px; }
+  .step-card {
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .step-card:hover { box-shadow: 0 4px 24px rgba(107,76,42,0.1); }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .step-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6b4c2a, #c9a96e);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .step-title { font-size: 17px; font-weight: 700; color: var(--text); }
+  .step-body { padding: 24px; }
+  .step-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px; }
+
+  code {
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-weight: 600;
+  }
+
+  /* PS モックUI */
+  .ps-mock { background: #2b2b2b; border-radius: 12px; overflow: hidden; margin-bottom: 12px; border: 1px solid #111; }
+  .ps-titlebar { background: #1e1e1e; padding: 6px 14px; display: flex; align-items: center; gap: 6px; }
+  .ps-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .ps-dot.r { background: #ff5f56; }
+  .ps-dot.y { background: #ffbd2e; }
+  .ps-dot.g { background: #27c93f; }
+  .ps-win-title { font-size: 10px; color: #888; margin-left: 8px; font-family: 'JetBrains Mono', monospace; }
+  .ps-body { display: flex; }
+  .ps-toolbar { background: #1f1f1f; width: 30px; border-right: 1px solid #111; padding: 8px 0; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .ps-tool-icon { width: 18px; height: 18px; background: #444; border-radius: 2px; }
+  .ps-canvas { flex: 1; background: #535353; display: flex; align-items: center; justify-content: center; padding: 16px; flex-wrap: wrap; gap: 10px; }
+  .ps-dialog { background: #404040; border: 1px solid #666; border-radius: 6px; padding: 14px 18px; min-width: 220px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+  .ps-dialog-title { font-size: 11px; font-weight: 600; color: #eee; margin-bottom: 12px; border-bottom: 1px solid #555; padding-bottom: 8px; font-family: 'JetBrains Mono', monospace; }
+  .ps-field { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; gap: 10px; }
+  .ps-field-label { font-size: 10px; color: #bbb; }
+  .ps-field-input { background: #222; border: 1px solid #666; border-radius: 3px; padding: 3px 8px; font-size: 10px; color: #fff; width: 80px; text-align: right; font-family: 'JetBrains Mono', monospace; }
+  .ps-field-input.hl { border-color: #c9a96e; background: #2c1f14; color: #c9a96e; font-weight: 600; }
+  .ps-field-select { background: #333; border: 1px solid #666; border-radius: 3px; padding: 3px 6px; font-size: 10px; color: #fff; width: 130px; }
+  .ps-btns { display: flex; justify-content: flex-end; gap: 6px; margin-top: 12px; }
+  .ps-btn { background: #555; border: 1px solid #777; border-radius: 3px; padding: 4px 12px; font-size: 10px; color: #eee; cursor: default; }
+  .ps-btn.ok { background: #0078d4; border-color: #0078d4; }
+  .ps-layers { background: #252525; width: 210px; border-left: 1px solid #111; padding: 8px; }
+  .ps-layers-title { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .ps-layer { display: flex; align-items: center; gap: 7px; padding: 5px 7px; border-radius: 3px; margin-bottom: 3px; background: #3a3a3a; }
+  .ps-layer.sel { background: #3d2b18; }
+  .ps-layer-thumb { width: 22px; height: 17px; border-radius: 2px; flex-shrink: 0; border: 1px solid #555; }
+  .ps-layer-name { font-size: 9px; color: #ddd; line-height: 1.3; }
+  .ps-layer-mode { font-size: 8px; color: #c9a96e; }
+  .blend-select { font-size: 9px; background: #333; border: 1px solid #c9a96e; color: #c9a96e; border-radius: 2px; padding: 2px 5px; margin-bottom: 6px; width: 100%; font-weight: 600; }
+
+  /* ヒントボックス */
+  .tip { background: #f9f3e8; border-left: 3px solid #c9a96e; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 16px; }
+  .tip p { font-size: 13px; color: #5a3e1b; line-height: 1.7; }
+  .tip strong { color: #6b4c2a; font-weight: 700; }
+
+  .caption { font-size: 12px; color: #94a3b8; margin-top: 8px; font-style: italic; }
+
+  /* カラースウォッチ */
+  .palette { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+  .swatch-wrap { text-align: center; }
+  .swatch { width: 64px; height: 64px; border-radius: 12px; margin-bottom: 6px; border: 1px solid rgba(0,0,0,0.08); }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 24px; }
+    .hero h1 { font-size: 22px; }
+    .ps-layers { display: none; }
+    .step-body { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Photoshop チュートリアル · Lesson 03</div>
+      <h1>☕ カフェ オリジナルバナー制作</h1>
+      <p>Lesson 01・02で学んだスキルを応用。シック・大人なカフェイベントバナーを1から作る</p>
+      <div class="size-chip">800 × 800 px</div>
+    </div>
+  </div>
+
+  <!-- 完成ゴール -->
+  <div class="goal-card">
+    <div class="goal-label">🎯 完成イメージ</div>
+    <div class="goal-banner">
+      <div class="goal-noise"></div>
+      <div class="goal-left">
+        <div style="font-size:9px; color:#c9a96e; letter-spacing:0.2em; font-family:'JetBrains Mono',monospace; margin-bottom:6px;">MAISON DU CAFÉ</div>
+        <div style="font-size:11px; color:#c9a96e; font-style:italic; margin-bottom:8px; letter-spacing:0.05em;">秋の特別な一杯を、あなたへ</div>
+        <div style="font-family:'Dancing Script',cursive; font-size:30px; font-weight:700; color:#f5ede0; line-height:1.1; text-shadow:0 2px 12px rgba(0,0,0,0.4);">Autumn<br>Coffee Fair</div>
+        <div style="font-size:10px; color:#f5ede0; margin-top:10px; letter-spacing:0.08em;">10/1（火）〜 10/31（木）</div>
+        <div style="margin-top:8px; display:inline-block; border:1px solid #c9a96e; border-radius:20px; padding:3px 10px; font-size:9px; color:#c9a96e; letter-spacing:0.1em;">期間限定</div>
+      </div>
+      <div class="goal-right">☕</div>
+    </div>
+    <p class="caption" style="margin-top:8px;">↑ 完成イメージ。左：テキスト　右：コーヒー写真（今回はアイコンで代用）</p>
+  </div>
+
+  <!-- ステップ -->
+  <div class="steps">
+
+    <!-- STEP 1 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div class="step-title">イベント情報を整理する（企画シート）</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">バナーを作る前に、伝えたい情報を整理します。Photoshopを開く前にここを決めておくと迷いがなくなります。</p>
+        <div style="background:#2c1f14; border-radius:14px; padding:24px; color:#f5ede0; margin-bottom:16px;">
+          <div style="font-size:11px; color:#c9a96e; font-family:'JetBrains Mono',monospace; margin-bottom:16px; letter-spacing:0.08em;">CAFE EVENT — 企画シート</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <div>
+              <div style="font-size:10px; color:#8b6355; margin-bottom:4px; font-family:'JetBrains Mono',monospace;">店名</div>
+              <div style="font-size:15px; font-weight:700; color:#c9a96e;">Maison du Café</div>
+            </div>
+            <div>
+              <div style="font-size:10px; color:#8b6355; margin-bottom:4px; font-family:'JetBrains Mono',monospace;">イベント名</div>
+              <div style="font-size:15px; font-weight:700; color:#f5ede0;">Autumn Coffee Fair</div>
+            </div>
+            <div>
+              <div style="font-size:10px; color:#8b6355; margin-bottom:4px; font-family:'JetBrains Mono',monospace;">キャッチコピー</div>
+              <div style="font-size:13px; color:#f5ede0; font-style:italic;">「秋の特別な一杯を、あなたへ」</div>
+            </div>
+            <div>
+              <div style="font-size:10px; color:#8b6355; margin-bottom:4px; font-family:'JetBrains Mono',monospace;">日程</div>
+              <div style="font-size:13px; color:#f5ede0;">10/1（火）〜10/31（木）<br>11:00 – 20:00</div>
+            </div>
+            <div>
+              <div style="font-size:10px; color:#8b6355; margin-bottom:4px; font-family:'JetBrains Mono',monospace;">内容</div>
+              <div style="font-size:13px; color:#f5ede0;">季節限定メニュー ／ 20% OFF</div>
+            </div>
+            <div>
+              <div style="font-size:10px; color:#8b6355; margin-bottom:4px; font-family:'JetBrains Mono',monospace;">バッジ</div>
+              <div style="font-size:13px; color:#f5ede0;">「期間限定」</div>
+            </div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>自分のバナーを作るときは：</strong>この企画シートを自分の情報に書き換えるだけでOKです。情報が決まってから作業を始めると迷いがなくなります。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div class="step-title">カラーパレットを決める</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">「シック・落ち着いた・大人」のイメージに合わせた5色のパレットです。この色だけを使って作るとまとまりが出ます。</p>
+        <div class="palette">
+          <div class="swatch-wrap">
+            <div class="swatch" style="background:#2c1f14; border:1px solid rgba(255,255,255,0.1);"></div>
+            <div style="font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">#2c1f14</div>
+            <div style="font-size:10px; color:#94a3b8;">背景</div>
+          </div>
+          <div class="swatch-wrap">
+            <div class="swatch" style="background:#6b4c2a;"></div>
+            <div style="font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">#6b4c2a</div>
+            <div style="font-size:10px; color:#94a3b8;">チョコレート</div>
+          </div>
+          <div class="swatch-wrap">
+            <div class="swatch" style="background:#c9a96e;"></div>
+            <div style="font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">#c9a96e</div>
+            <div style="font-size:10px; color:#94a3b8;">ゴールド</div>
+          </div>
+          <div class="swatch-wrap">
+            <div class="swatch" style="background:#f5ede0;"></div>
+            <div style="font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">#f5ede0</div>
+            <div style="font-size:10px; color:#94a3b8;">クリーム</div>
+          </div>
+          <div class="swatch-wrap">
+            <div class="swatch" style="background:#8b6355;"></div>
+            <div style="font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">#8b6355</div>
+            <div style="font-size:10px; color:#94a3b8;">テラコッタ</div>
+          </div>
+        </div>
+        <!-- 完成イメージプレビュー -->
+        <div style="width:100%; height:100px; border-radius:12px; background:linear-gradient(135deg,#2c1f14,#6b4c2a,#8b6355); position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; margin-bottom:10px;">
+          <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22100%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22400%22 height=%22100%22 filter=%22url(%23n)%22 opacity=%220.12%22/%3E%3C/svg%3E');"></div>
+          <div style="position:relative; text-align:center;">
+            <div style="font-size:10px; color:#c9a96e; letter-spacing:0.2em; font-family:'JetBrains Mono',monospace;">MAISON DU CAFÉ</div>
+            <div style="font-family:'Dancing Script',cursive; font-size:28px; font-weight:700; color:#f5ede0; text-shadow:0 2px 8px rgba(0,0,0,0.4);">Autumn Coffee Fair</div>
+          </div>
+        </div>
+        <p class="caption">↑ この5色だけで作るとまとまりが出る</p>
+        <div class="tip"><p><strong>ダークな背景のコツ：</strong>グラデーションの始点を <code>#2c1f14</code>、終点を <code>#8b6355</code> にすると奥行きが出ます。ノイズは量を少なめ（12%）にすると上品な仕上がりになります。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div class="step-title">背景を作る（ダークグラデーション＋ノイズ）</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Lesson 01・02で学んだ手順と同じです。色だけ変えればOK。ノイズ量を少なめにするのがシック系のポイントです。</p>
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">グラデーションで塗りつぶし — カフェカラー</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas">
+              <div class="ps-dialog" style="min-width:280px;">
+                <div class="ps-dialog-title">グラデーションで塗りつぶし</div>
+                <div class="ps-field">
+                  <span class="ps-field-label">グラデーション</span>
+                  <div style="width:130px; height:18px; border-radius:3px; border:1px solid #888; background:linear-gradient(to right,#2c1f14,#6b4c2a,#8b6355);"></div>
+                </div>
+                <div class="ps-field"><span class="ps-field-label">スタイル</span><select class="ps-field-select"><option>線形</option></select></div>
+                <div class="ps-field"><span class="ps-field-label">角度</span><input class="ps-field-input" value="135°" readonly /></div>
+                <div class="ps-btns"><button class="ps-btn ok">OK</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">ノイズを加える — カフェ版（量を控えめに）</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas">
+              <div class="ps-dialog" style="min-width:260px;">
+                <div class="ps-dialog-title">ノイズを加える</div>
+                <div class="ps-field"><span class="ps-field-label">量</span><input class="ps-field-input hl" value="12 %" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">分布方法</span><select class="ps-field-select"><option>ガウス</option></select></div>
+                <label style="font-size:10px; color:#bbb; display:flex; align-items:center; gap:5px;"><input type="checkbox" /> グレースケールノイズ（チェックしない）</label>
+                <div style="font-size:9px; color:#aaa; margin-top:8px; font-family:'JetBrains Mono',monospace;">💡 12%に抑えると上品な質感に（Lesson02は25%）</div>
+              </div>
+            </div>
+            <div class="ps-layers">
+              <div class="ps-layers-title">レイヤー</div>
+              <select class="blend-select"><option>オーバーレイ（描画モード）</option></select>
+              <div class="ps-layer sel">
+                <div class="ps-layer-thumb" style="background:#808080;"></div>
+                <div><div class="ps-layer-name">ノイズ（12%）</div><div class="ps-layer-mode">オーバーレイ</div></div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb" style="background:linear-gradient(to right,#2c1f14,#8b6355);"></div>
+                <div class="ps-layer-name">グラデーション塗りつぶし</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <div class="step-title">写真を配置する（左テキスト・右コーヒーのレイアウト）</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">今回のレイアウトは<strong>左半分にテキスト・右半分にコーヒー写真</strong>の構成です。まず構成図で全体を把握してから作業を始めましょう。</p>
+
+        <!-- レイアウト構成図 -->
+        <div style="background:#1a1a1a; border-radius:14px; padding:16px; margin-bottom:20px;">
+          <div style="font-size:11px; color:#c9a96e; font-family:'JetBrains Mono',monospace; margin-bottom:10px;">レイアウト構成図（800×800px）</div>
+          <div style="display:flex; gap:8px; height:200px; border-radius:10px; overflow:hidden; border:1px solid #3d2b18;">
+            <div style="flex:1; background:linear-gradient(135deg,#2c1f14,#6b4c2a); padding:14px; display:flex; flex-direction:column; justify-content:center; gap:8px; position:relative;">
+              <div style="border:1px dashed rgba(201,169,110,0.4); border-radius:4px; padding:4px 6px;">
+                <div style="font-size:8px; color:#c9a96e; font-family:'JetBrains Mono',monospace; margin-bottom:2px;">A キャッチコピー</div>
+                <div style="font-size:9px; color:#c9a96e; font-style:italic;">秋の特別な一杯を、あなたへ</div>
+              </div>
+              <div style="border:1px dashed rgba(245,237,224,0.4); border-radius:4px; padding:4px 6px;">
+                <div style="font-size:8px; color:#f5ede0; opacity:0.6; font-family:'JetBrains Mono',monospace; margin-bottom:2px;">B メインタイトル</div>
+                <div style="font-family:'Dancing Script',cursive; font-size:18px; font-weight:700; color:#f5ede0; line-height:1.1;">Autumn<br>Coffee Fair</div>
+              </div>
+              <div style="border:1px dashed rgba(201,169,110,0.3); border-radius:4px; padding:4px 6px;">
+                <div style="font-size:8px; color:#c9a96e; font-family:'JetBrains Mono',monospace; margin-bottom:2px;">C 日付</div>
+                <div style="font-size:9px; color:#f5ede0;">10/1（火）〜 10/31（木）</div>
+              </div>
+              <div style="width:55px; height:24px; border:1px solid #c9a96e; border-radius:20px; display:flex; align-items:center; justify-content:center;">
+                <div style="font-size:8px; color:#c9a96e;">期間限定</div>
+              </div>
+              <div style="position:absolute; right:0; top:0; bottom:0; width:1px; border-right:1px dashed rgba(201,169,110,0.4);"></div>
+              <div style="position:absolute; bottom:6px; right:6px; font-size:8px; color:rgba(201,169,110,0.5); font-family:'JetBrains Mono',monospace;">← 400px →</div>
+            </div>
+            <div style="flex:1; background:#3d2b18; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;">
+              <div style="font-size:40px; opacity:0.5;">☕</div>
+              <div style="font-size:9px; color:rgba(201,169,110,0.6); text-align:center; font-family:'JetBrains Mono',monospace; line-height:1.6;">コーヒー写真<br>（正面・切り抜き）</div>
+            </div>
+          </div>
+          <div style="font-size:10px; color:rgba(201,169,110,0.6); margin-top:8px; font-family:'JetBrains Mono',monospace;">← 左400px：テキスト　｜　右400px：コーヒー写真 →</div>
+        </div>
+
+        <!-- 写真の探し方 -->
+        <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px;">📷 写真素材の探し方</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
+          <div style="background:#2c1f14; border-radius:8px; padding:12px 14px; flex:1; min-width:160px;">
+            <div style="font-size:10px; color:#c9a96e; font-family:'JetBrains Mono',monospace; margin-bottom:8px;">🌐 Unsplash（無料）</div>
+            <div style="font-size:12px; color:#f5ede0; line-height:2.2;">
+              <code style="background:#3d2b18; color:#c9a96e; padding:2px 6px; border-radius:3px; display:inline-block; margin-bottom:2px;">latte art front view dark</code><br>
+              <code style="background:#3d2b18; color:#c9a96e; padding:2px 6px; border-radius:3px; display:inline-block; margin-bottom:2px;">coffee cup moody dark</code><br>
+              <code style="background:#3d2b18; color:#c9a96e; padding:2px 6px; border-radius:3px; display:inline-block;">espresso cup close up</code>
+            </div>
+          </div>
+          <div style="background:#2c1f14; border-radius:8px; padding:12px 14px; flex:1; min-width:160px;">
+            <div style="font-size:10px; color:#c9a96e; font-family:'JetBrains Mono',monospace; margin-bottom:8px;">✨ Fireflyプロンプト</div>
+            <div style="font-size:11px; color:#f5ede0; line-height:1.8; font-family:'JetBrains Mono',monospace;">front view coffee cup with latte art, dark brown background, steam rising, moody autumn, photorealistic</div>
+          </div>
+        </div>
+
+        <!-- 配置手順 -->
+        <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px;">🖼 Photoshopへの配置手順</div>
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">コーヒー写真の配置と切り抜き</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas" style="flex-direction:column; align-items:flex-start; gap:8px; padding:14px;">
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#6b4c2a,#c9a96e); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">1</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;"><code style="background:#333; color:#c9a96e; padding:1px 5px; border-radius:3px;">ファイル → 埋め込みを配置</code> でコーヒー写真を選択 → Enterで確定</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#6b4c2a,#c9a96e); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">2</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;"><code style="background:#333; color:#c9a96e; padding:1px 5px; border-radius:3px;">Cmd/Ctrl + T</code>（自由変形）で<strong style="color:#c9a96e;">右半分（400〜800px）</strong>に移動・サイズ調整。Shiftを押しながらドラッグで縦横比を維持。</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#6b4c2a,#c9a96e); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">3</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;"><code style="background:#333; color:#c9a96e; padding:1px 5px; border-radius:3px;">選択範囲 → 被写体を選択</code> でカップを自動選択 → <code style="background:#333; color:#c9a96e; padding:1px 5px; border-radius:3px;">選択とマスク</code> で境界線を整える</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#6b4c2a,#c9a96e); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">4</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">出力先：<code style="background:#333; color:#c9a96e; padding:1px 5px; border-radius:3px;">レイヤーマスク</code> → OK。背景が透明になる。</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#6b4c2a,#c9a96e); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">5</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;"><strong style="color:#c9a96e;">左端をグラデーションでなじませる：</strong>写真レイヤーのマスクをクリック → グラデーションツール（黒→透明・左方向）で左端をぼかす</p>
+              </div>
+            </div>
+            <div class="ps-layers" style="width:220px;">
+              <div class="ps-layers-title">レイヤー構成</div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb" style="background:#fff;display:flex;align-items:center;justify-content:center;font-size:7px;color:#333;font-weight:700;">T</div>
+                <div class="ps-layer-name">テキスト A〜D</div>
+              </div>
+              <div class="ps-layer sel">
+                <div class="ps-layer-thumb" style="background:#6b4c2a; position:relative; overflow:hidden;">
+                  <div style="position:absolute;right:0;top:0;bottom:0;width:40%;background:#222;"></div>
+                </div>
+                <div><div class="ps-layer-name">コーヒー写真</div><div class="ps-layer-mode">レイヤーマスク</div></div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb" style="background:#808080;"></div>
+                <div class="ps-layer-name">ノイズ（12%）</div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb" style="background:linear-gradient(to right,#2c1f14,#8b6355);"></div>
+                <div class="ps-layer-name">グラデーション背景</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#2c1f14; border-radius:12px; padding:16px 18px; margin-top:16px;">
+          <div style="font-size:11px; color:#c9a96e; font-family:'JetBrains Mono',monospace; margin-bottom:10px;">✨ 写真を背景になじませる3つのテクニック</div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; gap:10px;"><div style="font-size:11px; color:#c9a96e; font-weight:700; flex-shrink:0; width:18px;">①</div><p style="font-size:12px; color:#f5ede0; line-height:1.7;"><strong style="color:#c9a96e;">マスクの左端をグラデーション</strong>でぼかす → テキストエリアと自然につながる</p></div>
+            <div style="display:flex; gap:10px;"><div style="font-size:11px; color:#c9a96e; font-weight:700; flex-shrink:0; width:18px;">②</div><p style="font-size:12px; color:#f5ede0; line-height:1.7;"><strong style="color:#c9a96e;">描画モードを「乗算」</strong>に変更 → 写真の明るい部分が背景色と混ざってシックに</p></div>
+            <div style="display:flex; gap:10px;"><div style="font-size:11px; color:#c9a96e; font-weight:700; flex-shrink:0; width:18px;">③</div><p style="font-size:12px; color:#f5ede0; line-height:1.7;"><strong style="color:#c9a96e;">色相・彩度の調整レイヤー</strong>をクリッピングマスクで適用 → 写真の色味をブラウン系に寄せる</p></div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>湯気（スチーム）の扱い：</strong>描画モードを <code>スクリーン</code> にすると黒が消えて湯気だけが残り、より雰囲気が出ます。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">5</div>
+        <div class="step-title">テキストを配置する（カフェ版フォント設定）</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">A〜Dの4パーツを順番に配置します。シック系はトラッキングを<strong>広め</strong>に設定するのがポイントです。</p>
+        <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+          <div style="border:1px solid var(--border); border-radius:10px; overflow:hidden;">
+            <div style="background:#f5ede0; padding:8px 14px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border);">
+              <div style="background:#2c1f14; color:#c9a96e; font-size:11px; font-weight:700; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center;">A</div>
+              <span style="font-size:12px; font-weight:700;">キャッチコピー「秋の特別な一杯を、あなたへ」</span>
+            </div>
+            <div style="padding:10px 14px; font-size:12px; color:var(--text-secondary); line-height:2;">
+              フォント：<code>游明朝 / Noto Serif JP Light</code><br>
+              サイズ：<code>32px</code>　カラー：<code>#c9a96e</code>（ゴールド）<br>
+              トラッキング：<code>+80</code>（ゆったり間隔で上品に）
+            </div>
+          </div>
+          <div style="border:1px solid var(--border); border-radius:10px; overflow:hidden;">
+            <div style="background:#f5ede0; padding:8px 14px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border);">
+              <div style="background:#2c1f14; color:#c9a96e; font-size:11px; font-weight:700; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center;">B</div>
+              <span style="font-size:12px; font-weight:700;">メインタイトル「Autumn Coffee Fair」</span>
+            </div>
+            <div style="padding:10px 14px;">
+              <div style="font-size:12px; color:var(--text-secondary); line-height:2;">
+                フォント：<code>Cormorant Garamond Bold</code>（Adobe Fonts）<br>
+                サイズ：<code>100〜120px</code>　カラー：<code>#f5ede0</code>（クリーム）<br>
+                トラッキング：<code>-10</code>
+              </div>
+              <div style="background:linear-gradient(135deg,#2c1f14,#6b4c2a); border-radius:8px; padding:12px 16px; margin-top:8px; display:flex; align-items:center; justify-content:center;">
+                <div style="font-family:'Dancing Script',cursive; font-size:28px; font-weight:700; color:#f5ede0; letter-spacing:-0.02em;">Autumn Coffee Fair</div>
+              </div>
+            </div>
+          </div>
+          <div style="border:1px solid var(--border); border-radius:10px; overflow:hidden;">
+            <div style="background:#f5ede0; padding:8px 14px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border);">
+              <div style="background:#2c1f14; color:#c9a96e; font-size:11px; font-weight:700; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center;">C</div>
+              <span style="font-size:12px; font-weight:700;">日付「10/1（火）〜 10/31（木）」</span>
+            </div>
+            <div style="padding:10px 14px; font-size:12px; color:var(--text-secondary); line-height:2;">
+              フォント：<code>游ゴシック Medium</code><br>
+              サイズ：<code>36px</code>　カラー：<code>#f5ede0</code><br>
+              トラッキング：<code>+50</code>（スペーシングを広げて読みやすく）
+            </div>
+          </div>
+          <div style="border:1px solid var(--border); border-radius:10px; overflow:hidden;">
+            <div style="background:#f5ede0; padding:8px 14px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border);">
+              <div style="background:#8b6355; color:#f5ede0; font-size:11px; font-weight:700; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center;">D</div>
+              <span style="font-size:12px; font-weight:700;">バッジ「期間限定」</span>
+            </div>
+            <div style="padding:10px 14px; font-size:12px; color:var(--text-secondary); line-height:2;">
+              楕円形ツールで細い線の円を描く（塗り：なし　線：<code>#c9a96e</code> 2px）<br>
+              中に「期間限定」テキスト（游明朝　サイズ：<code>28px</code>　カラー：<code>#c9a96e</code>）
+            </div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>シック系バナーのポイント：</strong>トラッキングを<strong>広め（+50〜+100）</strong>にするとラグジュアリー感が出ます。Lesson02（All Free Day）とは逆の発想です。フォントも明朝体・セリフ体にすると大人っぽさが増します。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">6</div>
+        <div class="step-title">仕上げ（光彩・色調補正）</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">シック系バナーはドロップシャドウより<strong>光彩（外側）</strong>と<strong>色調補正</strong>で仕上げるとより高級感が出ます。</p>
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">レイヤースタイル — 光彩（外側）</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas">
+              <div class="ps-dialog" style="min-width:260px;">
+                <div class="ps-dialog-title">光彩（外側）— テキストレイヤーに適用</div>
+                <div class="ps-field"><span class="ps-field-label">描画モード</span><select class="ps-field-select"><option>スクリーン</option></select></div>
+                <div class="ps-field"><span class="ps-field-label">不透明度</span><input class="ps-field-input hl" value="30 %" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">カラー</span><div style="width:80px; height:18px; background:#c9a96e; border:1px solid #888; border-radius:3px;"></div></div>
+                <div class="ps-field"><span class="ps-field-label">サイズ</span><input class="ps-field-input" value="20 px" readonly /></div>
+                <div style="font-size:9px; color:#aaa; margin-top:6px; font-family:'JetBrains Mono',monospace;">💡 ゴールド色の光彩で高級感アップ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">色調補正 — 全体の雰囲気を整える</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas">
+              <div class="ps-dialog" style="min-width:260px;">
+                <div class="ps-dialog-title">色相・彩度（調整レイヤー）</div>
+                <div class="ps-field"><span class="ps-field-label">色相</span><input class="ps-field-input" value="0" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">彩度</span><input class="ps-field-input hl" value="-15" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">明度</span><input class="ps-field-input" value="-5" readonly /></div>
+                <div style="font-size:9px; color:#aaa; margin-top:6px; font-family:'JetBrains Mono',monospace;">💡 彩度を少し下げると落ち着いた印象に</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>最終確認：</strong>完成したら一度<strong>スマートフォンで見てみる</strong>ことをおすすめします。最小フォントは30px以上を目安にしましょう。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">7</div>
+        <div class="step-title">PNG書き出して完成</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><code>ファイル → 書き出し → スクリーン用に書き出し...</code> を開き、<code>PNG</code> 形式で保存します。サイズが <code>800 × 800 px</code> になっていることを確認してください。</p>
+        <div style="width:100%; height:80px; border-radius:12px; background:linear-gradient(135deg,#2c1f14,#6b4c2a,#8b6355); position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; margin-bottom:8px;">
+          <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%2280%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22400%22 height=%2280%22 filter=%22url(%23n)%22 opacity=%220.12%22/%3E%3C/svg%3E');"></div>
+          <div style="position:relative; font-size:11px; color:rgba(201,169,110,0.8); font-family:'JetBrains Mono',monospace; letter-spacing:0.1em;">800 × 800 px — PNG</div>
+        </div>
+        <p class="caption">↑ 完成。GitHubにアップしてNotionにリンクを貼りましょう。</p>
+      </div>
+    </div>
+
+  </div><!-- /steps -->
+
+  <div class="footer" style="text-align:center; margin-top:48px; font-size:12px; color:#94a3b8;">Photoshop チュートリアル · Lesson 03｜カフェ オリジナルバナー 800×800px</div>
+
+</div>
+</body>
+</html>
