@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WINTER SALEバナー模写｜Photoshop Lesson 06</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&family=Oswald:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --text: #1a1a2e;
+    --text-secondary: #4a5568;
+    --border: #e2e8f0;
+    --code-bg: #fdf0f4;
+    --code-text: #8b1a3a;
+    --accent: #e8507a;
+    --pink: #f06292;
+    --brown: #3d1f00;
+    --brown-light: #5c3010;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 40px 20px 80px; }
+  .container { max-width: 780px; margin: 0 auto; }
+
+  .hero { background: linear-gradient(135deg, #3d1f00 0%, #7a3b10 50%, #e8507a 100%); border-radius: 20px; padding: 48px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::after { content: '🛍'; position: absolute; right: 40px; top: 30px; font-size: 64px; opacity: 0.2; }
+  .hero-content { position: relative; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+  .hero h1 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.85); }
+  .size-chip { display: inline-flex; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.35); color: #fff; font-size: 13px; font-family: 'JetBrains Mono', monospace; padding: 5px 14px; border-radius: 8px; margin-top: 16px; font-weight: 600; }
+
+  .goal-card { background: #fff; border-radius: 16px; border: 1px solid var(--border); padding: 24px; margin-bottom: 32px; }
+  .goal-label { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--accent); font-weight: 600; letter-spacing: 0.08em; margin-bottom: 12px; text-transform: uppercase; }
+
+  /* バナープレビュー */
+  .banner-preview { border-radius: 12px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); max-width: 400px; }
+  .bp-main { background: #f06292; padding: 32px 28px 24px; display: flex; flex-direction: column; gap: 12px; }
+  .bp-title { font-family: 'Oswald', sans-serif; font-size: 72px; font-weight: 700; color: #3d1f00; line-height: 0.9; letter-spacing: -0.02em; }
+  .bp-date { font-size: 22px; font-weight: 900; color: #3d1f00; font-family: 'Oswald', sans-serif; letter-spacing: 0.02em; display: flex; align-items: baseline; gap: 8px; }
+  .bp-date .thu { font-size: 14px; font-weight: 700; }
+  .bp-brand { font-size: 20px; font-weight: 900; color: #3d1f00; letter-spacing: 0.05em; }
+  .bp-brands { font-size: 11px; color: #3d1f00; line-height: 1.8; font-weight: 500; }
+  .bp-cta { background: #3d1f00; padding: 14px 28px; display: flex; align-items: center; justify-content: center; gap: 12px; }
+  .bp-cta-text { font-size: 16px; font-weight: 700; color: #fff; letter-spacing: 0.1em; }
+  .bp-cta-arrow { font-size: 16px; color: #fff; }
+
+  .steps { display: flex; flex-direction: column; gap: 24px; }
+  .step-card { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; }
+  .step-card:hover { box-shadow: 0 4px 24px rgba(232,80,122,0.1); }
+  .step-header { display: flex; align-items: center; gap: 16px; padding: 20px 24px; border-bottom: 1px solid var(--border); }
+  .step-num { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #3d1f00, #e8507a); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .step-title { font-size: 17px; font-weight: 700; color: var(--text); }
+  .step-body { padding: 24px; }
+  .step-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px; }
+
+  code { background: var(--code-bg); color: var(--code-text); font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  .ps-mock { background: #2b2b2b; border-radius: 12px; overflow: hidden; margin-bottom: 12px; border: 1px solid #111; }
+  .ps-titlebar { background: #1e1e1e; padding: 6px 14px; display: flex; align-items: center; gap: 6px; }
+  .ps-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .ps-dot.r { background: #ff5f56; } .ps-dot.y { background: #ffbd2e; } .ps-dot.g { background: #27c93f; }
+  .ps-win-title { font-size: 10px; color: #888; margin-left: 8px; font-family: 'JetBrains Mono', monospace; }
+  .ps-body { display: flex; }
+  .ps-toolbar { background: #1f1f1f; width: 30px; border-right: 1px solid #111; padding: 8px 0; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .ps-tool-icon { width: 18px; height: 18px; background: #444; border-radius: 2px; }
+  .ps-canvas { flex: 1; background: #535353; display: flex; align-items: center; justify-content: center; padding: 16px; flex-wrap: wrap; gap: 10px; }
+  .ps-dialog { background: #404040; border: 1px solid #666; border-radius: 6px; padding: 14px 18px; min-width: 220px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+  .ps-dialog-title { font-size: 11px; font-weight: 600; color: #eee; margin-bottom: 12px; border-bottom: 1px solid #555; padding-bottom: 8px; font-family: 'JetBrains Mono', monospace; }
+  .ps-field { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; gap: 10px; }
+  .ps-field-label { font-size: 10px; color: #bbb; }
+  .ps-field-input { background: #222; border: 1px solid #666; border-radius: 3px; padding: 3px 8px; font-size: 10px; color: #fff; width: 80px; text-align: right; font-family: 'JetBrains Mono', monospace; }
+  .ps-field-input.hl { border-color: #e8507a; background: #2c0010; color: #f06292; font-weight: 600; }
+  .ps-field-input.hl-brown { border-color: #8b4510; background: #1a0a00; color: #c47a3a; font-weight: 600; }
+  .ps-field-select { background: #333; border: 1px solid #666; border-radius: 3px; padding: 3px 6px; font-size: 10px; color: #fff; width: 130px; }
+  .ps-btns { display: flex; justify-content: flex-end; gap: 6px; margin-top: 12px; }
+  .ps-btn { background: #555; border: 1px solid #777; border-radius: 3px; padding: 4px 12px; font-size: 10px; color: #eee; cursor: default; }
+  .ps-btn.ok { background: #0078d4; border-color: #0078d4; }
+  .ps-layers { background: #252525; width: 220px; border-left: 1px solid #111; padding: 8px; }
+  .ps-layers-title { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .ps-layer { display: flex; align-items: center; gap: 7px; padding: 5px 7px; border-radius: 3px; margin-bottom: 3px; background: #3a3a3a; }
+  .ps-layer.sel { background: #2c0010; }
+  .ps-layer-thumb { width: 22px; height: 17px; border-radius: 2px; flex-shrink: 0; border: 1px solid #555; }
+  .ps-layer-name { font-size: 9px; color: #ddd; line-height: 1.3; }
+  .ps-layer-mode { font-size: 8px; color: #f06292; }
+
+  .tip { background: #fdf0f4; border-left: 3px solid #e8507a; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 16px; }
+  .tip p { font-size: 13px; color: #5c0020; line-height: 1.7; }
+  .tip strong { color: #8b1a3a; font-weight: 700; }
+  .caption { font-size: 12px; color: #94a3b8; margin-top: 8px; font-style: italic; }
+
+  .part-row { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+  .part-header { padding: 8px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); background: #fdf0f4; }
+  .part-tag { font-size: 11px; font-weight: 700; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .part-body { padding: 10px 14px; font-size: 12px; color: var(--text-secondary); line-height: 2.2; }
+
+  /* タイポグラフィ比較 */
+  .typo-compare { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .typo-box { flex: 1; min-width: 140px; border-radius: 10px; overflow: hidden; }
+  .typo-preview { padding: 16px; display: flex; align-items: center; justify-content: center; }
+  .typo-label { padding: 6px 10px; font-size: 10px; font-family: 'JetBrains Mono', monospace; text-align: center; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 24px; }
+    .hero h1 { font-size: 22px; }
+    .ps-layers { display: none; }
+    .step-body { padding: 16px; }
+    .bp-title { font-size: 52px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Photoshop チュートリアル · Lesson 06</div>
+      <h1>🛍 WINTER SALE バナー模写<br>BAYCREW'S GROUP</h1>
+      <p>写真なし・テキストのみで作るタイポグラフィバナー。フォント選び・文字サイズの強弱・余白のとり方を学ぶ</p>
+      <div class="size-chip">988 × 990 px</div>
+    </div>
+  </div>
+
+  <!-- 完成ゴール -->
+  <div class="goal-card">
+    <div class="goal-label">🎯 完成イメージ</div>
+    <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+      <div class="banner-preview">
+        <div class="bp-main">
+          <div class="bp-title">WINTER<br>SALE</div>
+          <div class="bp-date">2026.01.01 <span class="thu">THU</span></div>
+          <div class="bp-brand">BAYCREW'S GROUP</div>
+          <div class="bp-brands">IÉNA, SLOBE IÉNA, Spick &amp; Span, FRAMeWORK, NOBLE<br>JOURNAL STANDARD, JOURNAL STANDARD relume<br>Deuxième Classe, L'Appartement, ÉDIFICE, 417 ÉDIFICE<br>and more ...</div>
+        </div>
+        <div class="bp-cta">
+          <div class="bp-cta-text">詳細はこちら</div>
+          <div class="bp-cta-arrow">›</div>
+        </div>
+      </div>
+      <div style="flex:1; min-width:200px;">
+        <div style="font-size:12px; font-weight:700; color:var(--text); margin-bottom:10px;">このバナーのポイント</div>
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:12px; color:var(--text-secondary); line-height:1.7;">
+          <div style="display:flex; gap:8px;"><span style="color:#e8507a; font-weight:700;">①</span> 写真なし・テキストのみの構成</div>
+          <div style="display:flex; gap:8px;"><span style="color:#e8507a; font-weight:700;">②</span> 「WINTER SALE」を極限まで大きく</div>
+          <div style="display:flex; gap:8px;"><span style="color:#e8507a; font-weight:700;">③</span> ピンク×ブラウンの2色だけ</div>
+          <div style="display:flex; gap:8px;"><span style="color:#e8507a; font-weight:700;">④</span> 余白を意識したレイアウト</div>
+          <div style="display:flex; gap:8px;"><span style="color:#e8507a; font-weight:700;">⑤</span> フォントの太さ・サイズで情報の強弱</div>
+        </div>
+      </div>
+    </div>
+    <p class="caption" style="margin-top:12px;">↑ 完成イメージ。シンプルな2色＋大胆なタイポグラフィが特徴</p>
+  </div>
+
+  <!-- ステップ -->
+  <div class="steps">
+
+    <!-- STEP 1 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div class="step-title">バナーの構造を分析する</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">今回は<strong>写真なし・テキストのみ</strong>のバナーです。Lesson 02〜05と違い、素材を用意する必要がありません。<strong>フォント・サイズ・余白・色</strong>だけで魅せるデザインです。</p>
+
+        <!-- 構造マップ -->
+        <div style="background:#1a1a1a; border-radius:14px; padding:16px; margin-bottom:20px;">
+          <div style="font-size:11px; color:#f06292; font-family:'JetBrains Mono',monospace; margin-bottom:10px;">バナー構造マップ（988×990px）</div>
+          <div style="border-radius:10px; overflow:hidden; border:1px solid #333; max-width:340px;">
+
+            <!-- ピンク背景エリア -->
+            <div style="background:#f06292; padding:20px 18px; display:flex; flex-direction:column; gap:10px;">
+
+              <!-- A: WINTER SALE -->
+              <div style="border:1px dashed rgba(61,31,0,0.5); border-radius:4px; padding:8px 10px;">
+                <div style="font-size:9px; color:rgba(61,31,0,0.7); font-family:'JetBrains Mono',monospace; margin-bottom:4px;">A メインタイトル（最大サイズ）</div>
+                <div style="font-family:'Oswald',sans-serif; font-size:42px; font-weight:700; color:#3d1f00; line-height:0.9; letter-spacing:-0.02em;">WINTER<br>SALE</div>
+              </div>
+
+              <!-- B: 日付 -->
+              <div style="border:1px dashed rgba(61,31,0,0.4); border-radius:4px; padding:6px 10px;">
+                <div style="font-size:9px; color:rgba(61,31,0,0.7); font-family:'JetBrains Mono',monospace; margin-bottom:3px;">B 日付（中サイズ）</div>
+                <div style="font-size:16px; font-weight:900; color:#3d1f00; font-family:'Oswald',sans-serif;">2026.01.01 <span style="font-size:11px;">THU</span></div>
+              </div>
+
+              <!-- C: ブランド名 -->
+              <div style="border:1px dashed rgba(61,31,0,0.4); border-radius:4px; padding:6px 10px;">
+                <div style="font-size:9px; color:rgba(61,31,0,0.7); font-family:'JetBrains Mono',monospace; margin-bottom:3px;">C ブランド名（中サイズ・太字）</div>
+                <div style="font-size:13px; font-weight:900; color:#3d1f00; letter-spacing:0.05em;">BAYCREW'S GROUP</div>
+              </div>
+
+              <!-- D: ブランド一覧 -->
+              <div style="border:1px dashed rgba(61,31,0,0.3); border-radius:4px; padding:6px 10px;">
+                <div style="font-size:9px; color:rgba(61,31,0,0.7); font-family:'JetBrains Mono',monospace; margin-bottom:3px;">D ブランド一覧（小サイズ）</div>
+                <div style="font-size:8px; color:#3d1f00; line-height:1.8; font-weight:500;">IÉNA, SLOBE IÉNA, Spick &amp; Span, FRAMeWORK...<br>and more ...</div>
+              </div>
+            </div>
+
+            <!-- E: CTAブラウン帯 -->
+            <div style="background:#3d1f00; padding:10px 18px; display:flex; align-items:center; justify-content:center; gap:10px;">
+              <div style="font-size:9px; color:rgba(255,255,255,0.6); font-family:'JetBrains Mono',monospace;">E CTAボタン帯（ブラウン）</div>
+              <div style="font-size:11px; font-weight:700; color:#fff; margin-left:auto;">詳細はこちら ›</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- カラーパレット -->
+        <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px;">このバナーで使う色（2色だけ！）</div>
+        <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
+          <div style="text-align:center;">
+            <div style="width:100px; height:80px; border-radius:12px; background:#f06292; border:1px solid rgba(0,0,0,0.08); margin-bottom:8px; display:flex; align-items:center; justify-content:center;">
+              <div style="font-family:'Oswald',sans-serif; font-size:20px; font-weight:700; color:#3d1f00;">SALE</div>
+            </div>
+            <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">#f06292</div>
+            <div style="font-size:11px; color:#94a3b8;">ピンク（背景）</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="width:100px; height:80px; border-radius:12px; background:#3d1f00; border:1px solid rgba(0,0,0,0.08); margin-bottom:8px; display:flex; align-items:center; justify-content:center;">
+              <div style="font-size:11px; font-weight:700; color:#fff; letter-spacing:0.1em;">詳細はこちら</div>
+            </div>
+            <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">#3d1f00</div>
+            <div style="font-size:11px; color:#94a3b8;">ダークブラウン<br>（文字・帯）</div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>2色バナーの強さ：</strong>色を絞ることで<strong>統一感と洗練さ</strong>が生まれます。ピンク×ブラウンは「かわいさ」と「高級感」を同時に表現できる組み合わせ。今回は素材探しが不要なので、<strong>フォント選びと余白</strong>に集中しましょう。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div class="step-title">新規ドキュメントとピンク背景を作る</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">今回はグラデーションなし。<strong>ピンク一色の塗りつぶし</strong>だけで背景を作ります。シンプルイズベスト。</p>
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">新規ドキュメント ＋ 背景塗りつぶし</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas">
+              <div class="ps-dialog" style="min-width:270px;">
+                <div class="ps-dialog-title">新規ドキュメント</div>
+                <div class="ps-field"><span class="ps-field-label">幅</span><input class="ps-field-input hl" value="988 px" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">高さ</span><input class="ps-field-input hl" value="990 px" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">解像度</span><input class="ps-field-input" value="72 ppi" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">背景コンテンツ</span><select class="ps-field-select"><option>カスタムカラー</option></select></div>
+                <div class="ps-field">
+                  <span class="ps-field-label">カラー</span>
+                  <div style="width:80px; height:18px; background:#f06292; border:1px solid #888; border-radius:3px;"></div>
+                </div>
+                <div style="font-size:9px; color:#aaa; margin-top:6px; font-family:'JetBrains Mono',monospace;">💡 背景コンテンツをピンク(#f06292)にすると一発で完成</div>
+                <div class="ps-btns"><button class="ps-btn ok">作成</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>背景を後から変えたい場合：</strong><code>編集 → 塗りつぶし</code> でカラーを指定するか、<code>新規塗りつぶしレイヤー → べた塗り</code> を使えばいつでも色を変更できます。後者のほうが後から変更しやすくておすすめです。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div class="step-title">フォントを選ぶ（このバナーの核心）</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">テキストのみのバナーは<strong>フォント選びがすべて</strong>を決めます。「WINTER SALE」には<strong>太くて幅が狭い縦長のゴシック体（コンデンスドフォント）</strong>が使われています。</p>
+
+        <!-- フォント比較 -->
+        <div class="typo-compare">
+          <div class="typo-box" style="border:2px solid #e8507a; border-radius:10px;">
+            <div class="typo-preview" style="background:#f06292; height:100px;">
+              <div style="font-family:'Oswald',sans-serif; font-size:36px; font-weight:700; color:#3d1f00; line-height:0.9;">WINTER<br>SALE</div>
+            </div>
+            <div class="typo-label" style="background:#fdf0f4; color:#8b1a3a; font-weight:700;">✅ Oswald Bold<br>縦長・幅が狭い<br>大量のテキストが入る</div>
+          </div>
+          <div class="typo-box" style="border:1px solid #e2e8f0; border-radius:10px;">
+            <div class="typo-preview" style="background:#f06292; height:100px;">
+              <div style="font-size:22px; font-weight:900; color:#3d1f00; line-height:1.1;">WINTER<br>SALE</div>
+            </div>
+            <div class="typo-label" style="background:#f7f9fc; color:#94a3b8;">❌ 通常ゴシック<br>横幅が広い<br>同じサイズで小さく見える</div>
+          </div>
+        </div>
+
+        <!-- Adobe Fonts -->
+        <div style="background:#1a1a1a; border-radius:12px; padding:16px 18px; margin-bottom:14px;">
+          <div style="font-size:11px; color:#f06292; font-family:'JetBrains Mono',monospace; margin-bottom:12px;">🔤 このバナーに合うフォント</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="background:#e8507a; color:#fff; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; flex-shrink:0; font-family:'JetBrains Mono',monospace;">Adobe Fonts</div>
+              <div style="font-size:12px; color:#eee; line-height:1.8;"><code style="background:#2c0010; color:#f06292; padding:2px 6px; border-radius:3px;">Industry</code> / <code style="background:#2c0010; color:#f06292; padding:2px 6px; border-radius:3px;">Acumin Pro Condensed</code> / <code style="background:#2c0010; color:#f06292; padding:2px 6px; border-radius:3px;">Futura PT Condensed</code></div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="background:#4285f4; color:#fff; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; flex-shrink:0; font-family:'JetBrains Mono',monospace;">Google Fonts</div>
+              <div style="font-size:12px; color:#eee; line-height:1.8;"><code style="background:#001a3d; color:#38bdf8; padding:2px 6px; border-radius:3px;">Oswald Bold</code> / <code style="background:#001a3d; color:#38bdf8; padding:2px 6px; border-radius:3px;">Barlow Condensed Black</code></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip"><p><strong>「コンデンスド（Condensed）」とは：</strong>文字の横幅が通常より細く縦長に設計されたフォントです。大きなサイズでも横にはみ出しにくいため、<strong>インパクトを出しながらたくさんの文字を入れられる</strong>のが特徴。ファッション系バナーで特によく使われます。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <div class="step-title">「WINTER SALE」を配置する（パーツA）</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">このバナーの主役です。<strong>できるだけ大きく・左端ギリギリまで</strong>配置することで迫力が生まれます。「WINTER」と「SALE」は<strong>別テキストレイヤー</strong>で作ります。</p>
+
+        <div class="part-row">
+          <div class="part-header">
+            <div class="part-tag" style="background:#e8507a; color:#fff;">A</div>
+            <span style="font-size:12px; font-weight:700;">「WINTER SALE」— フォント設定</span>
+          </div>
+          <div class="part-body">
+            フォント：<code>Oswald Bold</code>（または Acumin Pro Condensed）<br>
+            「WINTER」サイズ：<code>280〜300px</code><br>
+            「SALE」サイズ：<code>320〜340px</code>（WINTERより少し大きく）<br>
+            カラー：<code>#3d1f00</code>（ダークブラウン）<br>
+            トラッキング：<code>-20〜-30</code>（少し詰める）<br>
+            行送り：<code>250px前後</code>（行間を詰める）
+          </div>
+        </div>
+
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">文字パネル — WINTER SALE設定</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon" style="background:#4a9fdf; color:#fff; font-size:9px; display:flex; align-items:center; justify-content:center; font-weight:700;">T</div></div>
+            <div class="ps-canvas">
+              <div class="ps-dialog" style="min-width:260px;">
+                <div class="ps-dialog-title">「WINTER」「SALE」— 文字パネル</div>
+                <div class="ps-field"><span class="ps-field-label">フォント</span><select class="ps-field-select"><option>Oswald / コンデンスド系</option></select></div>
+                <div class="ps-field"><span class="ps-field-label">ウェイト</span><select class="ps-field-select"><option>Bold / Heavy</option></select></div>
+                <div class="ps-field"><span class="ps-field-label">サイズ（SALE）</span><input class="ps-field-input hl" value="320 px" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">行送り</span><input class="ps-field-input hl" value="250 px" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">トラッキング</span><input class="ps-field-input" value="-25" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">カラー</span><div style="width:80px; height:18px; background:#3d1f00; border:1px solid #888; border-radius:3px;"></div></div>
+              </div>
+            </div>
+            <div class="ps-layers">
+              <div class="ps-layers-title">レイヤー構成</div>
+              <div class="ps-layer sel">
+                <div class="ps-layer-thumb" style="background:#f06292; display:flex; align-items:center; justify-content:center; font-size:7px; color:#3d1f00; font-weight:700; font-family:'Oswald',sans-serif;">SALE</div>
+                <div class="ps-layer-name">SALE（320px）</div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb" style="background:#f06292; display:flex; align-items:center; justify-content:center; font-size:6px; color:#3d1f00; font-weight:700; font-family:'Oswald',sans-serif;">WIN</div>
+                <div class="ps-layer-name">WINTER（280px）</div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb" style="background:#f06292;"></div>
+                <div class="ps-layer-name">背景（#f06292）</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 余白の解説 -->
+        <div style="background:#fdf0f4; border-radius:12px; padding:16px 18px; margin-top:16px;">
+          <div style="font-size:11px; color:#8b1a3a; font-family:'JetBrains Mono',monospace; margin-bottom:10px;">📐 余白（マージン）のとり方</div>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <div style="flex:1; min-width:160px; background:#f06292; border-radius:8px; padding:12px; position:relative;">
+              <!-- 余白ガイド -->
+              <div style="border:1px dashed rgba(255,255,255,0.6); border-radius:4px; padding:8px; margin:4px;">
+                <div style="font-family:'Oswald',sans-serif; font-size:28px; font-weight:700; color:#3d1f00; line-height:0.9; letter-spacing:-0.02em;">WINTER<br>SALE</div>
+              </div>
+              <div style="position:absolute; top:4px; left:4px; font-size:8px; color:rgba(255,255,255,0.8); font-family:'JetBrains Mono',monospace;">余白 40〜50px</div>
+            </div>
+            <div style="flex:1; min-width:160px; font-size:12px; color:var(--text-secondary); line-height:1.9;">
+              上余白：<code>40〜50px</code><br>
+              左余白：<code>40〜50px</code>（左端に寄せる）<br>
+              右はテキストが少しはみ出てもOK<br>
+              → 迫力が増す
+            </div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>「SALE」を「WINTER」より大きくする理由：</strong>伝えたいメッセージの優先度は「SALE（セール中！）」＞「WINTER（季節）」です。重要な情報を大きくすることで<strong>視線が自然に誘導</strong>されます。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">5</div>
+        <div class="step-title">日付・ブランド名・ブランド一覧を配置する（パーツB・C・D）</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">「WINTER SALE」の下に3段の情報を配置します。<strong>サイズを段階的に小さく</strong>することで情報の優先度が伝わります。</p>
+
+        <div class="part-row">
+          <div class="part-header">
+            <div class="part-tag" style="background:#e8507a; color:#fff;">B</div>
+            <span style="font-size:12px; font-weight:700;">「2026.01.01 THU」— 日付</span>
+          </div>
+          <div class="part-body">
+            フォント：<code>Oswald Bold</code>（数字はコンデンスドが映える）<br>
+            「2026.01.01」サイズ：<code>80〜90px</code><br>
+            「THU」サイズ：<code>40px</code>（同じテキストボックスでサイズ変更）<br>
+            カラー：<code>#3d1f00</code><br>
+            トラッキング：<code>+20</code>（日付は少し広めに）
+          </div>
+        </div>
+
+        <div class="part-row">
+          <div class="part-header">
+            <div class="part-tag" style="background:#5c3010; color:#fff;">C</div>
+            <span style="font-size:12px; font-weight:700;">「BAYCREW'S GROUP」— ブランド名</span>
+          </div>
+          <div class="part-body">
+            フォント：<code>游ゴシック Black / Noto Sans JP Black</code><br>
+            サイズ：<code>52〜60px</code><br>
+            カラー：<code>#3d1f00</code><br>
+            トラッキング：<code>+50〜+80</code>（ゆったり間隔でブランド感を出す）<br>
+            <br>
+            💡 「BAYCREW'S GROUP」は英字フォントを使うとより洗練された印象に
+          </div>
+        </div>
+
+        <div class="part-row">
+          <div class="part-header">
+            <div class="part-tag" style="background:#8b6355; color:#fff;">D</div>
+            <span style="font-size:12px; font-weight:700;">ブランド一覧テキスト</span>
+          </div>
+          <div class="part-body">
+            フォント：<code>游ゴシック Medium / Noto Sans JP Medium</code><br>
+            サイズ：<code>22〜26px</code>（小さめ・読めればOK）<br>
+            カラー：<code>#3d1f00</code><br>
+            行送り：<code>38〜42px</code><br>
+            テキスト内容：<br>
+            <code>IÉNA, SLOBE IÉNA, Spick & Span, FRAMeWORK, NOBLE</code><br>
+            <code>JOURNAL STANDARD, JOURNAL STANDARD relume</code><br>
+            <code>Deuxième Classe, L'Appartement, ÉDIFICE, 417 ÉDIFICE</code><br>
+            <code>and more ...</code>
+          </div>
+        </div>
+
+        <!-- サイズ比較ビジュアル -->
+        <div style="background:#f06292; border-radius:12px; padding:20px 22px; margin-top:16px;">
+          <div style="font-family:'Oswald',sans-serif; font-size:48px; font-weight:700; color:#3d1f00; line-height:0.9; letter-spacing:-0.02em; margin-bottom:10px;">WINTER<br>SALE</div>
+          <div style="font-family:'Oswald',sans-serif; font-size:20px; font-weight:700; color:#3d1f00; letter-spacing:0.02em; margin-bottom:6px;">2026.01.01 <span style="font-size:13px;">THU</span></div>
+          <div style="font-size:14px; font-weight:900; color:#3d1f00; letter-spacing:0.05em; margin-bottom:6px;">BAYCREW'S GROUP</div>
+          <div style="font-size:9px; color:#3d1f00; line-height:1.9; font-weight:500;">IÉNA, SLOBE IÉNA, Spick &amp; Span, FRAMeWORK...<br>and more ...</div>
+        </div>
+        <p class="caption">↑ サイズの強弱で情報の優先度が自然に伝わる</p>
+
+        <div class="tip"><p><strong>テキストの整列：</strong>A〜Dすべて<strong>左揃え</strong>にします。左端を揃えることで縦の視線の流れが生まれ、読みやすくなります。<code>段落パネル → 左揃え</code> または <code>Cmd/Ctrl + Shift + L</code> で設定。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">6</div>
+        <div class="step-title">ブラウンのCTA帯を作る（パーツE）</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">バナー最下段の「詳細はこちら ›」の帯を作ります。<strong>長方形シェイプ＋テキスト＋矢印</strong>の組み合わせです。</p>
+
+        <div class="part-row">
+          <div class="part-header">
+            <div class="part-tag" style="background:#3d1f00; color:#fff;">E</div>
+            <span style="font-size:12px; font-weight:700;">CTA帯「詳細はこちら ›」</span>
+          </div>
+          <div class="part-body">
+            長方形ツールで横幅いっぱいの帯を描く<br>
+            高さ：<code>約90〜100px</code>　塗り：<code>#3d1f00</code>（ダークブラウン）<br>
+            <br>
+            テキスト「詳細はこちら」：<code>游ゴシック Bold 36px #ffffff</code><br>
+            トラッキング：<code>+100〜+150</code>（ゆったり間隔で高級感）<br>
+            矢印「›」：<code>同フォント 40px #ffffff</code>　右端に配置<br>
+            <br>
+            テキストを帯の中央（上下・左右）に整列
+          </div>
+        </div>
+
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">CTA帯の作り方</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas" style="flex-direction:column; align-items:flex-start; gap:8px; padding:14px;">
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#3d1f00,#e8507a); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">1</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;"><code style="background:#333; color:#f06292; padding:1px 5px; border-radius:3px;">長方形ツール（U）</code> でキャンバス下端に合わせて横幅いっぱいの長方形を描く<br>塗り：<code style="background:#333; color:#f06292; padding:1px 5px; border-radius:3px;">#3d1f00</code></p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#3d1f00,#e8507a); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">2</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">「詳細はこちら」テキストを入力 → 帯の<strong style="color:#f06292;">中央（垂直・水平）</strong>に整列<br>整列パネルで「水平中央」「垂直中央」を選択（基準：レイヤー）</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#3d1f00,#e8507a); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">3</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">「›」を別テキストレイヤーで作成 → 帯の<strong style="color:#f06292;">右端から30px</strong>の位置に配置</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>トラッキングを広くとる理由：</strong>「詳細はこちら」のトラッキングを <code>+100〜+150</code> と広めにすると、ファッション系らしい<strong>ラグジュアリーな雰囲気</strong>が出ます。狭いと急いでいる印象になります。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">7</div>
+        <div class="step-title">全体を整えて仕上げる</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">全パーツが揃ったら、<strong>余白・整列・サイズバランス</strong>を最終確認します。</p>
+
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">最終チェックリスト</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas" style="flex-direction:column; align-items:flex-start; gap:8px; padding:14px;">
+              <div style="display:flex; gap:10px;"><div style="color:#27c93f; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:11px; color:#ccc; line-height:1.7;">「WINTER SALE」が圧倒的に大きく見えるか</p></div>
+              <div style="display:flex; gap:10px;"><div style="color:#27c93f; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:11px; color:#ccc; line-height:1.7;">A→B→C→Dの順に文字サイズが段階的に小さくなっているか</p></div>
+              <div style="display:flex; gap:10px;"><div style="color:#27c93f; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:11px; color:#ccc; line-height:1.7;">左端の余白が均等（ガイドライン：<code style="background:#333; color:#f06292; padding:1px 5px; border-radius:3px;">表示 → ガイド</code> を使うと便利）</p></div>
+              <div style="display:flex; gap:10px;"><div style="color:#27c93f; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:11px; color:#ccc; line-height:1.7;">CTA帯がキャンバスの最下端にピッタリ揃っているか</p></div>
+              <div style="display:flex; gap:10px;"><div style="color:#27c93f; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:11px; color:#ccc; line-height:1.7;">使っている色が<strong style="color:#f06292;">ピンク（#f06292）とブラウン（#3d1f00）の2色だけ</strong>か</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ガイドラインの使い方 -->
+        <div style="background:#fdf0f4; border-radius:12px; padding:14px 16px; margin-top:16px;">
+          <div style="font-size:11px; color:#8b1a3a; font-family:'JetBrains Mono',monospace; margin-bottom:8px;">📏 ガイドラインで余白を揃える方法</div>
+          <div style="font-size:12px; color:var(--text-secondary); line-height:2;">
+            1. <code>表示 → 新規ガイド</code> を選択<br>
+            2. 方向：<code>垂直方向</code>　位置：<code>50px</code> → OK<br>
+            3. 青いガイドラインが表示される<br>
+            4. テキストの左端をこのラインに揃える<br>
+            5. 完成後は <code>表示 → ガイドを消去</code> で非表示に
+          </div>
+        </div>
+        <div class="tip"><p><strong>Lesson 04・05との最大の違い：</strong>今回は<strong>素材（写真）が一切不要</strong>です。フォント・サイズ・色・余白だけでここまでのインパクトが出せることを体感してください。テキストのみのバナーは作業時間が短く、修正も簡単です。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">8</div>
+        <div class="step-title">PNG書き出して完成</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><code>ファイル → 書き出し → スクリーン用に書き出し...</code> を開き、<code>PNG</code> 形式で保存。サイズが <code>988 × 990 px</code> になっていることを確認してください。</p>
+        <div style="width:100%; height:70px; border-radius:12px; background:#f06292; display:flex; align-items:center; overflow:hidden; margin-bottom:8px;">
+          <div style="flex:1; display:flex; align-items:center; justify-content:center;">
+            <div style="font-family:'Oswald',sans-serif; font-size:28px; font-weight:700; color:#3d1f00; line-height:1;">WINTER SALE</div>
+          </div>
+          <div style="background:#3d1f00; height:100%; width:120px; display:flex; align-items:center; justify-content:center;">
+            <div style="font-size:11px; font-weight:700; color:#fff; letter-spacing:0.08em;">詳細はこちら</div>
+          </div>
+        </div>
+        <p class="caption">↑ 完成。GitHubにアップしてNotionのLesson06に追加しましょう！</p>
+      </div>
+    </div>
+
+  </div><!-- /steps -->
+
+  <div style="text-align:center; margin-top:48px; font-size:12px; color:#94a3b8;">Photoshop チュートリアル · Lesson 06｜WINTER SALEバナー模写（BAYCREW'S GROUP）988×990px</div>
+
+</div>
+</body>
+</html>
