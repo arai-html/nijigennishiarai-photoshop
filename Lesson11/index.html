@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>テキスト技術 応用ワークシート｜Photoshop Lesson 11</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&family=Oswald:wght@700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --text: #1a1a2e;
+    --text-secondary: #4a5568;
+    --border: #e2e8f0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 40px 20px 80px; }
+  .container { max-width: 780px; margin: 0 auto; }
+
+  /* ヒーロー */
+  .hero { background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #818cf8 100%); border-radius: 20px; padding: 48px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='300' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"); }
+  .hero::after { content: '応用'; position: absolute; right: 36px; top: 24px; font-size: 64px; font-weight: 900; opacity: 0.12; color: #fff; }
+  .hero-content { position: relative; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+  .hero h1 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.85); }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .hero-tag { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+
+  /* 進捗バー */
+  .progress-bar { background: #fff; border-radius: 16px; border: 1px solid var(--border); padding: 20px 24px; margin-bottom: 32px; }
+  .progress-title { font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; }
+  .progress-items { display: flex; gap: 6px; flex-wrap: wrap; }
+  .prog-item { flex: 1; min-width: 70px; text-align: center; }
+  .prog-dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; margin: 0 auto 4px; font-family: 'JetBrains Mono', monospace; color: #fff; }
+  .prog-label { font-size: 9px; color: var(--text-secondary); line-height: 1.4; }
+
+  /* ワークカード */
+  .work-card { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; }
+  .work-header { padding: 20px 24px; display: flex; align-items: center; gap: 16px; border-bottom: 2px solid var(--border); }
+  .work-num { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; color: #fff; }
+  .work-title-wrap { flex: 1; }
+  .work-subtitle { font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-bottom: 2px; }
+  .work-title { font-size: 18px; font-weight: 700; color: var(--text); }
+  .work-badge { font-size: 10px; font-weight: 700; padding: 3px 12px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
+  .work-body { padding: 24px; }
+
+  /* 課題ボックス */
+  .task-box { border-radius: 12px; padding: 16px 18px; margin-bottom: 20px; }
+  .task-label { font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .task-text { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.7; }
+
+  /* ランダムバッジ */
+  .random-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
+
+  /* ビフォーアフター */
+  .ba-wrap { display: flex; gap: 14px; margin: 16px 0; flex-wrap: wrap; }
+  .ba-box { flex: 1; min-width: 150px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+  .ba-preview { padding: 24px 20px; display: flex; align-items: center; justify-content: center; min-height: 100px; }
+  .ba-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; padding: 8px 12px; text-align: center; font-weight: 700; }
+
+  /* 設定パネル */
+  .setting-panel { background: #1e1e2e; border-radius: 12px; padding: 16px 18px; margin: 14px 0; }
+  .setting-title { font-size: 10px; color: #888; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.08em; margin-bottom: 12px; }
+  .setting-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; gap: 12px; flex-wrap: wrap; }
+  .setting-key { font-size: 11px; color: #ccc; }
+  .setting-val { font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+
+  /* チェックリスト */
+  .checklist { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; }
+  .check-item { display: flex; align-items: flex-start; gap: 10px; }
+  .check-box { width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--border); flex-shrink: 0; margin-top: 2px; }
+  .check-text { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+  /* ヒント */
+  .hint { border-radius: 10px; padding: 12px 16px; margin-top: 14px; }
+  .hint p { font-size: 13px; line-height: 1.7; }
+
+  /* NG→OK比較 */
+  .ngok-wrap { display: flex; gap: 12px; margin: 16px 0; flex-wrap: wrap; }
+  .ngok-box { flex: 1; min-width: 140px; border-radius: 12px; overflow: hidden; }
+  .ngok-preview { padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 90px; }
+  .ngok-label { padding: 8px 12px; font-size: 11px; text-align: center; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+  .ngok-detail { padding: 0 12px 10px; font-size: 10px; color: var(--text-secondary); line-height: 1.7; }
+
+  code { background: #f1f5f9; color: #475569; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+  .caption { font-size: 12px; color: #94a3b8; margin-top: 8px; font-style: italic; }
+  .step-num-circle { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 24px; }
+    .hero h1 { font-size: 22px; }
+    .work-body { padding: 16px; }
+    .ba-wrap, .ngok-wrap { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Photoshop チュートリアル · Lesson 11</div>
+      <h1>🎯 テキスト技術<br>応用ワークシート</h1>
+      <p>Lesson10の基礎を土台に、全テクニックをランダムに組み合わせて実践力を鍛える</p>
+      <div class="hero-tags">
+        <span class="hero-tag">応用問題 × 8</span>
+        <span class="hero-tag">実践バナー × 2</span>
+        <span class="hero-tag">NG→OK添削</span>
+        <span class="hero-tag">総合仕上げ課題</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 進捗マップ -->
+  <div class="progress-bar">
+    <div class="progress-title">📍 このレッスンの流れ（全11課題）</div>
+    <div class="progress-items">
+      <div class="prog-item"><div class="prog-dot" style="background:#dc2626;">Q1</div><div class="prog-label">カーニング<br>修正</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#ea580c;">Q2</div><div class="prog-label">トラッキング<br>判断</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#ca8a04;">Q3</div><div class="prog-label">行送り<br>計算</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#16a34a;">Q4</div><div class="prog-label">フォント<br>選択</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#0891b2;">Q5</div><div class="prog-label">レイヤー<br>スタイル</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#7c3aed;">Q6</div><div class="prog-label">NG→OK<br>添削</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#db2777;">Q7</div><div class="prog-label">整列<br>操作</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#0070f3;">Q8</div><div class="prog-label">アウトライン<br>応用</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#059669;">Q9</div><div class="prog-label">実践<br>バナーA</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#9333ea;">Q10</div><div class="prog-label">実践<br>バナーB</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#1e1b4b;">Q11</div><div class="prog-label">総合<br>仕上げ</div></div>
+    </div>
+  </div>
+
+  <!-- Q1: カーニング修正 -->
+  <div class="work-card">
+    <div class="work-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#991b1b,#dc2626);">Q1</div>
+      <div class="work-title-wrap">
+        <div class="work-subtitle" style="color:#dc2626;">カーニング — 修正問題</div>
+        <div class="work-title">おかしい文字間を見つけて直す</div>
+      </div>
+      <div class="work-badge" style="background:#fef2f2; color:#dc2626;">⏱ 10分</div>
+    </div>
+    <div class="work-body">
+      <div class="random-tag" style="background:#fef2f2; color:#dc2626; border:1px solid #fca5a5;">🎲 ランダム出題：カーニング</div>
+
+      <div class="task-box" style="background:#fef2f2; border:1px solid #fca5a5;">
+        <div class="task-label" style="color:#dc2626;">📋 課題</div>
+        <div class="task-text">下記の3つのテキストを入力し、<strong>カーニングがおかしい箇所を修正</strong>してください。それぞれどこを・どのくらい調整したか記録しましょう。</div>
+      </div>
+
+      <!-- 3つの問題 -->
+      <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:16px;">
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:10px; color:#dc2626; font-family:'JetBrains Mono',monospace; font-weight:700; margin-bottom:8px;">問題①「TOKYO」</div>
+          <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
+            <div style="font-size:32px; font-weight:900; letter-spacing:0.15em; color:#1a1a2e; font-family:'Oswald',sans-serif;">TOKYO</div>
+            <div style="font-size:12px; color:var(--text-secondary); line-height:1.7;">→ <strong>TO</strong>の間が広く見える。<br>カーニングを調整して均等に見せる。</div>
+          </div>
+          <div style="margin-top:10px; background:#fff; border-radius:6px; padding:8px 12px; border:1px dashed #e2e8f0;">
+            <div style="font-size:10px; color:#94a3b8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">記録欄</div>
+            <div style="font-size:12px; color:var(--text-secondary);">調整した箇所：T と O の間　　値：_____ 単位</div>
+          </div>
+        </div>
+
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:10px; color:#dc2626; font-family:'JetBrains Mono',monospace; font-weight:700; margin-bottom:8px;">問題②「WAVE」</div>
+          <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
+            <div style="font-size:32px; font-weight:900; letter-spacing:0.12em; color:#1a1a2e; font-family:'Oswald',sans-serif;">WAVE</div>
+            <div style="font-size:12px; color:var(--text-secondary); line-height:1.7;">→ <strong>WA・AV</strong>どちらの間が問題？<br>両方チェックして自然に見せる。</div>
+          </div>
+          <div style="margin-top:10px; background:#fff; border-radius:6px; padding:8px 12px; border:1px dashed #e2e8f0;">
+            <div style="font-size:10px; color:#94a3b8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">記録欄</div>
+            <div style="font-size:12px; color:var(--text-secondary);">調整した箇所：_____ と _____　　値：_____ 単位</div>
+          </div>
+        </div>
+
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:10px; color:#dc2626; font-family:'JetBrains Mono',monospace; font-weight:700; margin-bottom:8px;">問題③「STYLE」</div>
+          <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
+            <div style="font-size:32px; font-weight:900; letter-spacing:0.1em; color:#1a1a2e; font-family:'Oswald',sans-serif;">STYLE</div>
+            <div style="font-size:12px; color:var(--text-secondary); line-height:1.7;">→ <strong>TY・YL</strong>の間が詰まって見える。<br>少し広げてバランスをとる。</div>
+          </div>
+          <div style="margin-top:10px; background:#fff; border-radius:6px; padding:8px 12px; border:1px dashed #e2e8f0;">
+            <div style="font-size:10px; color:#94a3b8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">記録欄</div>
+            <div style="font-size:12px; color:var(--text-secondary);">調整した箇所：_____ と _____　　値：_____ 単位</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hint" style="background:#fef2f2; border-left:3px solid #dc2626;">
+        <p style="color:#7f1d1d;"><strong>カーニングの鉄則：</strong>「光学的に均等に見える」ことが目標です。数値が均等でなくてもOK。<strong>目で見て均等に感じる</strong>かどうかで判断しましょう。<code>Option/Alt + ←</code> で詰める、<code>Option/Alt + →</code> で広げる。</p>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:12px; font-weight:700; color:var(--text-secondary); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#dc2626;"></div><div class="check-text">3つすべてのカーニングを調整できた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#dc2626;"></div><div class="check-text">調整した箇所と値を記録できた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#dc2626;"></div><div class="check-text">目で見て「均等に見える」状態にできた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2: トラッキング判断 -->
+  <div class="work-card">
+    <div class="work-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#9a3412,#ea580c);">Q2</div>
+      <div class="work-title-wrap">
+        <div class="work-subtitle" style="color:#ea580c;">トラッキング — 判断問題</div>
+        <div class="work-title">バナーを見てトラッキング値を推測する</div>
+      </div>
+      <div class="work-badge" style="background:#fff7ed; color:#ea580c;">⏱ 10分</div>
+    </div>
+    <div class="work-body">
+      <div class="random-tag" style="background:#fff7ed; color:#ea580c; border:1px solid #fed7aa;">🎲 ランダム出題：トラッキング</div>
+
+      <div class="task-box" style="background:#fff7ed; border:1px solid #fed7aa;">
+        <div class="task-label" style="color:#ea580c;">📋 課題</div>
+        <div class="task-text">下記の4つのテキストサンプルを見て、それぞれ<strong>どのトラッキング値</strong>（A〜D）が使われているか答えてください。そのあと実際に同じ設定を再現しましょう。</div>
+      </div>
+
+      <!-- 4つのサンプル -->
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+        <div style="background:#fff8f0; border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+          <div style="font-size:10px; color:#ea580c; font-family:'JetBrains Mono',monospace; width:50px; flex-shrink:0; font-weight:700;">Sample 1</div>
+          <div style="font-size:24px; font-weight:900; color:#1a1a2e; letter-spacing:-0.04em; flex:1; font-family:'Oswald',sans-serif;">SPECIAL SALE</div>
+          <div style="font-size:12px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">値：___</div>
+        </div>
+        <div style="background:#fff8f0; border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+          <div style="font-size:10px; color:#ea580c; font-family:'JetBrains Mono',monospace; width:50px; flex-shrink:0; font-weight:700;">Sample 2</div>
+          <div style="font-size:24px; font-weight:900; color:#1a1a2e; letter-spacing:0; flex:1; font-family:'Oswald',sans-serif;">SPECIAL SALE</div>
+          <div style="font-size:12px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">値：___</div>
+        </div>
+        <div style="background:#fff8f0; border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+          <div style="font-size:10px; color:#ea580c; font-family:'JetBrains Mono',monospace; width:50px; flex-shrink:0; font-weight:700;">Sample 3</div>
+          <div style="font-size:18px; font-weight:700; color:#1a1a2e; letter-spacing:0.12em; flex:1;">SPECIAL SALE</div>
+          <div style="font-size:12px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">値：___</div>
+        </div>
+        <div style="background:#fff8f0; border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+          <div style="font-size:10px; color:#ea580c; font-family:'JetBrains Mono',monospace; width:50px; flex-shrink:0; font-weight:700;">Sample 4</div>
+          <div style="font-size:14px; font-weight:500; color:#1a1a2e; letter-spacing:0.28em; flex:1;">SPECIAL SALE</div>
+          <div style="font-size:12px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">値：___</div>
+        </div>
+      </div>
+
+      <!-- 選択肢 -->
+      <div style="background:#1e1e2e; border-radius:10px; padding:14px 16px; margin-bottom:14px;">
+        <div style="font-size:10px; color:#888; font-family:'JetBrains Mono',monospace; margin-bottom:10px;">選択肢（A〜Dから選ぶ）</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <div style="background:#2a2a3e; border-radius:6px; padding:6px 14px; font-size:12px; font-family:'JetBrains Mono',monospace; color:#f87171; font-weight:700;">A: -80</div>
+          <div style="background:#2a2a3e; border-radius:6px; padding:6px 14px; font-size:12px; font-family:'JetBrains Mono',monospace; color:#86efac; font-weight:700;">B: 0</div>
+          <div style="background:#2a2a3e; border-radius:6px; padding:6px 14px; font-size:12px; font-family:'JetBrains Mono',monospace; color:#93c5fd; font-weight:700;">C: +120</div>
+          <div style="background:#2a2a3e; border-radius:6px; padding:6px 14px; font-size:12px; font-family:'JetBrains Mono',monospace; color:#c4b5fd; font-weight:700;">D: +280</div>
+        </div>
+      </div>
+
+      <!-- 答えと再現 -->
+      <details style="background:#f8f9fa; border-radius:10px; padding:14px 16px; cursor:pointer; border:1px solid var(--border);">
+        <summary style="font-size:13px; font-weight:700; color:var(--text-secondary); list-style:none; display:flex; align-items:center; gap:8px;">
+          <span style="background:#ea580c; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">答え合わせ</span> クリックして確認
+        </summary>
+        <div style="margin-top:12px; display:flex; flex-direction:column; gap:6px; font-size:12px; color:var(--text-secondary); line-height:2;">
+          <div>Sample 1 → <strong style="color:#f87171;">A: -80</strong>（詰めて力強いポップ系）</div>
+          <div>Sample 2 → <strong style="color:#86efac;">B: 0</strong>（標準・汎用的）</div>
+          <div>Sample 3 → <strong style="color:#93c5fd;">C: +120</strong>（ゆったり・ファッション系）</div>
+          <div>Sample 4 → <strong style="color:#c4b5fd;">D: +280</strong>（超広め・ラグジュアリー）</div>
+        </div>
+      </details>
+
+      <div class="checklist">
+        <div style="font-size:12px; font-weight:700; color:var(--text-secondary); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#ea580c;"></div><div class="check-text">4つのサンプルすべて答えられた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#ea580c;"></div><div class="check-text">Photoshopで同じ設定を再現できた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3: 行送り計算 -->
+  <div class="work-card">
+    <div class="work-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#854d0e,#ca8a04);">Q3</div>
+      <div class="work-title-wrap">
+        <div class="work-subtitle" style="color:#ca8a04;">行送り — 計算問題</div>
+        <div class="work-title">フォントサイズから適切な行送りを求める</div>
+      </div>
+      <div class="work-badge" style="background:#fefce8; color:#ca8a04;">⏱ 8分</div>
+    </div>
+    <div class="work-body">
+      <div class="random-tag" style="background:#fefce8; color:#ca8a04; border:1px solid #fde047;">🎲 ランダム出題：行送り</div>
+
+      <div class="task-box" style="background:#fefce8; border:1px solid #fde047;">
+        <div class="task-label" style="color:#ca8a04;">📋 課題</div>
+        <div class="task-text">下記の3つのケースで<strong>適切な行送り値を計算</strong>してPhotoshopで設定しましょう。</div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #ca8a04;">
+          <div style="display:flex; align-items:flex-start; gap:12px; flex-wrap:wrap;">
+            <div style="flex:1; min-width:200px;">
+              <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#ca8a04; font-weight:700; margin-bottom:6px;">ケース①：バナーのメインタイトル</div>
+              <div style="font-size:13px; color:var(--text-secondary); line-height:1.8;">フォントサイズ：<strong>200px</strong><br>目的：詰まった迫力のある表示<br>行送りの目安：フォントサイズ × 0.85</div>
+            </div>
+            <div style="background:#fff; border-radius:8px; padding:10px 16px; border:1px dashed #fde047; min-width:120px; text-align:center;">
+              <div style="font-size:10px; color:#94a3b8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">計算してみよう</div>
+              <div style="font-size:13px; color:var(--text-secondary);">200 × 0.85 = <strong style="color:#ca8a04;">_____ px</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #ca8a04;">
+          <div style="display:flex; align-items:flex-start; gap:12px; flex-wrap:wrap;">
+            <div style="flex:1; min-width:200px;">
+              <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#ca8a04; font-weight:700; margin-bottom:6px;">ケース②：サブキャッチコピー</div>
+              <div style="font-size:13px; color:var(--text-secondary); line-height:1.8;">フォントサイズ：<strong>48px</strong><br>目的：読みやすい標準的な行間<br>行送りの目安：フォントサイズ × 1.5</div>
+            </div>
+            <div style="background:#fff; border-radius:8px; padding:10px 16px; border:1px dashed #fde047; min-width:120px; text-align:center;">
+              <div style="font-size:10px; color:#94a3b8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">計算してみよう</div>
+              <div style="font-size:13px; color:var(--text-secondary);">48 × 1.5 = <strong style="color:#ca8a04;">_____ px</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #ca8a04;">
+          <div style="display:flex; align-items:flex-start; gap:12px; flex-wrap:wrap;">
+            <div style="flex:1; min-width:200px;">
+              <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#ca8a04; font-weight:700; margin-bottom:6px;">ケース③：注意書き（細かいテキスト）</div>
+              <div style="font-size:13px; color:var(--text-secondary); line-height:1.8;">フォントサイズ：<strong>20px</strong><br>目的：詰め込まずゆったりと読みやすく<br>行送りの目安：フォントサイズ × 1.8</div>
+            </div>
+            <div style="background:#fff; border-radius:8px; padding:10px 16px; border:1px dashed #fde047; min-width:120px; text-align:center;">
+              <div style="font-size:10px; color:#94a3b8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">計算してみよう</div>
+              <div style="font-size:13px; color:var(--text-secondary);">20 × 1.8 = <strong style="color:#ca8a04;">_____ px</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <details style="background:#f8f9fa; border-radius:10px; padding:14px 16px; cursor:pointer; border:1px solid var(--border);">
+        <summary style="font-size:13px; font-weight:700; color:var(--text-secondary); list-style:none; display:flex; align-items:center; gap:8px;">
+          <span style="background:#ca8a04; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">答え合わせ</span> クリックして確認
+        </summary>
+        <div style="margin-top:12px; display:flex; flex-direction:column; gap:6px; font-size:12px; color:var(--text-secondary); line-height:2;">
+          <div>ケース① → <strong style="color:#ca8a04;">170px</strong>（200 × 0.85）</div>
+          <div>ケース② → <strong style="color:#ca8a04;">72px</strong>（48 × 1.5）</div>
+          <div>ケース③ → <strong style="color:#ca8a04;">36px</strong>（20 × 1.8）</div>
+        </div>
+      </details>
+
+      <div class="checklist">
+        <div style="font-size:12px; font-weight:700; color:var(--text-secondary); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#ca8a04;"></div><div class="check-text">3つすべて計算できた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#ca8a04;"></div><div class="check-text">Photoshopで実際に設定して確認できた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4: フォント選択 -->
+  <div class="work-card">
+    <div class="work-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#14532d,#16a34a);">Q4</div>
+      <div class="work-title-wrap">
+        <div class="work-subtitle" style="color:#16a34a;">フォント選択 — 判断問題</div>
+        <div class="work-title">バナーのジャンルに合うフォントを選ぶ</div>
+      </div>
+      <div class="work-badge" style="background:#f0fdf4; color:#16a34a;">⏱ 10分</div>
+    </div>
+    <div class="work-body">
+      <div class="random-tag" style="background:#f0fdf4; color:#16a34a; border:1px solid #86efac;">🎲 ランダム出題：フォント選択</div>
+
+      <div class="task-box" style="background:#f0fdf4; border:1px solid #86efac;">
+        <div class="task-label" style="color:#16a34a;">📋 課題</div>
+        <div class="task-text">下記の4つのバナーシーンに対して、<strong>最も適したフォント種類</strong>を選んで理由も答えてください。</div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:16px;">
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#16a34a; font-weight:700; margin-bottom:8px;">シーン① ハイブランドのセールバナー（シック・高級感）</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+            <div style="background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 12px; font-size:12px; font-family:'Oswald',sans-serif; font-weight:700;">A: Oswald（縦長・力強い）</div>
+            <div style="background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 12px; font-size:12px; font-family:'Dancing Script',cursive; font-weight:700;">B: 筆記体（手書き風）</div>
+            <div style="background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 12px; font-size:12px; font-weight:700; letter-spacing:0.15em;">C: 游明朝 Light（細・上品）</div>
+            <div style="background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 12px; font-size:12px; font-weight:900;">D: ゴシック Black（太・ポップ）</div>
+          </div>
+          <div style="background:#fff; border-radius:6px; padding:8px 12px; border:1px dashed #e2e8f0;">
+            <div style="font-size:10px; color:#94a3b8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">答え：___　理由：</div>
+          </div>
+        </div>
+
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#16a34a; font-weight:700; margin-bottom:8px;">シーン② こども向けイベントバナー（にぎやか・かわいい）</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+            <div style="background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 12px; font-size:12px; font-weight:700; letter-spacing:0.15em;">A: 游明朝 Light</div>
+            <div style="background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 12px; font-size:12px; font-weight:900; color:#f06292;">B: 丸ゴシック Black（丸みポップ）</div>
+            <div style="background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 12px; font-size:12px; font-family:'Oswald',sans-serif; font-weight:700;">C: Oswald</div>
+            <div style="background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 12px; font-size:12px; font-weight:700; letter-spacing:0.05em;">D: 游ゴシック Medium</div>
+          </div>
+          <div style="background:#fff; border-radius:6px; padding:8px 12px; border:1px dashed #e2e8f0;">
+            <div style="font-size:10px; color:#94a3b8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">答え：___　理由：</div>
+          </div>
+        </div>
+
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#16a34a; font-weight:700; margin-bottom:8px;">シーン③ IT企業の採用バナー（クリーン・プロフェッショナル）</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+            <div style="background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 12px; font-size:12px; font-weight:700;">A: Noto Sans JP Bold（クリーン）</div>
+            <div style="background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 12px; font-size:12px; font-family:'Dancing Script',cursive; font-weight:700;">B: 筆記体</div>
+            <div style="background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 12px; font-size:12px; font-weight:900; color:#f06292;">C: 丸ゴシック Black</div>
+            <div style="background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 12px; font-size:12px; font-weight:700; letter-spacing:0.15em;">D: 游明朝 Light</div>
+          </div>
+          <div style="background:#fff; border-radius:6px; padding:8px 12px; border:1px dashed #e2e8f0;">
+            <div style="font-size:10px; color:#94a3b8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">答え：___　理由：</div>
+          </div>
+        </div>
+
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#16a34a; font-weight:700; margin-bottom:8px;">シーン④ カフェの季節メニューバナー（温かみ・手作り感）</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+            <div style="background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 12px; font-size:12px; font-family:'Oswald',sans-serif; font-weight:700;">A: Oswald</div>
+            <div style="background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 12px; font-size:12px; font-weight:700; letter-spacing:0.05em;">B: 游ゴシック Bold</div>
+            <div style="background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 12px; font-size:12px; font-family:'Dancing Script',cursive; font-weight:700; color:#6b4c2a;">C: 筆記体（手書き風・温かみ）</div>
+            <div style="background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 12px; font-size:12px; font-weight:900;">D: ゴシック Black</div>
+          </div>
+          <div style="background:#fff; border-radius:6px; padding:8px 12px; border:1px dashed #e2e8f0;">
+            <div style="font-size:10px; color:#94a3b8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">答え：___　理由：</div>
+          </div>
+        </div>
+      </div>
+
+      <details style="background:#f8f9fa; border-radius:10px; padding:14px 16px; cursor:pointer; border:1px solid var(--border);">
+        <summary style="font-size:13px; font-weight:700; color:var(--text-secondary); list-style:none; display:flex; align-items:center; gap:8px;">
+          <span style="background:#16a34a; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">答え合わせ</span> クリックして確認
+        </summary>
+        <div style="margin-top:12px; display:flex; flex-direction:column; gap:6px; font-size:12px; color:var(--text-secondary); line-height:2;">
+          <div>シーン① → <strong style="color:#16a34a;">C: 游明朝 Light</strong>（細く上品。高級感・余白感が出る）</div>
+          <div>シーン② → <strong style="color:#16a34a;">B: 丸ゴシック Black</strong>（丸みがかわいく、子供に親しみやすい）</div>
+          <div>シーン③ → <strong style="color:#16a34a;">A: Noto Sans JP Bold</strong>（クリーンで読みやすく、信頼感がある）</div>
+          <div>シーン④ → <strong style="color:#16a34a;">C: 筆記体</strong>（手書き風の温かみがカフェの雰囲気にマッチ）</div>
+        </div>
+      </details>
+
+      <div class="checklist">
+        <div style="font-size:12px; font-weight:700; color:var(--text-secondary); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#16a34a;"></div><div class="check-text">4つすべて答えられた（理由も含めて）</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#16a34a;"></div><div class="check-text">自分の選択と答えの違いを理解できた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5: レイヤースタイル組み合わせ -->
+  <div class="work-card">
+    <div class="work-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#0e7490,#0891b2);">Q5</div>
+      <div class="work-title-wrap">
+        <div class="work-subtitle" style="color:#0891b2;">レイヤースタイル — 組み合わせ問題</div>
+        <div class="work-title">複数のスタイルを組み合わせて再現する</div>
+      </div>
+      <div class="work-badge" style="background:#ecfeff; color:#0891b2;">⏱ 15分</div>
+    </div>
+    <div class="work-body">
+      <div class="random-tag" style="background:#ecfeff; color:#0891b2; border:1px solid #a5f3fc;">🎲 ランダム出題：レイヤースタイル</div>
+
+      <div class="task-box" style="background:#ecfeff; border:1px solid #a5f3fc;">
+        <div class="task-label" style="color:#0891b2;">📋 課題</div>
+        <div class="task-text">下記の3つのテキストエフェクトを<strong>設定値を見ながら再現</strong>してください。複数のスタイルを同時に使うのがポイントです。</div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px;">
+
+        <!-- エフェクト1: ネオン -->
+        <div style="border:1px solid var(--border); border-radius:12px; overflow:hidden;">
+          <div style="background:#0a1628; padding:20px; display:flex; align-items:center; justify-content:center; min-height:90px;">
+            <div style="font-size:36px; font-weight:900; color:#0a1628; -webkit-text-stroke:2px #38bdf8; text-shadow:0 0 20px rgba(56,189,248,0.8), 0 0 40px rgba(56,189,248,0.4); font-family:'Oswald',sans-serif;">NEON</div>
+          </div>
+          <div style="padding:14px 16px; border-top:1px solid var(--border);">
+            <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#0891b2; font-weight:700; margin-bottom:10px;">エフェクト①「ネオン」— 設定値</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:11px; color:var(--text-secondary);">
+              <div>文字色：<code>#0a1628</code>（背景色と同じ）</div>
+              <div>境界線：<code>3px #38bdf8 外側</code></div>
+              <div>光彩（外側）：<code>#38bdf8 60% 24px</code></div>
+              <div>光彩（内側）：<code>#ffffff 30% 8px</code></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- エフェクト2: 金箔 -->
+        <div style="border:1px solid var(--border); border-radius:12px; overflow:hidden;">
+          <div style="background:#1a0a00; padding:20px; display:flex; align-items:center; justify-content:center; min-height:90px;">
+            <div style="font-size:36px; font-weight:900; font-family:'Oswald',sans-serif; background:linear-gradient(135deg,#b8860b,#ffd700,#b8860b,#ffd700); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-shadow:none; filter:drop-shadow(2px 2px 4px rgba(0,0,0,0.8));">GOLD</div>
+          </div>
+          <div style="padding:14px 16px; border-top:1px solid var(--border);">
+            <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#ca8a04; font-weight:700; margin-bottom:10px;">エフェクト②「金箔」— 設定値</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:11px; color:var(--text-secondary);">
+              <div>グラデーションオーバーレイ：<code>#b8860b → #ffd700 → #b8860b</code></div>
+              <div>角度：<code>135°</code></div>
+              <div>ドロップシャドウ：<code>黒 80% 3px 6px</code></div>
+              <div>境界線：<code>1px #b8860b 外側</code></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- エフェクト3: 浮き出し -->
+        <div style="border:1px solid var(--border); border-radius:12px; overflow:hidden;">
+          <div style="background:#f5f5e8; padding:20px; display:flex; align-items:center; justify-content:center; min-height:90px;">
+            <div style="font-size:36px; font-weight:900; color:#e8507a; font-family:'Oswald',sans-serif; text-shadow:3px 3px 0 #c04060, 6px 6px 0 rgba(192,64,96,0.3);">POP</div>
+          </div>
+          <div style="padding:14px 16px; border-top:1px solid var(--border);">
+            <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#db2777; font-weight:700; margin-bottom:10px;">エフェクト③「ポップ浮き出し」— 設定値</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:11px; color:var(--text-secondary);">
+              <div>文字色：<code>#e8507a</code></div>
+              <div>ドロップシャドウ①：<code>#c04060 100% 3px 3px ぼかし0</code></div>
+              <div>ドロップシャドウ②：<code>#c04060 30% 6px 6px ぼかし0</code></div>
+              <div>💡 シャドウを2つ重ねて奥行きを出す</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hint" style="background:#ecfeff; border-left:3px solid #0891b2; margin-top:16px;">
+        <p style="color:#0e7490;"><strong>複数のシャドウを追加するには：</strong>レイヤースタイルの「ドロップシャドウ」の左にある <code>+</code> ボタンをクリックすると同じスタイルを複数追加できます。</p>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:12px; font-weight:700; color:var(--text-secondary); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#0891b2;"></div><div class="check-text">「ネオン」エフェクトを再現できた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#0891b2;"></div><div class="check-text">「金箔」エフェクトを再現できた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#0891b2;"></div><div class="check-text">「ポップ浮き出し」エフェクトを再現できた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q6: NG→OK添削 -->
+  <div class="work-card">
+    <div class="work-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#4c1d95,#7c3aed);">Q6</div>
+      <div class="work-title-wrap">
+        <div class="work-subtitle" style="color:#7c3aed;">NG→OK — 添削問題</div>
+        <div class="work-title">バナーの問題点を見つけて修正する</div>
+      </div>
+      <div class="work-badge" style="background:#ede9fe; color:#7c3aed;">⏱ 15分</div>
+    </div>
+    <div class="work-body">
+      <div class="random-tag" style="background:#ede9fe; color:#7c3aed; border:1px solid #c4b5fd;">🎲 ランダム出題：NG→OK</div>
+
+      <div class="task-box" style="background:#ede9fe; border:1px solid #c4b5fd;">
+        <div class="task-label" style="color:#7c3aed;">📋 課題</div>
+        <div class="task-text">下記の3つの「NGバナー」には<strong>テキストの問題点</strong>があります。何が問題か答え、自分で修正したバージョンを作ってください。</div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px;">
+
+        <!-- NG1: トラッキング問題 -->
+        <div>
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#7c3aed; font-weight:700; margin-bottom:10px;">問題① — このバナーの問題は？</div>
+          <div class="ngok-wrap">
+            <div class="ngok-box" style="border:2px solid #fca5a5;">
+              <div class="ngok-preview" style="background:#f06292; flex-direction:column; gap:6px;">
+                <div style="font-size:8px; letter-spacing:0.02em; color:#3d1f00; font-weight:500;">BAYCREW'S GROUP</div>
+                <div style="font-family:'Oswald',sans-serif; font-size:30px; font-weight:700; color:#3d1f00; line-height:0.9; letter-spacing:0.25em;">SALE</div>
+                <div style="font-size:7px; color:#3d1f00; letter-spacing:0.02em;">2026.01.01まで</div>
+              </div>
+              <div class="ngok-label" style="background:#fef2f2; color:#dc2626;">❌ NG</div>
+              <div class="ngok-detail">問題点を答えてください：<br><br>_______________</div>
+            </div>
+            <div class="ngok-box" style="border:2px dashed #86efac;">
+              <div class="ngok-preview" style="background:#f8f9fa; min-height:90px; flex-direction:column; gap:4px; justify-content:center; align-items:center;">
+                <div style="font-size:11px; color:#94a3b8; font-family:'JetBrains Mono',monospace;">修正後をここに</div>
+                <div style="font-size:10px; color:#94a3b8;">Photoshopで作成</div>
+              </div>
+              <div class="ngok-label" style="background:#f0fdf4; color:#16a34a;">✅ OK（修正後）</div>
+            </div>
+          </div>
+          <div class="hint" style="background:#ede9fe; border-left:3px solid #7c3aed;">
+            <p style="color:#4c1d95;"><strong>ヒント：</strong>「BAYCREW'S GROUP」と「SALE」と「日付」のトラッキング値を比べてみてください。統一感があるかどうか確認しましょう。</p>
+          </div>
+        </div>
+
+        <!-- NG2: 行送り問題 -->
+        <div>
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#7c3aed; font-weight:700; margin-bottom:10px;">問題② — このバナーの問題は？</div>
+          <div class="ngok-wrap">
+            <div class="ngok-box" style="border:2px solid #fca5a5;">
+              <div class="ngok-preview" style="background:#0077c2; flex-direction:column; align-items:flex-start; padding:14px;">
+                <div style="font-family:'Dancing Script',cursive; font-size:22px; font-weight:700; color:#fff; line-height:2.4;">All<br>Free<br>Day</div>
+              </div>
+              <div class="ngok-label" style="background:#fef2f2; color:#dc2626;">❌ NG</div>
+              <div class="ngok-detail">問題点を答えてください：<br><br>_______________</div>
+            </div>
+            <div class="ngok-box" style="border:2px dashed #86efac;">
+              <div class="ngok-preview" style="background:#f8f9fa; min-height:90px; flex-direction:column; gap:4px;">
+                <div style="font-size:11px; color:#94a3b8; font-family:'JetBrains Mono',monospace;">修正後をここに</div>
+                <div style="font-size:10px; color:#94a3b8;">Photoshopで作成</div>
+              </div>
+              <div class="ngok-label" style="background:#f0fdf4; color:#16a34a;">✅ OK（修正後）</div>
+            </div>
+          </div>
+          <div class="hint" style="background:#ede9fe; border-left:3px solid #7c3aed;">
+            <p style="color:#4c1d95;"><strong>ヒント：</strong>Lesson02のAll Free Dayバナーを思い出してください。行送りはどのくらいにしていましたか？</p>
+          </div>
+        </div>
+
+        <!-- NG3: フォントサイズ問題 -->
+        <div>
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#7c3aed; font-weight:700; margin-bottom:10px;">問題③ — このバナーの問題は？</div>
+          <div class="ngok-wrap">
+            <div class="ngok-box" style="border:2px solid #fca5a5;">
+              <div class="ngok-preview" style="background:#1a1a2e; flex-direction:column; gap:4px; align-items:flex-start; padding:14px;">
+                <div style="font-size:18px; font-weight:700; color:#fff;">年収100万円UP</div>
+                <div style="font-size:16px; font-weight:700; color:#38bdf8;">への転職</div>
+                <div style="font-size:15px; color:#ccc;">リモートOK求人 多数</div>
+                <div style="font-size:14px; color:#aaa;">平均年収820万円</div>
+              </div>
+              <div class="ngok-label" style="background:#fef2f2; color:#dc2626;">❌ NG</div>
+              <div class="ngok-detail">問題点を答えてください：<br><br>_______________</div>
+            </div>
+            <div class="ngok-box" style="border:2px dashed #86efac;">
+              <div class="ngok-preview" style="background:#f8f9fa; min-height:90px; flex-direction:column; gap:4px;">
+                <div style="font-size:11px; color:#94a3b8; font-family:'JetBrains Mono',monospace;">修正後をここに</div>
+                <div style="font-size:10px; color:#94a3b8;">Photoshopで作成</div>
+              </div>
+              <div class="ngok-label" style="background:#f0fdf4; color:#16a34a;">✅ OK（修正後）</div>
+            </div>
+          </div>
+          <div class="hint" style="background:#ede9fe; border-left:3px solid #7c3aed;">
+            <p style="color:#4c1d95;"><strong>ヒント：</strong>「視線の流れ」を考えてみてください。一番伝えたい情報が一番目立っていますか？テキストの<strong>強弱（ヒエラルキー）</strong>を意識しましょう。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:12px; font-weight:700; color:var(--text-secondary); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">3つすべての問題点を言語化できた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">修正バージョンをPhotoshopで作れた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q7〜Q8: まとめ（シンプル版） -->
+  <div class="work-card">
+    <div class="work-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#9d174d,#db2777);">Q7</div>
+      <div class="work-title-wrap">
+        <div class="work-subtitle" style="color:#db2777;">整列 — 操作問題</div>
+        <div class="work-title">5つのテキストを正確に揃える</div>
+      </div>
+      <div class="work-badge" style="background:#fdf2f8; color:#db2777;">⏱ 10分</div>
+    </div>
+    <div class="work-body">
+      <div class="random-tag" style="background:#fdf2f8; color:#db2777; border:1px solid #f9a8d4;">🎲 ランダム出題：整列</div>
+
+      <div class="task-box" style="background:#fdf2f8; border:1px solid #f9a8d4;">
+        <div class="task-label" style="color:#db2777;">📋 課題</div>
+        <div class="task-text">下記の5つのテキストレイヤーを配置して、<strong>整列パネルだけを使って</strong>すべて揃えてください。手動で動かすのはNGです。</div>
+      </div>
+
+      <!-- 課題内容 -->
+      <div style="background:#1e1e2e; border-radius:12px; padding:16px 18px; margin-bottom:16px;">
+        <div style="font-size:10px; color:#888; font-family:'JetBrains Mono',monospace; margin-bottom:12px;">配置する5つのテキスト</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; gap:10px; align-items:center;">
+            <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#f9a8d4; width:20px;">①</div>
+            <div style="font-size:11px; color:#ccc;">「SALE」（200px・太字）→ キャンバス水平中央・上から100px</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#f9a8d4; width:20px;">②</div>
+            <div style="font-size:11px; color:#ccc;">「50% OFF」（80px）→ キャンバス水平中央</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#f9a8d4; width:20px;">③</div>
+            <div style="font-size:11px; color:#ccc;">「2026.1.1〜1.31」（32px）→ キャンバス水平中央</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#f9a8d4; width:20px;">④</div>
+            <div style="font-size:11px; color:#ccc;">「左のバッジ」→ キャンバス左端から40px・垂直中央</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#f9a8d4; width:20px;">⑤</div>
+            <div style="font-size:11px; color:#ccc;">「右のバッジ」→ キャンバス右端から40px・垂直中央</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hint" style="background:#fdf2f8; border-left:3px solid #db2777;">
+        <p style="color:#9d174d;"><strong>整列の手順：</strong>① Cmd+A で全選択 → ② 移動ツール（V）に切替 → ③ 整列パネルで「水平中央」などをクリック。<br>基準を「キャンバス」に設定しないと正しく揃わないので注意！</p>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:12px; font-weight:700; color:var(--text-secondary); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#db2777;"></div><div class="check-text">手動を使わず整列パネルだけで揃えられた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#db2777;"></div><div class="check-text">キャンバス基準で整列できた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q8: アウトライン応用 -->
+  <div class="work-card">
+    <div class="work-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#1e40af,#0070f3);">Q8</div>
+      <div class="work-title-wrap">
+        <div class="work-subtitle" style="color:#0070f3;">アウトライン — 応用問題</div>
+        <div class="work-title">塗りありとアウトラインを組み合わせる</div>
+      </div>
+      <div class="work-badge" style="background:#eff6ff; color:#0070f3;">⏱ 12分</div>
+    </div>
+    <div class="work-body">
+      <div class="random-tag" style="background:#eff6ff; color:#0070f3; border:1px solid #bfdbfe;">🎲 ランダム出題：アウトライン応用</div>
+
+      <div class="task-box" style="background:#eff6ff; border:1px solid #bfdbfe;">
+        <div class="task-label" style="color:#0070f3;">📋 課題</div>
+        <div class="task-text">「50」は<strong>塗りあり（白）</strong>、「%OFF」は<strong>アウトラインのみ（白の境界線）</strong>という組み合わせを作ってください。</div>
+      </div>
+
+      <!-- 完成イメージ -->
+      <div style="background:#0070f3; border-radius:12px; padding:24px; display:flex; align-items:baseline; justify-content:center; gap:4px; margin:16px 0;">
+        <div style="font-family:'Oswald',sans-serif; font-size:72px; font-weight:700; color:#fff; line-height:1;">50</div>
+        <div style="display:flex; flex-direction:column; align-items:flex-start;">
+          <div style="font-family:'Oswald',sans-serif; font-size:36px; font-weight:700; color:transparent; -webkit-text-stroke:2px #fff; line-height:1;">%</div>
+          <div style="font-family:'Oswald',sans-serif; font-size:32px; font-weight:700; color:transparent; -webkit-text-stroke:2px #fff; line-height:1;">OFF</div>
+        </div>
+      </div>
+      <p class="caption">↑ 目標。「50」は白塗り、「%OFF」はアウトラインのみ</p>
+
+      <!-- 手順 -->
+      <div style="display:flex; flex-direction:column; gap:8px; margin:16px 0;">
+        <div style="display:flex; gap:10px; align-items:flex-start;">
+          <div class="step-num-circle" style="background:#0070f3;">1</div>
+          <p style="font-size:13px; color:var(--text-secondary); line-height:1.7;">「50」を入力 → 色：<code>#ffffff</code>（白）→ 通常の塗りあり文字</p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:flex-start;">
+          <div class="step-num-circle" style="background:#0070f3;">2</div>
+          <p style="font-size:13px; color:var(--text-secondary); line-height:1.7;">「%」「OFF」をそれぞれ別レイヤーで入力 → 色を背景色（<code>#0070f3</code>）と同じに</p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:flex-start;">
+          <div class="step-num-circle" style="background:#0070f3;">3</div>
+          <p style="font-size:13px; color:var(--text-secondary); line-height:1.7;">「%」「OFF」にレイヤースタイル → 境界線：<code>3px #ffffff 外側</code></p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:flex-start;">
+          <div class="step-num-circle" style="background:#0070f3;">4</div>
+          <p style="font-size:13px; color:var(--text-secondary); line-height:1.7;">3つを位置調整して完成。グループ化（Cmd+G）でまとめて管理</p>
+        </div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:12px; font-weight:700; color:var(--text-secondary); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#0070f3;"></div><div class="check-text">塗りありとアウトラインを組み合わせられた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#0070f3;"></div><div class="check-text">3つのレイヤーをグループ化できた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q9〜Q10: 実践バナー -->
+  <div class="work-card" style="border:2px solid #059669;">
+    <div class="work-header" style="background:linear-gradient(135deg,#064e3b,#059669);">
+      <div class="work-num" style="background:rgba(255,255,255,0.2); border:2px solid rgba(255,255,255,0.4);">Q9</div>
+      <div class="work-title-wrap">
+        <div class="work-subtitle" style="color:rgba(255,255,255,0.7);">実践バナーA — 制作問題</div>
+        <div class="work-title" style="color:#fff;">指定テキストでミニバナーを作る</div>
+      </div>
+      <div class="work-badge" style="background:rgba(255,255,255,0.2); color:#fff;">⏱ 20分</div>
+    </div>
+    <div class="work-body">
+
+      <div class="task-box" style="background:#f0fdf4; border:2px solid #059669;">
+        <div class="task-label" style="color:#059669;">📋 実践課題A</div>
+        <div class="task-text">下記の<strong>仕様書通り</strong>にミニバナー（600×400px）を制作してください。テクニックの指定があるので必ず守りましょう。</div>
+      </div>
+
+      <!-- 仕様書 -->
+      <div style="background:#1e1e2e; border-radius:14px; padding:20px; margin:16px 0;">
+        <div style="font-size:11px; color:#86efac; font-family:'JetBrains Mono',monospace; margin-bottom:16px; letter-spacing:0.08em;">📄 仕様書</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:12px;">
+          <div><div style="font-size:10px; color:#666; font-family:'JetBrains Mono',monospace; margin-bottom:3px;">サイズ</div><div style="color:#e2e8f0; font-weight:700;">600 × 400px</div></div>
+          <div><div style="font-size:10px; color:#666; font-family:'JetBrains Mono',monospace; margin-bottom:3px;">背景色</div><div style="color:#e2e8f0; font-weight:700;">#2d3748（ダークグレー）</div></div>
+          <div style="grid-column:1/-1;"><div style="font-size:10px; color:#666; font-family:'JetBrains Mono',monospace; margin-bottom:3px;">配置するテキスト</div>
+            <div style="color:#e2e8f0; line-height:2;">
+              ① 「NEW ARRIVAL」— 上部・中央揃え・トラッキング+150<br>
+              ② 「2026 SPRING」— メイン・大きめ・カーニング調整済み<br>
+              ③ 「3.1 START」— 日付・中央揃え<br>
+              ④ 「SHOP NOW →」— 下部・ドロップシャドウ付き
+            </div>
+          </div>
+          <div style="grid-column:1/-1;"><div style="font-size:10px; color:#666; font-family:'JetBrains Mono',monospace; margin-bottom:3px;">必須テクニック</div>
+            <div style="color:#86efac; line-height:2;">
+              ✓ カーニング（「2026 SPRING」）<br>
+              ✓ トラッキング（①は+150以上）<br>
+              ✓ レイヤースタイル（④にドロップシャドウ）<br>
+              ✓ 整列パネルで中央揃え
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:12px; font-weight:700; color:var(--text-secondary); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#059669;"></div><div class="check-text">仕様書通りに4つのテキストを配置できた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#059669;"></div><div class="check-text">必須テクニック4つをすべて使えた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#059669;"></div><div class="check-text">PNG書き出しで保存できた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q10: 実践バナーB（自由） -->
+  <div class="work-card" style="border:2px solid #9333ea;">
+    <div class="work-header" style="background:linear-gradient(135deg,#6b21a8,#9333ea);">
+      <div class="work-num" style="background:rgba(255,255,255,0.2); border:2px solid rgba(255,255,255,0.4);">Q10</div>
+      <div class="work-title-wrap">
+        <div class="work-subtitle" style="color:rgba(255,255,255,0.7);">実践バナーB — 自由制作</div>
+        <div class="work-title" style="color:#fff;">テクニックを選んで自由にバナーを作る</div>
+      </div>
+      <div class="work-badge" style="background:rgba(255,255,255,0.2); color:#fff;">⏱ 25分</div>
+    </div>
+    <div class="work-body">
+
+      <div class="task-box" style="background:#faf5ff; border:2px solid #9333ea;">
+        <div class="task-label" style="color:#9333ea;">📋 自由課題</div>
+        <div class="task-text">テーマ・色・フォントをすべて<strong>自分で決めて</strong>バナー（600×600px）を1枚制作してください。<br>ただし下記の<strong>テクニックを最低5つ</strong>使うこと。</div>
+      </div>
+
+      <!-- テクニックカード -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:16px 0;">
+        <div style="background:#f8f9fa; border-radius:8px; padding:10px 12px; border-left:3px solid #dc2626;">
+          <input type="checkbox" style="margin-right:6px;"><span style="font-size:12px; color:var(--text-secondary);">カーニング調整</span>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:10px 12px; border-left:3px solid #ea580c;">
+          <input type="checkbox" style="margin-right:6px;"><span style="font-size:12px; color:var(--text-secondary);">トラッキング設定</span>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:10px 12px; border-left:3px solid #ca8a04;">
+          <input type="checkbox" style="margin-right:6px;"><span style="font-size:12px; color:var(--text-secondary);">行送り調整</span>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:10px 12px; border-left:3px solid #16a34a;">
+          <input type="checkbox" style="margin-right:6px;"><span style="font-size:12px; color:var(--text-secondary);">フォントの強弱（3種類以上）</span>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:10px 12px; border-left:3px solid #0891b2;">
+          <input type="checkbox" style="margin-right:6px;"><span style="font-size:12px; color:var(--text-secondary);">ドロップシャドウ</span>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:10px 12px; border-left:3px solid #7c3aed;">
+          <input type="checkbox" style="margin-right:6px;"><span style="font-size:12px; color:var(--text-secondary);">境界線（アウトライン）</span>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:10px 12px; border-left:3px solid #db2777;">
+          <input type="checkbox" style="margin-right:6px;"><span style="font-size:12px; color:var(--text-secondary);">整列パネルで揃える</span>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:10px 12px; border-left:3px solid #0070f3;">
+          <input type="checkbox" style="margin-right:6px;"><span style="font-size:12px; color:var(--text-secondary);">グラデーションオーバーレイ</span>
+        </div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:12px; font-weight:700; color:var(--text-secondary); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ 完成後の自己チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#9333ea;"></div><div class="check-text">テクニックを5つ以上使えた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#9333ea;"></div><div class="check-text">一番伝えたいテキストが一番目立っている</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#9333ea;"></div><div class="check-text">色は3色以内におさまっている</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#9333ea;"></div><div class="check-text">余白が均等にとれている</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#9333ea;"></div><div class="check-text">PNG書き出しで保存できた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q11: 総合仕上げ -->
+  <div class="work-card" style="border:2px solid #1e1b4b;">
+    <div class="work-header" style="background:linear-gradient(135deg,#1e1b4b,#4338ca,#818cf8);">
+      <div class="work-num" style="background:rgba(255,255,255,0.2); border:2px solid rgba(255,255,255,0.4);">Q11</div>
+      <div class="work-title-wrap">
+        <div class="work-subtitle" style="color:rgba(255,255,255,0.7);">総合仕上げ — 振り返り</div>
+        <div class="work-title" style="color:#fff;">Lesson10・11で学んだことを整理する</div>
+      </div>
+      <div class="work-badge" style="background:rgba(255,255,255,0.2); color:#fff;">⏱ 10分</div>
+    </div>
+    <div class="work-body">
+
+      <div class="task-box" style="background:#eef2ff; border:2px solid #4338ca;">
+        <div class="task-label" style="color:#4338ca;">📋 振り返り課題</div>
+        <div class="task-text">下記の質問に自分の言葉で答えてください。答えることで理解が定着します。</div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:16px;">
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:12px; font-weight:700; color:#4338ca; margin-bottom:8px;">Q: カーニングとトラッキングの違いを説明してください。</div>
+          <div style="background:#fff; border-radius:6px; padding:10px; border:1px dashed #c7d2fe; min-height:60px;">
+            <div style="font-size:11px; color:#94a3b8; font-family:'JetBrains Mono',monospace;">自分の言葉で書く</div>
+          </div>
+        </div>
+
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:12px; font-weight:700; color:#4338ca; margin-bottom:8px;">Q: ファッション系バナーに向いているトラッキング値の目安は？</div>
+          <div style="background:#fff; border-radius:6px; padding:10px; border:1px dashed #c7d2fe; min-height:60px;">
+            <div style="font-size:11px; color:#94a3b8; font-family:'JetBrains Mono',monospace;">自分の言葉で書く</div>
+          </div>
+        </div>
+
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:12px; font-weight:700; color:#4338ca; margin-bottom:8px;">Q: アウトライン文字を作るにはどうすればいいですか？</div>
+          <div style="background:#fff; border-radius:6px; padding:10px; border:1px dashed #c7d2fe; min-height:60px;">
+            <div style="font-size:11px; color:#94a3b8; font-family:'JetBrains Mono',monospace;">自分の言葉で書く</div>
+          </div>
+        </div>
+
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:12px; font-weight:700; color:#4338ca; margin-bottom:8px;">Q: バナーでテキストの強弱（ヒエラルキー）をつける方法を3つ挙げてください。</div>
+          <div style="background:#fff; border-radius:6px; padding:10px; border:1px dashed #c7d2fe; min-height:60px;">
+            <div style="font-size:11px; color:#94a3b8; font-family:'JetBrains Mono',monospace;">① ② ③ の形で書く</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- テクニック早見表（Lesson11版） -->
+      <div style="background:#eef2ff; border-radius:12px; padding:16px 18px; margin-top:4px;">
+        <div style="font-size:11px; color:#4338ca; font-family:'JetBrains Mono',monospace; margin-bottom:12px; font-weight:700;">📚 Lesson10・11 完全マスターチェック</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; gap:10px;"><div style="color:#4338ca; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:12px; color:var(--text-secondary);">カーニング（2文字間）を調整できる</p></div>
+          <div style="display:flex; gap:10px;"><div style="color:#4338ca; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:12px; color:var(--text-secondary);">バナーのジャンルに合ったトラッキングを設定できる</p></div>
+          <div style="display:flex; gap:10px;"><div style="color:#4338ca; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:12px; color:var(--text-secondary);">フォントサイズから適切な行送りを計算できる</p></div>
+          <div style="display:flex; gap:10px;"><div style="color:#4338ca; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:12px; color:var(--text-secondary);">バナーのジャンルに合ったフォントを選べる</p></div>
+          <div style="display:flex; gap:10px;"><div style="color:#4338ca; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:12px; color:var(--text-secondary);">ドロップシャドウ・光彩・境界線を使いこなせる</p></div>
+          <div style="display:flex; gap:10px;"><div style="color:#4338ca; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:12px; color:var(--text-secondary);">NGバナーの問題点を言語化できる</p></div>
+          <div style="display:flex; gap:10px;"><div style="color:#4338ca; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:12px; color:var(--text-secondary);">整列パネルを使って正確に揃えられる</p></div>
+          <div style="display:flex; gap:10px;"><div style="color:#4338ca; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:12px; color:var(--text-secondary);">塗りありとアウトラインを組み合わせられる</p></div>
+          <div style="display:flex; gap:10px;"><div style="color:#4338ca; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:12px; color:var(--text-secondary);">仕様書を見てバナーを制作できる</p></div>
+          <div style="display:flex; gap:10px;"><div style="color:#4338ca; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:12px; color:var(--text-secondary);">テクニックを5つ以上使って自由バナーを作れる</p></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:16px; font-size:12px; color:#94a3b8;">Photoshop チュートリアル · Lesson 11｜テキスト技術 応用ワークシート</div>
+
+</div>
+</body>
+</html>
