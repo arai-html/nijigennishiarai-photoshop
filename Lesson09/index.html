@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>アウトレット10%OFFバナー模写｜Photoshop Lesson 09</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&family=Oswald:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --text: #1a1a2e;
+    --text-secondary: #4a5568;
+    --border: #e2e8f0;
+    --code-bg: #eefaf5;
+    --code-text: #1a6b4a;
+    --accent: #2ec4a0;
+    --green: #2ec4a0;
+    --green-dark: #1a8a6e;
+    --cream: #f5f5e8;
+    --dark: #1a2e1e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 40px 20px 80px; }
+  .container { max-width: 780px; margin: 0 auto; }
+
+  .hero { background: linear-gradient(135deg, #1a6b4a 0%, #2ec4a0 60%, #7de8c8 100%); border-radius: 20px; padding: 48px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::after { content: '🏷'; position: absolute; right: 40px; top: 30px; font-size: 64px; opacity: 0.2; }
+  .hero-content { position: relative; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+  .hero h1 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.85); }
+  .size-chip { display: inline-flex; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.35); color: #fff; font-size: 13px; font-family: 'JetBrains Mono', monospace; padding: 5px 14px; border-radius: 8px; margin-top: 16px; font-weight: 600; }
+
+  .goal-card { background: #fff; border-radius: 16px; border: 1px solid var(--border); padding: 24px; margin-bottom: 32px; }
+  .goal-label { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--green-dark); font-weight: 600; letter-spacing: 0.08em; margin-bottom: 12px; text-transform: uppercase; }
+
+  /* バナープレビュー */
+  .banner-preview {
+    width: 100%; border-radius: 12px; overflow: hidden;
+    background: #f5f5e8;
+    padding: 0;
+    position: relative;
+    border: 1px solid rgba(0,0,0,0.08);
+    aspect-ratio: 16/9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .bp-border { position: absolute; inset: 10px; border: 1px solid #c8c8b0; pointer-events: none; }
+  .bp-top { font-size: clamp(8px,1.5vw,13px); letter-spacing: 0.2em; color: #1a2e1e; font-weight: 500; margin-bottom: 8px; }
+  .bp-main { display: flex; align-items: baseline; gap: 0; position: relative; }
+  .bp-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(60px,15vw,120px);
+    font-weight: 700;
+    color: transparent;
+    -webkit-text-stroke: 3px #2ec4a0;
+    line-height: 1;
+    position: relative;
+  }
+  .bp-num::before {
+    content: '10';
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    color: transparent;
+    -webkit-text-stroke: 3px rgba(46,196,160,0.3);
+    z-index: -1;
+  }
+  .bp-percent {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(30px,7vw,56px);
+    font-weight: 700;
+    color: transparent;
+    -webkit-text-stroke: 2px #2ec4a0;
+    line-height: 1;
+  }
+  .bp-off {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(28px,6vw,50px);
+    font-weight: 700;
+    color: transparent;
+    -webkit-text-stroke: 2px #2ec4a0;
+    display: block;
+    text-align: right;
+  }
+  .bp-right-group { display: flex; flex-direction: column; align-items: flex-start; }
+  .bp-sub { font-size: clamp(7px,1.2vw,11px); color: #1a2e1e; text-align: center; margin-top: 6px; line-height: 1.7; }
+  .bp-vertical-l { position: absolute; left: 18px; top: 50%; transform: translateY(-50%) rotate(180deg); writing-mode: vertical-rl; font-size: clamp(5px,0.9vw,9px); letter-spacing: 0.12em; color: #2ec4a0; font-weight: 500; }
+  .bp-vertical-r { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; font-size: clamp(5px,0.9vw,9px); letter-spacing: 0.12em; color: #2ec4a0; font-weight: 500; }
+
+  .steps { display: flex; flex-direction: column; gap: 24px; }
+  .step-card { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; }
+  .step-card:hover { box-shadow: 0 4px 24px rgba(46,196,160,0.1); }
+  .step-header { display: flex; align-items: center; gap: 16px; padding: 20px 24px; border-bottom: 1px solid var(--border); }
+  .step-num { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #1a8a6e, #2ec4a0); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .step-title { font-size: 17px; font-weight: 700; color: var(--text); }
+  .step-body { padding: 24px; }
+  .step-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px; }
+
+  code { background: var(--code-bg); color: var(--code-text); font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  .ps-mock { background: #2b2b2b; border-radius: 12px; overflow: hidden; margin-bottom: 12px; border: 1px solid #111; }
+  .ps-titlebar { background: #1e1e1e; padding: 6px 14px; display: flex; align-items: center; gap: 6px; }
+  .ps-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .ps-dot.r { background: #ff5f56; } .ps-dot.y { background: #ffbd2e; } .ps-dot.g { background: #27c93f; }
+  .ps-win-title { font-size: 10px; color: #888; margin-left: 8px; font-family: 'JetBrains Mono', monospace; }
+  .ps-body { display: flex; }
+  .ps-toolbar { background: #1f1f1f; width: 30px; border-right: 1px solid #111; padding: 8px 0; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .ps-tool-icon { width: 18px; height: 18px; background: #444; border-radius: 2px; }
+  .ps-canvas { flex: 1; background: #535353; display: flex; align-items: center; justify-content: center; padding: 16px; flex-wrap: wrap; gap: 10px; }
+  .ps-dialog { background: #404040; border: 1px solid #666; border-radius: 6px; padding: 14px 18px; min-width: 220px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+  .ps-dialog-title { font-size: 11px; font-weight: 600; color: #eee; margin-bottom: 12px; border-bottom: 1px solid #555; padding-bottom: 8px; font-family: 'JetBrains Mono', monospace; }
+  .ps-field { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; gap: 10px; }
+  .ps-field-label { font-size: 10px; color: #bbb; }
+  .ps-field-input { background: #222; border: 1px solid #666; border-radius: 3px; padding: 3px 8px; font-size: 10px; color: #fff; width: 80px; text-align: right; font-family: 'JetBrains Mono', monospace; }
+  .ps-field-input.hl { border-color: #2ec4a0; background: #001a10; color: #2ec4a0; font-weight: 600; }
+  .ps-field-select { background: #333; border: 1px solid #666; border-radius: 3px; padding: 3px 6px; font-size: 10px; color: #fff; width: 130px; }
+  .ps-btns { display: flex; justify-content: flex-end; gap: 6px; margin-top: 12px; }
+  .ps-btn { background: #555; border: 1px solid #777; border-radius: 3px; padding: 4px 12px; font-size: 10px; color: #eee; cursor: default; }
+  .ps-btn.ok { background: #0078d4; border-color: #0078d4; }
+  .ps-layers { background: #252525; width: 220px; border-left: 1px solid #111; padding: 8px; }
+  .ps-layers-title { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .ps-layer { display: flex; align-items: center; gap: 7px; padding: 5px 7px; border-radius: 3px; margin-bottom: 3px; background: #3a3a3a; }
+  .ps-layer.sel { background: #001a10; }
+  .ps-layer-thumb { width: 22px; height: 17px; border-radius: 2px; flex-shrink: 0; border: 1px solid #555; }
+  .ps-layer-name { font-size: 9px; color: #ddd; line-height: 1.3; }
+  .ps-layer-mode { font-size: 8px; color: #2ec4a0; }
+
+  .tip { background: #eefaf5; border-left: 3px solid #2ec4a0; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 16px; }
+  .tip p { font-size: 13px; color: #0d4030; line-height: 1.7; }
+  .tip strong { color: #1a6b4a; font-weight: 700; }
+  .caption { font-size: 12px; color: #94a3b8; margin-top: 8px; font-style: italic; }
+
+  .part-row { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+  .part-header { padding: 8px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); background: #eefaf5; }
+  .part-tag { font-size: 11px; font-weight: 700; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .part-body { padding: 10px 14px; font-size: 12px; color: var(--text-secondary); line-height: 2.2; }
+
+  /* アウトライン文字デモ */
+  .outline-demo { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+  .od-box { flex: 1; min-width: 130px; border-radius: 10px; overflow: hidden; }
+  .od-preview { height: 90px; display: flex; align-items: center; justify-content: center; background: #f5f5e8; }
+  .od-label { padding: 8px; font-size: 10px; text-align: center; font-family: 'JetBrains Mono', monospace; line-height: 1.6; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 24px; }
+    .hero h1 { font-size: 22px; }
+    .ps-layers { display: none; }
+    .step-body { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Photoshop チュートリアル · Lesson 09</div>
+      <h1>🏷 アウトレット 10%OFF<br>バナー模写</h1>
+      <p>アウトライン文字・影・縦書きテキスト・細枠ボーダーを学ぶ。3色だけのミニマルデザイン</p>
+      <div class="size-chip">1200 × 675 px（16:9横型）</div>
+    </div>
+  </div>
+
+  <!-- 完成ゴール -->
+  <div class="goal-card">
+    <div class="goal-label">🎯 完成イメージ</div>
+    <div class="banner-preview">
+      <div class="bp-border"></div>
+      <div class="bp-vertical-l">FOR SHIPS ONLINE SHOP</div>
+      <div class="bp-vertical-r">FOR SHIPS ONLINE SHOP</div>
+      <div style="display:flex; flex-direction:column; align-items:center; position:relative; z-index:1;">
+        <div class="bp-top">OUTLET ITEMS SPECIAL SALE</div>
+        <div class="bp-main">
+          <div class="bp-num">10</div>
+          <div class="bp-right-group">
+            <div class="bp-percent">%</div>
+            <div class="bp-off">OFF</div>
+          </div>
+        </div>
+        <div class="bp-sub">アウトレット対象品、全品さらに10%OFF！<br>9.17 FRI. 23:59まで</div>
+      </div>
+    </div>
+    <p class="caption" style="margin-top:8px;">↑ 完成イメージ。クリーム背景にグリーンのアウトライン文字が特徴的</p>
+  </div>
+
+  <!-- ステップ -->
+  <div class="steps">
+
+    <!-- STEP 1 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div class="step-title">バナーの構造を分析する</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">このバナーはLesson06・07と同じテキストのみですが、<strong>アウトライン文字・縦書き・細枠ボーダー</strong>という新しいテクニックが登場します。</p>
+
+        <!-- 構造マップ -->
+        <div style="background:#1a1a1a; border-radius:14px; padding:16px; margin-bottom:20px;">
+          <div style="font-size:11px; color:#2ec4a0; font-family:'JetBrains Mono',monospace; margin-bottom:10px;">バナー構造マップ（1200×675px）</div>
+          <div style="border-radius:10px; overflow:hidden; background:#f5f5e8; padding:16px; position:relative; aspect-ratio:16/9; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;">
+
+            <!-- 細枠ボーダー -->
+            <div style="position:absolute; inset:8px; border:1px solid #c8c8b0; border-radius:2px; pointer-events:none;"></div>
+
+            <!-- 縦書き左 -->
+            <div style="position:absolute; left:12px; top:50%; transform:translateY(-50%) rotate(180deg); writing-mode:vertical-rl; font-size:7px; color:#2ec4a0; font-weight:600; letter-spacing:0.1em;">FOR SHIPS ONLINE SHOP</div>
+
+            <!-- 縦書き右 -->
+            <div style="position:absolute; right:12px; top:50%; transform:translateY(-50%); writing-mode:vertical-rl; font-size:7px; color:#2ec4a0; font-weight:600; letter-spacing:0.1em;">FOR SHIPS ONLINE SHOP</div>
+
+            <!-- A: 上部テキスト -->
+            <div style="border:1px dashed rgba(46,196,160,0.5); border-radius:3px; padding:3px 8px; display:inline-block;">
+              <div style="font-size:7px; color:#1a8a6e; font-family:'JetBrains Mono',monospace; margin-bottom:2px;">A 上部テキスト</div>
+              <div style="font-size:9px; letter-spacing:0.18em; color:#1a2e1e; font-weight:500;">OUTLET ITEMS SPECIAL SALE</div>
+            </div>
+
+            <!-- B: メイン数字（アウトライン） -->
+            <div style="border:1px dashed rgba(46,196,160,0.5); border-radius:3px; padding:4px 10px; display:inline-flex; align-items:baseline; gap:0;">
+              <div style="font-size:7px; color:#1a8a6e; font-family:'JetBrains Mono',monospace; position:absolute; top:-14px; left:0;">B アウトライン文字（メイン）</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:40px; font-weight:700; color:transparent; -webkit-text-stroke:2px #2ec4a0; line-height:1; position:relative;">
+                10
+                <span style="position:absolute; left:2px; top:2px; color:transparent; -webkit-text-stroke:2px rgba(46,196,160,0.2);">10</span>
+              </div>
+              <div style="display:flex; flex-direction:column; align-items:flex-start;">
+                <div style="font-family:'Oswald',sans-serif; font-size:22px; font-weight:700; color:transparent; -webkit-text-stroke:1.5px #2ec4a0; line-height:1;">%</div>
+                <div style="font-family:'Oswald',sans-serif; font-size:20px; font-weight:700; color:transparent; -webkit-text-stroke:1.5px #2ec4a0; line-height:1;">OFF</div>
+              </div>
+            </div>
+
+            <!-- C: 下部テキスト -->
+            <div style="border:1px dashed rgba(46,196,160,0.4); border-radius:3px; padding:3px 8px;">
+              <div style="font-size:7px; color:#1a8a6e; font-family:'JetBrains Mono',monospace; margin-bottom:2px;">C 下部テキスト（日本語）</div>
+              <div style="font-size:8px; color:#1a2e1e; text-align:center; line-height:1.7;">アウトレット対象品、全品さらに10%OFF！<br>9.17 FRI. 23:59まで</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- カラーパレット -->
+        <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px;">このバナーで使う色（3色のみ）</div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
+          <div style="text-align:center;">
+            <div style="width:70px; height:70px; border-radius:12px; background:#f5f5e8; border:1px solid #d0d0c0; margin-bottom:6px; display:flex; align-items:center; justify-content:center; font-size:10px; color:#888;">クリーム</div>
+            <div style="font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">#f5f5e8</div>
+            <div style="font-size:10px; color:#94a3b8;">背景</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="width:70px; height:70px; border-radius:12px; background:#2ec4a0; margin-bottom:6px;"></div>
+            <div style="font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">#2ec4a0</div>
+            <div style="font-size:10px; color:#94a3b8;">グリーン<br>（アウトライン・縦書き）</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="width:70px; height:70px; border-radius:12px; background:#1a2e1e; margin-bottom:6px;"></div>
+            <div style="font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-secondary);">#1a2e1e</div>
+            <div style="font-size:10px; color:#94a3b8;">ダークグリーン<br>（通常テキスト）</div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>このバナーで学ぶ新テクニック：</strong>① アウトライン文字（塗りなし・線だけ）② 文字に影をつけてずらす ③ 縦書きテキスト ④ 細枠のボーダー装飾。Lesson06・07より少し難易度が上がります。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div class="step-title">新規ドキュメントとクリーム背景を作る</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">背景はクリーム色の単色です。白に近い黄色がかった色で、温かみとナチュラルな印象を与えます。</p>
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">新規ドキュメント ＋ クリーム背景</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas">
+              <div class="ps-dialog" style="min-width:270px;">
+                <div class="ps-dialog-title">新規ドキュメント</div>
+                <div class="ps-field"><span class="ps-field-label">幅</span><input class="ps-field-input hl" value="1200 px" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">高さ</span><input class="ps-field-input hl" value="675 px" readonly /></div>
+                <div class="ps-field"><span class="ps-field-label">解像度</span><input class="ps-field-input" value="72 ppi" readonly /></div>
+                <div class="ps-field">
+                  <span class="ps-field-label">背景カラー</span>
+                  <div style="width:80px; height:18px; background:#f5f5e8; border:1px solid #888; border-radius:3px;"></div>
+                </div>
+                <div style="font-size:9px; color:#aaa; margin-top:6px; font-family:'JetBrains Mono',monospace;">💡 白（#ffffff）ではなくクリーム（#f5f5e8）を指定</div>
+                <div class="ps-btns"><button class="ps-btn ok">作成</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>純白との違い：</strong>白（#ffffff）だと冷たい・硬い印象になります。クリーム色（#f5f5e8）にするだけで<strong>温かみ・高級感・ナチュラルさ</strong>が生まれます。ファッション・コスメ・食品系のバナーによく使われます。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div class="step-title">細枠ボーダーを作る</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">バナーの内側に一回り小さい細い枠線を入れます。高級感・丁寧さを演出するシンプルな装飾テクニックです。</p>
+
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">細枠ボーダーの作り方</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas" style="flex-direction:column; align-items:flex-start; gap:8px; padding:14px;">
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#1a8a6e,#2ec4a0); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">1</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;"><code style="background:#333; color:#2ec4a0; padding:1px 5px; border-radius:3px;">長方形ツール（U）</code> でキャンバスより一回り小さい長方形を描く<br>塗り：<code style="background:#333; color:#2ec4a0; padding:1px 5px; border-radius:3px;">なし</code>　線：<code style="background:#333; color:#2ec4a0; padding:1px 5px; border-radius:3px;">#c8c8b0</code>（薄いベージュ）1px</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#1a8a6e,#2ec4a0); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">2</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">サイズを <code style="background:#333; color:#2ec4a0; padding:1px 5px; border-radius:3px;">W:1160px × H:635px</code> に設定（上下左右から20pxずつ内側）</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#1a8a6e,#2ec4a0); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">3</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">整列パネルで <code style="background:#333; color:#2ec4a0; padding:1px 5px; border-radius:3px;">水平中央・垂直中央</code> に整列（キャンバス基準）</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>線の太さは1pxが基本：</strong>細枠は目立ちすぎないのがポイント。2px以上にすると野暮ったくなります。色も純白・純黒より<strong>背景に近い薄い色</strong>（今回は薄いベージュ）にするとエレガントに仕上がります。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <div class="step-title">アウトライン文字（10%OFF）を作る ★このレッスンの核心</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><strong>塗りなし・線だけの文字（アウトライン文字）</strong>を作ります。さらに少しずらした影を重ねて立体感を出すのがこのバナーの特徴です。</p>
+
+        <!-- アウトライン比較 -->
+        <div class="outline-demo">
+          <div class="od-box" style="border:2px solid #2ec4a0; border-radius:10px;">
+            <div class="od-preview">
+              <div style="font-family:'Oswald',sans-serif; font-size:52px; font-weight:700; color:transparent; -webkit-text-stroke:2.5px #2ec4a0; line-height:1; position:relative;">
+                10
+                <span style="position:absolute; left:3px; top:3px; color:transparent; -webkit-text-stroke:2.5px rgba(46,196,160,0.25); z-index:-1;">10</span>
+              </div>
+            </div>
+            <div class="od-label" style="background:#eefaf5; color:#1a6b4a; font-weight:700;">✅ アウトライン＋影ずらし<br>塗り：なし　線：グリーン<br>影を3pxずらして奥行き感</div>
+          </div>
+          <div class="od-box" style="border:1px solid #e2e8f0; border-radius:10px;">
+            <div class="od-preview">
+              <div style="font-family:'Oswald',sans-serif; font-size:52px; font-weight:700; color:#2ec4a0; line-height:1;">10</div>
+            </div>
+            <div class="od-label" style="background:#f7f9fc; color:#94a3b8;">❌ 塗りあり<br>シンプルだが<br>軽さ・洗練感が出ない</div>
+          </div>
+          <div class="od-box" style="border:1px solid #e2e8f0; border-radius:10px;">
+            <div class="od-preview">
+              <div style="font-family:'Oswald',sans-serif; font-size:52px; font-weight:700; color:transparent; -webkit-text-stroke:2.5px #2ec4a0; line-height:1;">10</div>
+            </div>
+            <div class="od-label" style="background:#f7f9fc; color:#94a3b8;">△ アウトラインのみ<br>影なし<br>少し物足りない</div>
+          </div>
+        </div>
+
+        <!-- アウトライン文字の作り方 -->
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">アウトライン文字の作り方（2ステップ）</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon" style="background:#4a9fdf; color:#fff; font-size:9px; display:flex; align-items:center; justify-content:center; font-weight:700;">T</div></div>
+            <div class="ps-canvas" style="flex-direction:column; align-items:flex-start; gap:10px; padding:14px;">
+
+              <div style="background:#333; border-radius:8px; padding:10px 12px; width:100%;">
+                <div style="font-size:10px; color:#2ec4a0; font-family:'JetBrains Mono',monospace; margin-bottom:8px; font-weight:700;">STEP A — テキストを入力する</div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                  <div style="display:flex; gap:8px;"><div style="color:#2ec4a0; font-size:11px; flex-shrink:0; font-weight:700;">①</div><p style="font-size:11px; color:#ccc; line-height:1.6;">横書き文字ツール（T）で「10」を入力</p></div>
+                  <div style="display:flex; gap:8px;"><div style="color:#2ec4a0; font-size:11px; flex-shrink:0; font-weight:700;">②</div><p style="font-size:11px; color:#ccc; line-height:1.6;">フォント：<code style="background:#222; color:#2ec4a0; padding:1px 5px; border-radius:3px;">Oswald Bold</code>　サイズ：<code style="background:#222; color:#2ec4a0; padding:1px 5px; border-radius:3px;">500〜600px</code></p></div>
+                  <div style="display:flex; gap:8px;"><div style="color:#2ec4a0; font-size:11px; flex-shrink:0; font-weight:700;">③</div><p style="font-size:11px; color:#ccc; line-height:1.6;">カラーは仮で何色でもOK（後でアウトラインにするので）</p></div>
+                </div>
+              </div>
+
+              <div style="background:#333; border-radius:8px; padding:10px 12px; width:100%;">
+                <div style="font-size:10px; color:#2ec4a0; font-family:'JetBrains Mono',monospace; margin-bottom:8px; font-weight:700;">STEP B — レイヤースタイルでアウトライン化</div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                  <div style="display:flex; gap:8px;"><div style="color:#2ec4a0; font-size:11px; flex-shrink:0; font-weight:700;">①</div><p style="font-size:11px; color:#ccc; line-height:1.6;">テキストレイヤーをダブルクリック → <strong style="color:#2ec4a0;">レイヤースタイル</strong>を開く</p></div>
+                  <div style="display:flex; gap:8px;"><div style="color:#2ec4a0; font-size:11px; flex-shrink:0; font-weight:700;">②</div><p style="font-size:11px; color:#ccc; line-height:1.6;"><strong style="color:#2ec4a0;">境界線</strong>をチェック：サイズ <code style="background:#222; color:#2ec4a0; padding:1px 5px; border-radius:3px;">6px</code>　カラー <code style="background:#222; color:#2ec4a0; padding:1px 5px; border-radius:3px;">#2ec4a0</code>　位置：<code style="background:#222; color:#2ec4a0; padding:1px 5px; border-radius:3px;">外側</code></p></div>
+                  <div style="display:flex; gap:8px;"><div style="color:#2ec4a0; font-size:11px; flex-shrink:0; font-weight:700;">③</div><p style="font-size:11px; color:#ccc; line-height:1.6;">文字のカラーを <code style="background:#222; color:#2ec4a0; padding:1px 5px; border-radius:3px;">透明（#ffffff 0%）</code>… ではなく<br>→ <strong style="color:#ff8533;">文字パネルのカラーを背景色（#f5f5e8）と同じにする</strong><br>これで「塗りと背景が同化してアウトラインだけ見える」状態になる</p></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="tip" style="margin-top:0;">
+          <p><strong>もう一つの方法（レイヤースタイルを使わない）：</strong><br>
+          ① テキストを入力 → 右クリック → <code>作業用パスを作成</code><br>
+          ② パスパネルで作業用パスを選択 → <code>パスの境界線を描く</code>（ブラシツール）<br>
+          ③ テキストレイヤーを非表示 → パスの線だけが残る<br>
+          少し難しいですが、より細かい調整ができます。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">5</div>
+        <div class="step-title">影をずらして立体感を出す</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">「10」の後ろに薄いアウトラインをずらして重ねることで、<strong>奥行き感・立体感</strong>が生まれます。2枚のレイヤーを使うシンプルなテクニックです。</p>
+
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">影ずらしの作り方</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas" style="flex-direction:column; align-items:flex-start; gap:8px; padding:14px;">
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#1a8a6e,#2ec4a0); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">1</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">STEP4で作ったアウトライン「10」レイヤーを <code style="background:#333; color:#2ec4a0; padding:1px 5px; border-radius:3px;">Cmd/Ctrl+J</code> で複製</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#1a8a6e,#2ec4a0); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">2</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">複製したレイヤーを元のレイヤーの<strong style="color:#2ec4a0;">下</strong>に移動</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#1a8a6e,#2ec4a0); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">3</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">複製レイヤーの境界線カラーを <code style="background:#333; color:#2ec4a0; padding:1px 5px; border-radius:3px;">#2ec4a0</code> → <code style="background:#333; color:#2ec4a0; padding:1px 5px; border-radius:3px;">rgba(46,196,160,0.25)</code>（25%の透明度）に変更</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#1a8a6e,#2ec4a0); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">4</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">複製レイヤーを右に <code style="background:#333; color:#2ec4a0; padding:1px 5px; border-radius:3px;">8px</code>・下に <code style="background:#333; color:#2ec4a0; padding:1px 5px; border-radius:3px;">8px</code> ずらす（矢印キーで移動）</p>
+              </div>
+            </div>
+            <div class="ps-layers">
+              <div class="ps-layers-title">レイヤー構成</div>
+              <div class="ps-layer sel">
+                <div class="ps-layer-thumb" style="background:#f5f5e8; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:transparent; -webkit-text-stroke:0.5px #2ec4a0; font-family:'Oswald',sans-serif;">10</div>
+                <div><div class="ps-layer-name">10（アウトライン・前面）</div><div class="ps-layer-mode">境界線 #2ec4a0</div></div>
+              </div>
+              <div class="ps-layer">
+                <div class="ps-layer-thumb" style="background:#f5f5e8; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:transparent; -webkit-text-stroke:0.5px rgba(46,196,160,0.3); font-family:'Oswald',sans-serif;">10</div>
+                <div><div class="ps-layer-name">10（影・8pxずらし）</div><div class="ps-layer-mode">境界線 25%透明</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>ずらす量の目安：</strong>フォントサイズが大きいほどずらす量も大きくします。今回は500〜600pxのフォントに対して <code>8〜12px</code> ずらすとちょうどいいバランスになります。ずらしすぎると不自然になるので注意。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">6</div>
+        <div class="step-title">縦書きテキストを配置する（左右）</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">左右に縦書きで「FOR SHIPS ONLINE SHOP」を配置します。Photoshopの<strong>縦書き文字ツール</strong>を使います。</p>
+
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">縦書きテキストの作り方</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar">
+              <div class="ps-tool-icon" style="background:#4a9fdf; color:#fff; font-size:7px; display:flex; align-items:center; justify-content:center; font-weight:700; writing-mode:vertical-rl;">T</div>
+            </div>
+            <div class="ps-canvas" style="flex-direction:column; align-items:flex-start; gap:8px; padding:14px;">
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#1a8a6e,#2ec4a0); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">1</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">ツールバーで文字ツールを<strong style="color:#2ec4a0;">長押し</strong> → <code style="background:#333; color:#2ec4a0; padding:1px 5px; border-radius:3px;">縦書き文字ツール</code> を選択</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#1a8a6e,#2ec4a0); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">2</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">キャンバス左端付近をクリック → 「FOR SHIPS ONLINE SHOP」を入力</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#1a8a6e,#2ec4a0); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">3</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">フォント：<code style="background:#333; color:#2ec4a0; padding:1px 5px; border-radius:3px;">游ゴシック Medium</code>　サイズ：<code style="background:#333; color:#2ec4a0; padding:1px 5px; border-radius:3px;">20〜24px</code>　カラー：<code style="background:#333; color:#2ec4a0; padding:1px 5px; border-radius:3px;">#2ec4a0</code></p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#1a8a6e,#2ec4a0); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">4</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">整列パネルで<strong style="color:#2ec4a0;">垂直中央揃え</strong>（上下の中心に）→ 左端から <code style="background:#333; color:#2ec4a0; padding:1px 5px; border-radius:3px;">30px</code> の位置に配置</p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+                <div style="width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#1a8a6e,#2ec4a0); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0;">5</div>
+                <p style="font-size:11px; color:#ccc; line-height:1.7;">左側のレイヤーを <code style="background:#333; color:#2ec4a0; padding:1px 5px; border-radius:3px;">Cmd/Ctrl+J</code> で複製 → 右端から30pxの位置に配置</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>縦書きテキストのトラッキング：</strong>縦書きの場合もトラッキングを <code>+80〜+120</code> と広めにすると品よく見えます。また英字を縦書きにすると自動的に横向きになることがあります。<code>文字パネル → 縦中横</code> の設定を確認してください。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">7</div>
+        <div class="step-title">上部・下部のテキストを配置する（パーツA・C）</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">「OUTLET ITEMS SPECIAL SALE」と日本語テキストを配置します。どちらも目立ちすぎないよう小さめ・細めにします。</p>
+
+        <div class="part-row">
+          <div class="part-header">
+            <div class="part-tag" style="background:#2ec4a0; color:#fff;">A</div>
+            <span style="font-size:12px; font-weight:700;">「OUTLET ITEMS SPECIAL SALE」— 上部テキスト</span>
+          </div>
+          <div class="part-body">
+            フォント：<code>游ゴシック Medium / Noto Sans JP Medium</code><br>
+            サイズ：<code>22〜26px</code><br>
+            カラー：<code>#1a2e1e</code>（ダークグリーン）<br>
+            トラッキング：<code>+200〜+250</code>（かなりゆったり間隔）<br>
+            配置：キャンバス水平中央・メインタイトルの上 <code>40px</code>
+          </div>
+        </div>
+
+        <div class="part-row">
+          <div class="part-header">
+            <div class="part-tag" style="background:#1a8a6e; color:#fff;">C</div>
+            <span style="font-size:12px; font-weight:700;">日本語テキスト＋日付 — 下部テキスト</span>
+          </div>
+          <div class="part-body">
+            「アウトレット対象品、全品さらに10%OFF！」<br>
+            フォント：<code>游ゴシック Regular</code>　サイズ：<code>22px</code>　カラー：<code>#1a2e1e</code><br>
+            <br>
+            「9.17 FRI. 23:59まで」<br>
+            フォント：<code>游ゴシック Regular</code>　サイズ：<code>20px</code>　カラー：<code>#1a2e1e</code><br>
+            <br>
+            配置：キャンバス水平中央・メインタイトルの下 <code>30px</code><br>
+            行送り：<code>34〜38px</code>
+          </div>
+        </div>
+
+        <div class="tip"><p><strong>上部テキストのトラッキングを大きくする理由：</strong>「OUTLET ITEMS SPECIAL SALE」はサブ情報なので小さいサイズですが、トラッキングを <code>+200以上</code> に広げることで<strong>小さくても存在感が出て、上質な印象</strong>になります。ファッション・コスメ系バナーの定番テクニックです。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">8</div>
+        <div class="step-title">全体を整えて仕上げる</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">全パーツが揃ったら最終確認。このバナーは<strong>余白・整列・バランス</strong>が命です。</p>
+
+        <div class="ps-mock">
+          <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">最終チェックリスト</span></div>
+          <div class="ps-body">
+            <div class="ps-toolbar"><div class="ps-tool-icon"></div></div>
+            <div class="ps-canvas" style="flex-direction:column; align-items:flex-start; gap:8px; padding:14px;">
+              <div style="display:flex; gap:10px;"><div style="color:#27c93f; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:11px; color:#ccc; line-height:1.7;">「10%OFF」のアウトラインが綺麗に出ているか</p></div>
+              <div style="display:flex; gap:10px;"><div style="color:#27c93f; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:11px; color:#ccc; line-height:1.7;">影のずれが自然に見えるか（ずらしすぎていないか）</p></div>
+              <div style="display:flex; gap:10px;"><div style="color:#27c93f; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:11px; color:#ccc; line-height:1.7;">細枠ボーダーがキャンバス中央にちゃんと揃っているか</p></div>
+              <div style="display:flex; gap:10px;"><div style="color:#27c93f; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:11px; color:#ccc; line-height:1.7;">縦書きテキストが左右対称に配置されているか</p></div>
+              <div style="display:flex; gap:10px;"><div style="color:#27c93f; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:11px; color:#ccc; line-height:1.7;">使っている色が3色（クリーム・グリーン・ダークグリーン）だけか</p></div>
+              <div style="display:flex; gap:10px;"><div style="color:#27c93f; font-size:14px; flex-shrink:0;">✓</div><p style="font-size:11px; color:#ccc; line-height:1.7;">全体が水平中央に揃っているか（ガイドラインで確認）</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 学んだテクニックまとめ -->
+        <div style="background:#eefaf5; border-radius:12px; padding:16px 18px; margin-top:16px;">
+          <div style="font-size:11px; color:#1a6b4a; font-family:'JetBrains Mono',monospace; margin-bottom:12px;">📚 Lesson09で学んだ新テクニック</div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; gap:10px;"><span style="color:#2ec4a0; font-weight:700; flex-shrink:0;">①</span><p style="font-size:12px; color:var(--text-secondary); line-height:1.7;"><strong>アウトライン文字</strong>：塗りを背景色と同色にして境界線だけを見せる</p></div>
+            <div style="display:flex; gap:10px;"><span style="color:#2ec4a0; font-weight:700; flex-shrink:0;">②</span><p style="font-size:12px; color:var(--text-secondary); line-height:1.7;"><strong>影ずらし</strong>：同じレイヤーを複製・薄くして後ろにずらす</p></div>
+            <div style="display:flex; gap:10px;"><span style="color:#2ec4a0; font-weight:700; flex-shrink:0;">③</span><p style="font-size:12px; color:var(--text-secondary); line-height:1.7;"><strong>縦書きテキスト</strong>：縦書き文字ツールで左右のアクセントに</p></div>
+            <div style="display:flex; gap:10px;"><span style="color:#2ec4a0; font-weight:700; flex-shrink:0;">④</span><p style="font-size:12px; color:var(--text-secondary); line-height:1.7;"><strong>細枠ボーダー</strong>：塗りなし・線のみの長方形で上品な枠装飾</p></div>
+            <div style="display:flex; gap:10px;"><span style="color:#2ec4a0; font-weight:700; flex-shrink:0;">⑤</span><p style="font-size:12px; color:var(--text-secondary); line-height:1.7;"><strong>トラッキング活用</strong>：小さい文字を+200以上に広げて存在感を出す</p></div>
+          </div>
+        </div>
+        <div class="tip"><p><strong>Lesson06・07との比較：</strong>今回は同じ「テキストのみ」でも<strong>アウトライン・影・縦書き・細枠</strong>という装飾テクニックが加わりました。シンプルに見えて、実は細かい工夫が詰まっています。</p></div>
+      </div>
+    </div>
+
+    <!-- STEP 9 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">9</div>
+        <div class="step-title">PNG書き出して完成</div>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><code>ファイル → 書き出し → スクリーン用に書き出し...</code> を開き、<code>PNG</code> 形式で保存。サイズが <code>1200 × 675 px</code> になっていることを確認。</p>
+        <div style="width:100%; height:60px; border-radius:12px; background:#f5f5e8; border:1px solid #d0d0c0; display:flex; align-items:center; justify-content:center; margin-bottom:8px; position:relative; overflow:hidden;">
+          <div style="position:absolute; inset:4px; border:1px solid #c8c8b0; border-radius:4px;"></div>
+          <div style="font-family:'Oswald',sans-serif; font-size:28px; font-weight:700; color:transparent; -webkit-text-stroke:1.5px #2ec4a0; position:relative;">10% OFF</div>
+        </div>
+        <p class="caption">↑ 完成。GitHubにアップしてNotionのLesson09に追加しましょう！</p>
+      </div>
+    </div>
+
+  </div><!-- /steps -->
+
+  <div style="text-align:center; margin-top:48px; font-size:12px; color:#94a3b8;">Photoshop チュートリアル · Lesson 09｜アウトレット10%OFFバナー模写 1200×675px</div>
+
+</div>
+</body>
+</html>

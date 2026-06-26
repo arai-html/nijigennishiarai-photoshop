@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>シェイプ・パス完全解説｜Photoshop Lesson 08</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --text: #1a1a2e;
+    --text-sub: #4a5568;
+    --border: #e2e8f0;
+    --accent: #0891b2;
+    --accent-light: #ecfeff;
+    --green: #059669;
+    --orange: #ea580c;
+    --purple: #7c3aed;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 40px 20px 80px; }
+  .container { max-width: 780px; margin: 0 auto; }
+
+  /* ヒーロー */
+  .hero { background: linear-gradient(135deg, #0c4a6e 0%, #0891b2 50%, #22d3ee 100%); border-radius: 20px; padding: 52px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='300' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"); }
+  .hero::after { content: '◆'; position: absolute; right: 40px; top: 30px; font-size: 80px; opacity: 0.12; color: #fff; }
+  .hero-content { position: relative; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+  .hero h1 { font-size: 30px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.3; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.85); margin-bottom: 20px; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-tag { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+
+  /* セクション */
+  .section { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; }
+  .section-header { padding: 20px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 14px; }
+  .section-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-num { font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-bottom: 2px; }
+  .section-title { font-size: 18px; font-weight: 700; }
+  .section-body { padding: 24px; }
+  .desc { font-size: 14px; color: var(--text-sub); line-height: 1.85; margin-bottom: 20px; }
+
+  code { background: #e0f2fe; color: #0c4a6e; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  /* PSモックUI */
+  .ps-mock { background: #2b2b2b; border-radius: 14px; overflow: hidden; margin: 16px 0; border: 1px solid #111; }
+  .ps-titlebar { background: #1e1e1e; padding: 7px 14px; display: flex; align-items: center; gap: 6px; }
+  .ps-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .ps-dot.r { background: #ff5f56; } .ps-dot.y { background: #ffbd2e; } .ps-dot.g { background: #27c93f; }
+  .ps-win-title { font-size: 10px; color: #888; margin-left: 8px; font-family: 'JetBrains Mono', monospace; }
+  .ps-body { display: flex; }
+  .ps-toolbar { background: #1f1f1f; width: 32px; border-right: 1px solid #111; padding: 10px 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .ps-tool { width: 20px; height: 20px; background: #444; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #ccc; }
+  .ps-tool.active { background: #0891b2; border: 1px solid #22d3ee; }
+  .ps-canvas { flex: 1; background: #535353; padding: 16px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px; min-height: 120px; }
+  .ps-panel { background: #404040; border: 1px solid #666; border-radius: 8px; padding: 14px 16px; min-width: 220px; }
+  .ps-panel-title { font-size: 10px; font-weight: 700; color: #ddd; margin-bottom: 10px; border-bottom: 1px solid #555; padding-bottom: 7px; font-family: 'JetBrains Mono', monospace; }
+  .ps-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; gap: 10px; }
+  .ps-key { font-size: 10px; color: #bbb; }
+  .ps-val { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; padding: 2px 7px; border-radius: 4px; }
+  .ps-select { background: #333; border: 1px solid #666; border-radius: 3px; padding: 3px 6px; font-size: 10px; color: #fff; width: 130px; }
+  .ps-layers { background: #252525; width: 210px; border-left: 1px solid #111; padding: 8px; }
+  .ps-layers-title { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .ps-layer { display: flex; align-items: center; gap: 7px; padding: 5px 7px; border-radius: 4px; margin-bottom: 3px; background: #3a3a3a; }
+  .ps-layer.sel { background: #0c4a6e; }
+  .ps-layer-thumb { width: 24px; height: 18px; border-radius: 3px; flex-shrink: 0; border: 1px solid #555; }
+  .ps-layer-name { font-size: 9px; color: #ddd; line-height: 1.3; }
+  .ps-layer-mode { font-size: 8px; color: #22d3ee; }
+
+  /* ステップ */
+  .steps { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+  .step { display: flex; gap: 12px; align-items: flex-start; background: #f8f9fa; border-radius: 10px; padding: 12px 14px; }
+  .step-num { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .step-text { font-size: 13px; color: var(--text-sub); line-height: 1.7; padding-top: 2px; }
+
+  /* ヒント */
+  .tip { border-radius: 10px; padding: 12px 16px; margin-top: 14px; }
+  .tip p { font-size: 13px; line-height: 1.75; }
+
+  /* シェイプ比較グリッド */
+  .shape-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+  .shape-card { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+  .shape-preview { height: 100px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; }
+  .shape-label { padding: 8px 12px; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .shape-desc { padding: 0 12px 10px; font-size: 11px; color: var(--text-sub); line-height: 1.6; }
+
+  /* ショートカット表 */
+  .shortcut-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 16px 0; }
+  .sc-item { background: #1e1e2e; border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; }
+  .sc-key { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; background: #333; color: #e2e8f0; padding: 3px 8px; border-radius: 4px; border: 1px solid #555; white-space: nowrap; flex-shrink: 0; }
+  .sc-desc { font-size: 11px; color: #ccc; line-height: 1.4; }
+
+  /* パス説明 */
+  .path-parts { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+  .path-part { border-radius: 10px; padding: 14px 16px; border-left: 4px solid; }
+
+  /* チェックリスト */
+  .checklist { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+  .check-item { display: flex; align-items: flex-start; gap: 10px; }
+  .check-box { width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--border); flex-shrink: 0; margin-top: 2px; }
+  .check-text { font-size: 13px; color: var(--text-sub); line-height: 1.6; }
+
+  .caption { font-size: 12px; color: #94a3b8; margin-top: 6px; font-style: italic; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 24px; }
+    .hero h1 { font-size: 22px; }
+    .section-body { padding: 16px; }
+    .shape-grid { grid-template-columns: 1fr 1fr; }
+    .shortcut-grid { grid-template-columns: 1fr; }
+    .ps-layers { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Photoshop チュートリアル · Lesson 08</div>
+      <h1>◆ シェイプ・パス<br>完全解説</h1>
+      <p>長方形・楕円から自由な形まで。シェイプとペンツール・パスを使いこなしてバナーのデザインの幅を広げる。</p>
+      <div class="hero-tags">
+        <span class="hero-tag">シェイプツール</span>
+        <span class="hero-tag">ペンツール</span>
+        <span class="hero-tag">パスの編集</span>
+        <span class="hero-tag">塗り・線の設定</span>
+        <span class="hero-tag">ブールン演算</span>
+        <span class="hero-tag">バナーへの応用</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 1: シェイプとパスの違い -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#ecfeff;">📐</div>
+      <div>
+        <div class="section-num" style="color:#0891b2;">CHAPTER 01</div>
+        <div class="section-title">シェイプとパスの違いを理解する</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">Photoshopでは「シェイプ」と「パス」はよく似ていますが<strong>目的が異なります</strong>。まず違いをしっかり理解しましょう。</p>
+
+      <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;">
+        <div style="border-radius:12px; overflow:hidden; border:2px solid #0891b2;">
+          <div style="background:linear-gradient(135deg,#0c4a6e,#0891b2); padding:12px 16px;">
+            <div style="font-size:14px; font-weight:700; color:#fff;">🔷 シェイプ（Shape）</div>
+          </div>
+          <div style="padding:14px 16px;">
+            <p style="font-size:13px; color:var(--text-sub); line-height:1.8; margin-bottom:10px;"><strong>色・線・サイズがあるベクター図形</strong>。レイヤーとして存在し、印刷・拡大縮小しても綺麗なまま。バナーの帯・ボタン・装飾などに使う。</p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <span style="background:#ecfeff; color:#0891b2; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">レイヤーとして存在</span>
+              <span style="background:#ecfeff; color:#0891b2; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">塗り・線を設定できる</span>
+              <span style="background:#ecfeff; color:#0891b2; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">拡大しても綺麗</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:linear-gradient(135deg,#7c3aed,#a78bfa); padding:12px 16px;">
+            <div style="font-size:14px; font-weight:700; color:#fff;">✏️ パス（Path）</div>
+          </div>
+          <div style="padding:14px 16px;">
+            <p style="font-size:13px; color:var(--text-sub); line-height:1.8; margin-bottom:10px;"><strong>色がない輪郭線（アウトライン）</strong>。印刷されず、選択範囲に変換したりブラシでなぞったりするための「ガイド」として使う。ペンツールで描く。</p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <span style="background:#ede9fe; color:#7c3aed; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">印刷されない</span>
+              <span style="background:#ede9fe; color:#7c3aed; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">選択範囲に変換可</span>
+              <span style="background:#ede9fe; color:#7c3aed; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">切り抜きに使う</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 比較表 -->
+      <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; font-size:12px;">
+          <thead>
+            <tr style="background:#0c4a6e; color:#fff;">
+              <th style="padding:10px 14px; text-align:left;">項目</th>
+              <th style="padding:10px 14px; text-align:left;">シェイプ</th>
+              <th style="padding:10px 14px; text-align:left;">パス</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:10px 14px; font-weight:700;">見た目</td>
+              <td style="padding:10px 14px; color:var(--text-sub);">色・線がある</td>
+              <td style="padding:10px 14px; color:var(--text-sub);">青いアウトラインのみ</td>
+            </tr>
+            <tr style="background:#f8f9fa; border-bottom:1px solid var(--border);">
+              <td style="padding:10px 14px; font-weight:700;">レイヤー</td>
+              <td style="padding:10px 14px; color:var(--text-sub);">シェイプレイヤーとして存在</td>
+              <td style="padding:10px 14px; color:var(--text-sub);">パスパネルに保存</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:10px 14px; font-weight:700;">印刷</td>
+              <td style="padding:10px 14px; color:var(--text-sub);">される</td>
+              <td style="padding:10px 14px; color:var(--text-sub);">されない</td>
+            </tr>
+            <tr style="background:#f8f9fa; border-bottom:1px solid var(--border);">
+              <td style="padding:10px 14px; font-weight:700;">主な用途</td>
+              <td style="padding:10px 14px; color:var(--text-sub);">帯・ボタン・装飾</td>
+              <td style="padding:10px 14px; color:var(--text-sub);">切り抜き・選択範囲</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 14px; font-weight:700;">作成ツール</td>
+              <td style="padding:10px 14px; color:var(--text-sub);">シェイプツール・ペンツール</td>
+              <td style="padding:10px 14px; color:var(--text-sub);">ペンツール（パスモード）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip" style="background:#ecfeff; border-left:3px solid #0891b2;">
+        <p style="color:#0c4a6e;"><strong>バナー制作での使い分け：</strong><br>
+        帯・ボタン・円バッジを作るとき → <strong>シェイプ</strong><br>
+        写真を切り抜くとき → <strong>パス → 選択範囲に変換</strong><br>
+        複雑な形を描くとき → <strong>ペンツールでシェイプ</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 2: シェイプツール -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#f0fdf4;">🔷</div>
+      <div>
+        <div class="section-num" style="color:#059669;">CHAPTER 02</div>
+        <div class="section-title">シェイプツールの種類と使い方</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">ツールバーの長方形ツールを<strong>長押し</strong>すると6種類のシェイプツールが表示されます。それぞれの特徴を覚えましょう。</p>
+
+      <!-- 6つのシェイプ -->
+      <div class="shape-grid">
+        <div class="shape-card">
+          <div class="shape-preview">
+            <div style="width:70px; height:50px; background:#0891b2; border-radius:4px;"></div>
+          </div>
+          <div class="shape-label" style="color:#0891b2;">長方形ツール（U）</div>
+          <div class="shape-desc">帯・ボタン・背景に最多用。Shiftで正方形。角丸はプロパティで設定。</div>
+        </div>
+        <div class="shape-card">
+          <div class="shape-preview">
+            <div style="width:70px; height:50px; background:#059669; border-radius:25px;"></div>
+          </div>
+          <div class="shape-label" style="color:#059669;">角丸長方形</div>
+          <div class="shape-desc">バッジ・タグ・カード風デザインに。長方形ツールで角丸半径を設定。</div>
+        </div>
+        <div class="shape-card">
+          <div class="shape-preview">
+            <div style="width:60px; height:60px; background:#7c3aed; border-radius:50%;"></div>
+          </div>
+          <div class="shape-label" style="color:#7c3aed;">楕円形ツール（U）</div>
+          <div class="shape-desc">円バッジ・ロゴ背景に。Shiftで正円。Lesson04の「転職」バッジで使用。</div>
+        </div>
+        <div class="shape-card">
+          <div class="shape-preview">
+            <svg width="60" height="60" viewBox="0 0 60 60"><polygon points="30,5 55,55 5,55" fill="#ea580c"/></svg>
+          </div>
+          <div class="shape-label" style="color:#ea580c;">三角形ツール</div>
+          <div class="shape-desc">矢印・アクセント・装飾に。角丸・向きを設定できる。</div>
+        </div>
+        <div class="shape-card">
+          <div class="shape-preview">
+            <svg width="60" height="60" viewBox="0 0 60 60"><polygon points="30,5 37,22 55,22 42,33 47,52 30,41 13,52 18,33 5,22 23,22" fill="#ca8a04"/></svg>
+          </div>
+          <div class="shape-label" style="color:#ca8a04;">多角形ツール</div>
+          <div class="shape-desc">星・多角形。辺の数・星型の設定が可能。評価の星マークに使う。</div>
+        </div>
+        <div class="shape-card">
+          <div class="shape-preview">
+            <svg width="70" height="50" viewBox="0 0 70 50"><path d="M5 45 Q35 5 65 45" stroke="#db2777" stroke-width="4" fill="none"/></svg>
+          </div>
+          <div class="shape-label" style="color:#db2777;">ラインツール</div>
+          <div class="shape-desc">区切り線・下線・装飾ライン。太さ・端のスタイルを設定。</div>
+        </div>
+      </div>
+
+      <!-- シェイプの描き方 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:20px 0 12px;">シェイプの基本的な描き方</div>
+      <div class="ps-mock">
+        <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">長方形ツール — オプションバー</span></div>
+        <div style="background:#3c3c3c; padding:8px 14px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; border-bottom:1px solid #111; font-size:10px; color:#ccc;">
+          <select style="background:#333; border:1px solid #555; color:#fff; padding:3px 6px; border-radius:3px; font-size:10px;">
+            <option>シェイプ ◀ここ</option>
+            <option>パス</option>
+            <option>ピクセル</option>
+          </select>
+          <span>塗り：<span style="display:inline-block; width:20px; height:14px; background:#0891b2; border:1px solid #888; border-radius:2px; vertical-align:middle;"></span></span>
+          <span>線：<span style="display:inline-block; width:20px; height:14px; background:transparent; border:2px solid #ccc; border-radius:2px; vertical-align:middle;"></span> 2px</span>
+          <span>W: <strong style="color:#fff;">400</strong> H: <strong style="color:#fff;">60</strong></span>
+        </div>
+        <div class="ps-body">
+          <div class="ps-toolbar">
+            <div class="ps-tool active" style="font-size:9px; font-weight:700;">U</div>
+          </div>
+          <div class="ps-canvas" style="flex-direction:column; align-items:flex-start; gap:10px; padding:14px;">
+            <div class="step" style="width:100%;">
+              <div class="step-num" style="background:#0891b2;">1</div>
+              <div class="step-text">ツールバーで<strong style="color:#22d3ee;">長方形ツール（U）</strong>を選択。オプションバーで「<code style="background:#333; color:#22d3ee;">シェイプ</code>」モードを選ぶ</div>
+            </div>
+            <div class="step" style="width:100%;">
+              <div class="step-num" style="background:#0891b2;">2</div>
+              <div class="step-text">塗りの色をクリックして色を設定（例：<code style="background:#333; color:#22d3ee;">#e85d04</code>）。線は「なし」でもOK</div>
+            </div>
+            <div class="step" style="width:100%;">
+              <div class="step-num" style="background:#0891b2;">3</div>
+              <div class="step-text">キャンバスをドラッグして描画。<code style="background:#333; color:#22d3ee;">Shift</code>で正方形・正円。<code style="background:#333; color:#22d3ee;">Alt/Option</code>で中心から描く</div>
+            </div>
+            <div class="step" style="width:100%;">
+              <div class="step-num" style="background:#0891b2;">4</div>
+              <div class="step-text">描いた後は<strong style="color:#22d3ee;">プロパティパネル</strong>（ウィンドウ→プロパティ）で角丸・サイズ・色を変更できる</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 塗り・線の設定 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:20px 0 12px;">塗り・線の詳細設定</div>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #0891b2;">
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#0891b2; font-weight:700; margin-bottom:8px;">塗り（Fill）の種類</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; font-size:12px; color:var(--text-sub);">
+            <div style="background:#fff; border-radius:6px; padding:6px 12px; border:1px solid var(--border);">なし（透明）</div>
+            <div style="background:#0891b2; border-radius:6px; padding:6px 12px; color:#fff;">単色</div>
+            <div style="background:linear-gradient(135deg,#0891b2,#22d3ee); border-radius:6px; padding:6px 12px; color:#fff;">グラデーション</div>
+            <div style="background:repeating-linear-gradient(45deg,#ccc,#ccc 2px,#fff 2px,#fff 8px); border-radius:6px; padding:6px 12px; border:1px solid var(--border);">パターン</div>
+          </div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #059669;">
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#059669; font-weight:700; margin-bottom:8px;">線（Stroke）の設定</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.9;">
+            太さ：<code>1〜10px</code>が一般的<br>
+            位置：<code>内側</code>・<code>中央</code>・<code>外側</code>から選択<br>
+            種類：実線・破線・点線（プロパティパネルで設定）<br>
+            端の形：バット・丸・四角
+          </div>
+        </div>
+      </div>
+
+      <!-- ショートカット -->
+      <div class="shortcut-grid">
+        <div class="sc-item"><div class="sc-key">U</div><div class="sc-desc">シェイプツール選択（繰り返しで切替）</div></div>
+        <div class="sc-item"><div class="sc-key">Shift + ドラッグ</div><div class="sc-desc">正方形・正円に固定</div></div>
+        <div class="sc-item"><div class="sc-key">Alt/Option + ドラッグ</div><div class="sc-desc">中心から描く</div></div>
+        <div class="sc-item"><div class="sc-key">Cmd/Ctrl + T</div><div class="sc-desc">サイズ・角度を変形</div></div>
+      </div>
+
+      <div class="tip" style="background:#f0fdf4; border-left:3px solid #059669;">
+        <p style="color:#14532d;"><strong>角丸の設定：</strong>長方形を描いた後、プロパティパネルの角丸半径を変更できます。4つの角を個別に設定したい場合は鎖のアイコンをクリックしてロックを外しましょう。Lesson04の「年収700万円」バッジは角丸 <code>4px</code> で作っています。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 3: ペンツールとパス -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fdf2f8;">✏️</div>
+      <div>
+        <div class="section-num" style="color:#db2777;">CHAPTER 03</div>
+        <div class="section-title">ペンツールでパスを描く</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">ペンツール（<code>P</code>）はPhotoshopで<strong>自由な形のパスやシェイプを描く</strong>ツールです。慣れるまで難しいですが、マスターすると切り抜き・装飾の幅が大きく広がります。</p>
+
+      <!-- パスの構成要素 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px;">パスを構成する3つの要素</div>
+      <div class="path-parts">
+        <div class="path-part" style="background:#e0f2fe; border-color:#0891b2;">
+          <div style="font-size:12px; font-weight:700; color:#0c4a6e; margin-bottom:6px;">🔵 アンカーポイント（点）</div>
+          <div style="font-size:12px; color:#164e63; line-height:1.8;">パスの曲がり角・端点になる「点」です。クリックで追加されます。角のある形にはコーナーポイント、曲線にはスムーズポイントを使います。</div>
+        </div>
+        <div class="path-part" style="background:#fdf2f8; border-color:#db2777;">
+          <div style="font-size:12px; font-weight:700; color:#831843; margin-bottom:6px;">🩷 セグメント（線）</div>
+          <div style="font-size:12px; color:#9d174d; line-height:1.8;">アンカーポイントとアンカーポイントをつなぐ「線」です。直線セグメントと曲線セグメント（ベジェ曲線）の2種類があります。</div>
+        </div>
+        <div class="path-part" style="background:#fff7ed; border-color:#ea580c;">
+          <div style="font-size:12px; font-weight:700; color:#7c2d12; margin-bottom:6px;">🟠 ハンドル（方向線）</div>
+          <div style="font-size:12px; color:#9a3412; line-height:1.8;">曲線の「引っ張り具合」を調整する棒です。ドラッグして引き出すことで曲線の形を変えられます。</div>
+        </div>
+      </div>
+
+      <!-- ペンツールの基本操作 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:20px 0 12px;">ペンツールの基本操作</div>
+      <div class="ps-mock">
+        <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">ペンツール — 4つの基本操作</span></div>
+        <div class="ps-body">
+          <div class="ps-toolbar">
+            <div class="ps-tool active" style="font-size:9px; font-weight:700;">P</div>
+          </div>
+          <div class="ps-canvas" style="flex-direction:column; align-items:flex-start; gap:8px; padding:14px;">
+
+            <div style="background:#2a2a3e; border-radius:8px; padding:10px 14px; width:100%;">
+              <div style="font-size:10px; color:#22d3ee; font-family:'JetBrains Mono',monospace; margin-bottom:8px; font-weight:700;">操作① クリック → 直線を描く</div>
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                <svg width="140" height="40" viewBox="0 0 140 40">
+                  <line x1="20" y1="20" x2="120" y2="20" stroke="#22d3ee" stroke-width="2"/>
+                  <circle cx="20" cy="20" r="4" fill="#22d3ee"/>
+                  <circle cx="70" cy="20" r="4" fill="#22d3ee"/>
+                  <circle cx="120" cy="20" r="4" fill="#22d3ee"/>
+                </svg>
+                <div style="font-size:10px; color:#aaa; line-height:1.6;">クリックするだけで<br>直線が引ける</div>
+              </div>
+              <div style="font-size:10px; color:#ccc; line-height:1.6;">Shift+クリックで水平・垂直・45°に固定</div>
+            </div>
+
+            <div style="background:#2a2a3e; border-radius:8px; padding:10px 14px; width:100%;">
+              <div style="font-size:10px; color:#f9a8d4; font-family:'JetBrains Mono',monospace; margin-bottom:8px; font-weight:700;">操作② クリック＋ドラッグ → 曲線を描く</div>
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                <svg width="140" height="50" viewBox="0 0 140 50">
+                  <path d="M20 40 C50 5 90 5 120 40" stroke="#f9a8d4" stroke-width="2" fill="none"/>
+                  <circle cx="20" cy="40" r="4" fill="#f9a8d4"/>
+                  <circle cx="120" cy="40" r="4" fill="#f9a8d4"/>
+                  <line x1="20" y1="40" x2="50" y2="5" stroke="rgba(249,168,212,0.5)" stroke-width="1" stroke-dasharray="3,2"/>
+                  <line x1="120" y1="40" x2="90" y2="5" stroke="rgba(249,168,212,0.5)" stroke-width="1" stroke-dasharray="3,2"/>
+                  <circle cx="50" cy="5" r="3" fill="rgba(249,168,212,0.7)"/>
+                  <circle cx="90" cy="5" r="3" fill="rgba(249,168,212,0.7)"/>
+                </svg>
+                <div style="font-size:10px; color:#aaa; line-height:1.6;">ドラッグでハンドルを<br>引き出して曲線に</div>
+              </div>
+            </div>
+
+            <div style="background:#2a2a3e; border-radius:8px; padding:10px 14px; width:100%;">
+              <div style="font-size:10px; color:#86efac; font-family:'JetBrains Mono',monospace; margin-bottom:6px; font-weight:700;">操作③ 最初のアンカーポイントをクリック → パスを閉じる</div>
+              <div style="font-size:10px; color:#ccc; line-height:1.6;">カーソルに「○」マークが表示されたらクリックで閉じられる。閉じたパスは選択範囲に変換できる。</div>
+            </div>
+
+            <div style="background:#2a2a3e; border-radius:8px; padding:10px 14px; width:100%;">
+              <div style="font-size:10px; color:#fbbf24; font-family:'JetBrains Mono',monospace; margin-bottom:6px; font-weight:700;">操作④ Cmd/Ctrl+クリック → アンカーポイントを選択・移動</div>
+              <div style="font-size:10px; color:#ccc; line-height:1.6;">描いた後にアンカーポイントを動かして形を調整できる。</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ペンツール関連ショートカット -->
+      <div class="shortcut-grid" style="margin-top:16px;">
+        <div class="sc-item"><div class="sc-key">P</div><div class="sc-desc">ペンツール選択</div></div>
+        <div class="sc-item"><div class="sc-key">A</div><div class="sc-desc">パス選択ツール（ポイント移動）</div></div>
+        <div class="sc-item"><div class="sc-key">Cmd/Ctrl + クリック</div><div class="sc-desc">アンカーポイントを選択</div></div>
+        <div class="sc-item"><div class="sc-key">Alt/Option + クリック</div><div class="sc-desc">曲線→直線に切替</div></div>
+        <div class="sc-item"><div class="sc-key">Cmd/Ctrl + Enter</div><div class="sc-desc">パスを選択範囲に変換</div></div>
+        <div class="sc-item"><div class="sc-key">Esc</div><div class="sc-desc">パスの描画を終了</div></div>
+      </div>
+
+      <div class="tip" style="background:#fdf2f8; border-left:3px solid #db2777;">
+        <p style="color:#831843;"><strong>ペンツール上達のコツ：</strong>最初はアンカーポイントを少なめに置くことを意識してください。ポイントが多いほど形を整えるのが難しくなります。<strong>シンプルな形から始めて</strong>、慣れてきたら複雑な形に挑戦しましょう。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 4: パスを選択範囲に変換 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fefce8;">🔄</div>
+      <div>
+        <div class="section-num" style="color:#ca8a04;">CHAPTER 04</div>
+        <div class="section-title">パスを選択範囲に変換して切り抜く</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">ペンツールで描いたパスは<strong>選択範囲に変換</strong>することで切り抜きや塗りつぶしに使えます。Lesson08の核心テクニックです。</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num" style="background:#ca8a04;">1</div>
+          <div class="step-text">ペンツールで切り抜きたい形のパスを描いて<strong>閉じる</strong>（最初のアンカーポイントをクリック）</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#ca8a04;">2</div>
+          <div class="step-text"><strong>方法A：</strong><code>Cmd/Ctrl + Enter</code> で直接選択範囲に変換<br><strong>方法B：</strong>パスパネル（ウィンドウ→パス）→「パスを選択範囲として読み込む」ボタン</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#ca8a04;">3</div>
+          <div class="step-text">点線の選択範囲が表示されたら、<code>レイヤーマスクを追加</code>ボタンをクリック → パスの内側だけ残る</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#ca8a04;">4</div>
+          <div class="step-text">マスクなので<strong>後から調整可能</strong>。ペンツールでアンカーポイントを動かして形を修正できる</div>
+        </div>
+      </div>
+
+      <!-- パスパネルの解説 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:20px 0 12px;">パスパネルの使い方</div>
+      <div class="ps-mock">
+        <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">パスパネル（ウィンドウ → パス）</span></div>
+        <div class="ps-body">
+          <div class="ps-canvas" style="flex-direction:column; align-items:stretch; padding:0; background:#252525;">
+            <div style="padding:8px; border-bottom:1px solid #111;">
+              <div style="font-size:9px; color:#888; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">パス</div>
+              <div style="display:flex; align-items:center; gap:8px; padding:5px 8px; background:#1a3a5a; border-radius:4px;">
+                <div style="width:24px; height:18px; border:1px solid #555; background:#2b2b2b; border-radius:2px; display:flex; align-items:center; justify-content:center;">
+                  <svg width="16" height="12" viewBox="0 0 16 12"><path d="M2 10 Q8 2 14 10" stroke="#22d3ee" stroke-width="1.5" fill="none"/><circle cx="2" cy="10" r="1.5" fill="#22d3ee"/><circle cx="14" cy="10" r="1.5" fill="#22d3ee"/></svg>
+                </div>
+                <div style="font-size:9px; color:#ddd;">作業用パス</div>
+              </div>
+            </div>
+            <div style="padding:8px; display:flex; justify-content:space-between; align-items:center;">
+              <div style="display:flex; gap:6px;">
+                <div style="width:20px; height:20px; background:#444; border-radius:3px; border:1px solid #666; display:flex; align-items:center; justify-content:center; font-size:9px; color:#ccc;" title="塗りつぶし">⬛</div>
+                <div style="width:20px; height:20px; background:#0891b2; border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:9px; color:#fff;" title="選択範囲に変換">◎</div>
+                <div style="width:20px; height:20px; background:#444; border-radius:3px; border:1px solid #666; display:flex; align-items:center; justify-content:center; font-size:9px; color:#ccc;" title="シェイプから作業用パスを作成">⬡</div>
+                <div style="width:20px; height:20px; background:#444; border-radius:3px; border:1px solid #666; display:flex; align-items:center; justify-content:center; font-size:9px; color:#ccc; border:1px solid #0891b2; color:#22d3ee;" title="新規パスを作成">＋</div>
+                <div style="width:20px; height:20px; background:#444; border-radius:3px; border:1px solid #666; display:flex; align-items:center; justify-content:center; font-size:9px; color:#ccc;" title="パスを削除">🗑</div>
+              </div>
+              <div style="font-size:9px; color:#888; font-family:'JetBrains Mono',monospace;">◎ ← これ！</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">↑ 「◎」（パスを選択範囲として読み込む）ボタンをクリックすると選択範囲になる</p>
+
+      <div class="tip" style="background:#fefce8; border-left:3px solid #ca8a04;">
+        <p style="color:#713f12;"><strong>羽毛（フェザー）について：</strong><code>Cmd/Ctrl + Enter</code>の際に<code>Alt/Option</code>も一緒に押すと「選択範囲を変更」ダイアログが出ます。「ぼかし（フェザー）」に値を入れると選択範囲の端がぼけて、より自然な切り抜きになります。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 5: ブーリアン演算 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#ede9fe;">🔮</div>
+      <div>
+        <div class="section-num" style="color:#7c3aed;">CHAPTER 05</div>
+        <div class="section-title">ブーリアン演算でシェイプを組み合わせる</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">複数のシェイプを<strong>足す・引く・交差させる</strong>ことで、複雑な形を作ることができます。これを「ブーリアン演算」と呼びます。</p>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="height:90px; background:#f8f9fa; display:flex; align-items:center; justify-content:center;">
+            <svg width="100" height="70" viewBox="0 0 100 70">
+              <circle cx="35" cy="35" r="28" fill="#0891b2" opacity="0.7"/>
+              <circle cx="65" cy="35" r="28" fill="#0891b2" opacity="0.7"/>
+            </svg>
+          </div>
+          <div style="padding:8px 12px; font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#0891b2;">① 前面シェイプを合体</div>
+          <div style="padding:0 12px 10px; font-size:11px; color:var(--text-sub);">2つのシェイプを合体。足し算。</div>
+        </div>
+
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="height:90px; background:#f8f9fa; display:flex; align-items:center; justify-content:center;">
+            <svg width="100" height="70" viewBox="0 0 100 70">
+              <circle cx="35" cy="35" r="28" fill="#dc2626"/>
+              <circle cx="65" cy="35" r="28" fill="#f8f9fa"/>
+            </svg>
+          </div>
+          <div style="padding:8px 12px; font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#dc2626;">② 前面シェイプを削除</div>
+          <div style="padding:0 12px 10px; font-size:11px; color:var(--text-sub);">前面シェイプの形を後ろから削る。引き算。</div>
+        </div>
+
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="height:90px; background:#f8f9fa; display:flex; align-items:center; justify-content:center;">
+            <svg width="100" height="70" viewBox="0 0 100 70">
+              <circle cx="35" cy="35" r="28" fill="#f8f9fa" stroke="#e2e8f0" stroke-width="1"/>
+              <circle cx="65" cy="35" r="28" fill="#f8f9fa" stroke="#e2e8f0" stroke-width="1"/>
+              <clipPath id="c1"><circle cx="35" cy="35" r="28"/></clipPath>
+              <circle cx="65" cy="35" r="28" fill="#059669" clip-path="url(#c1)"/>
+            </svg>
+          </div>
+          <div style="padding:8px 12px; font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#059669;">③ シェイプエリアを交差</div>
+          <div style="padding:0 12px 10px; font-size:11px; color:var(--text-sub);">重なっている部分だけ残る。</div>
+        </div>
+
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="height:90px; background:#f8f9fa; display:flex; align-items:center; justify-content:center;">
+            <svg width="100" height="70" viewBox="0 0 100 70">
+              <circle cx="35" cy="35" r="28" fill="#7c3aed" opacity="0.6"/>
+              <circle cx="65" cy="35" r="28" fill="#7c3aed" opacity="0.6"/>
+              <clipPath id="c2"><circle cx="35" cy="35" r="28"/></clipPath>
+              <circle cx="65" cy="35" r="28" fill="#f8f9fa" clip-path="url(#c2)"/>
+            </svg>
+          </div>
+          <div style="padding:8px 12px; font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#7c3aed;">④ シェイプエリアを除外</div>
+          <div style="padding:0 12px 10px; font-size:11px; color:var(--text-sub);">重なった部分だけ削除。ドーナツ形などに。</div>
+        </div>
+      </div>
+
+      <!-- 使い方 -->
+      <div style="background:#1e1e2e; border-radius:12px; padding:16px 18px; margin-bottom:14px;">
+        <div style="font-size:10px; color:#a78bfa; font-family:'JetBrains Mono',monospace; margin-bottom:10px; letter-spacing:0.08em;">ブーリアン演算の操作方法</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <div style="font-size:11px; color:#a78bfa; font-weight:700; flex-shrink:0; width:18px;">1</div>
+            <p style="font-size:11px; color:#ccc; line-height:1.7;">最初のシェイプを描く（例：大きい円）</p>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <div style="font-size:11px; color:#a78bfa; font-weight:700; flex-shrink:0; width:18px;">2</div>
+            <p style="font-size:11px; color:#ccc; line-height:1.7;">同じシェイプツールのまま、オプションバーの<strong style="color:#a78bfa;">演算ボタン</strong>を選ぶ（合体・削除・交差・除外）</p>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <div style="font-size:11px; color:#a78bfa; font-weight:700; flex-shrink:0; width:18px;">3</div>
+            <p style="font-size:11px; color:#ccc; line-height:1.7;">2つ目のシェイプを描くと演算が自動で適用される</p>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <div style="font-size:11px; color:#a78bfa; font-weight:700; flex-shrink:0; width:18px;">💡</div>
+            <p style="font-size:11px; color:#aaa; line-height:1.7;">別々のシェイプレイヤーを後から合体させる場合：2つのレイヤーを選択 → <code style="background:#333; color:#a78bfa; padding:1px 5px; border-radius:3px;">パスを結合</code>（プロパティパネル）</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 実例 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px;">実例：ドーナツ形（円バッジの穴あき）</div>
+      <div style="display:flex; gap:16px; align-items:center; background:#f8f9fa; border-radius:10px; padding:14px; flex-wrap:wrap; margin-bottom:14px;">
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <div style="width:56px; height:56px; border-radius:50%; background:#0891b2; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; text-align:center;">大きい円</div>
+          <div style="font-size:18px; color:var(--text-sub);">−</div>
+          <div style="width:36px; height:36px; border-radius:50%; background:#0891b2; display:flex; align-items:center; justify-content:center; font-size:9px; color:#fff; text-align:center;">小さい円</div>
+          <div style="font-size:18px; color:var(--text-sub);">=</div>
+          <div style="width:56px; height:56px; position:relative; display:flex; align-items:center; justify-content:center;">
+            <div style="width:56px; height:56px; border-radius:50%; background:#0891b2;"></div>
+            <div style="position:absolute; width:30px; height:30px; border-radius:50%; background:#f8f9fa;"></div>
+          </div>
+        </div>
+        <div style="font-size:12px; color:var(--text-sub); line-height:1.7; flex:1; min-width:160px;">大きい円を描く → 演算「前面シェイプを削除」→ 小さい円を重ねて描く → ドーナツ形完成！<br>Lesson09の細枠バッジはこの方法で作れます。</div>
+      </div>
+
+      <div class="tip" style="background:#ede9fe; border-left:3px solid #7c3aed;">
+        <p style="color:#3b0764;"><strong>バナーでの活用例：</strong><br>
+        矢印（→）→ 長方形＋三角形を合体<br>
+        吹き出し → 長方形＋三角形を合体<br>
+        リングバッジ → 大円から小円を削除<br>
+        切り欠き → 長方形から円を削除</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 6: バナーへの応用 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#f0fdf4;">⚡</div>
+      <div>
+        <div class="section-num" style="color:#059669;">CHAPTER 06</div>
+        <div class="section-title">バナー制作でシェイプ・パスを使う実践例</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">これまでのレッスンで登場したシェイプ・パスの使い方を整理します。</p>
+
+      <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;">
+
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:#1a1a2e; padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-size:12px; font-weight:700; color:#fff; font-family:'JetBrains Mono',monospace;">① 情報バッジ（Lesson04・05）</div>
+            <span style="background:#059669; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">★★★</span>
+          </div>
+          <div style="padding:14px 16px; display:flex; gap:14px; flex-wrap:wrap;">
+            <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+              <div style="background:#fff; border-radius:4px; padding:6px 16px; font-size:12px; font-weight:700; color:#1a3a5c; border-left:3px solid #00c896;">年収700万円</div>
+              <div style="background:#fff; border-radius:20px; padding:6px 16px; font-size:12px; font-weight:700; color:#1a3a5c; border:2px solid #c9a96e;">期間限定</div>
+            </div>
+            <div style="flex:1; min-width:160px; font-size:12px; color:var(--text-sub); line-height:1.8;">
+              <code>長方形ツール</code> で白い帯を描く → 角丸設定 → テキストを重ねる。グリーンのアクセントラインは細い長方形を左端に重ねる。
+            </div>
+          </div>
+        </div>
+
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:#1a1a2e; padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-size:12px; font-weight:700; color:#fff; font-family:'JetBrains Mono',monospace;">② 円形バッジ（Lesson02・03）</div>
+            <span style="background:#059669; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">★★★</span>
+          </div>
+          <div style="padding:14px 16px; display:flex; gap:14px; flex-wrap:wrap;">
+            <div style="width:70px; height:70px; border-radius:50%; border:2px solid #c9a96e; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <div style="text-align:center; font-size:10px; font-weight:700; color:#c9a96e; line-height:1.3;">期間<br>限定</div>
+            </div>
+            <div style="flex:1; min-width:160px; font-size:12px; color:var(--text-sub); line-height:1.8;">
+              <code>楕円形ツール</code>でShiftを押しながら正円を描く → 塗り：なし・線：2px → 中にテキストを配置。Lesson03カフェの「期間限定」バッジで使用。
+            </div>
+          </div>
+        </div>
+
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:#1a1a2e; padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-size:12px; font-weight:700; color:#fff; font-family:'JetBrains Mono',monospace;">③ CTA帯・ボタン（Lesson04〜07）</div>
+            <span style="background:#059669; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">★★★</span>
+          </div>
+          <div style="padding:14px 16px; display:flex; gap:14px; flex-wrap:wrap;">
+            <div style="background:linear-gradient(to right,#e85d04,#ff8533); padding:10px 20px; border-radius:4px; display:flex; align-items:center; gap:8px; flex-shrink:0;">
+              <div style="font-size:12px; font-weight:700; color:#fff;">3人に2人が年収アップ</div>
+              <div style="width:20px; height:20px; border-radius:50%; background:rgba(255,255,255,0.3); display:flex; align-items:center; justify-content:center; font-size:11px; color:#fff;">▶</div>
+            </div>
+            <div style="flex:1; min-width:160px; font-size:12px; color:var(--text-sub); line-height:1.8;">
+              <code>長方形ツール</code>で帯を描く → レイヤースタイル「グラデーションオーバーレイ」で色をつける → テキスト＋矢印ボタンを重ねる。
+            </div>
+          </div>
+        </div>
+
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:#1a1a2e; padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-size:12px; font-weight:700; color:#fff; font-family:'JetBrains Mono',monospace;">④ 写真の切り抜き（Lesson03〜05）</div>
+            <span style="background:#ca8a04; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">★★</span>
+          </div>
+          <div style="padding:14px 16px; font-size:12px; color:var(--text-sub); line-height:1.9;">
+            「被写体を選択」で自動選択 → 選択とマスク → レイヤーマスク が基本。<br>
+            複雑な形（建物・製品）は<code>ペンツール</code>でパスを描いて → <code>Cmd+Enter</code>で選択範囲に変換 → マスクをかける。
+          </div>
+        </div>
+
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:#1a1a2e; padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-size:12px; font-weight:700; color:#fff; font-family:'JetBrains Mono',monospace;">⑤ 斜めの区切り・斜めカット（応用）</div>
+            <span style="background:#7c3aed; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">★ 応用</span>
+          </div>
+          <div style="padding:14px 16px; display:flex; gap:14px; flex-wrap:wrap;">
+            <div style="width:120px; height:60px; position:relative; overflow:hidden; flex-shrink:0;">
+              <div style="position:absolute; inset:0; background:#0891b2;"></div>
+              <div style="position:absolute; right:0; top:0; bottom:0; width:50%; background:#f8f9fa; clip-path:polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);"></div>
+            </div>
+            <div style="flex:1; min-width:160px; font-size:12px; color:var(--text-sub); line-height:1.8;">
+              <code>ペンツール</code>で斜めのシェイプを描く → 背景帯として配置。またはCSSの<code>clip-path</code>的な感覚で使う。背景に動きが生まれてモダンな印象になる。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- まとめチェックリスト -->
+      <div style="background:#ecfeff; border-radius:12px; padding:16px 18px;">
+        <div style="font-size:11px; color:#0891b2; font-family:'JetBrains Mono',monospace; margin-bottom:12px; font-weight:700;">📚 Lesson08 マスターチェック</div>
+        <div class="checklist">
+          <div class="check-item"><div class="check-box" style="border-color:#0891b2;"></div><div class="check-text">シェイプとパスの違いが説明できる</div></div>
+          <div class="check-item"><div class="check-box" style="border-color:#0891b2;"></div><div class="check-text">長方形・楕円・角丸のシェイプが描ける</div></div>
+          <div class="check-item"><div class="check-box" style="border-color:#0891b2;"></div><div class="check-text">塗り・線の色・太さを設定できる</div></div>
+          <div class="check-item"><div class="check-box" style="border-color:#0891b2;"></div><div class="check-text">ペンツールで直線・曲線のパスが描ける</div></div>
+          <div class="check-item"><div class="check-box" style="border-color:#0891b2;"></div><div class="check-text">パスを選択範囲に変換してマスクを作れる</div></div>
+          <div class="check-item"><div class="check-box" style="border-color:#0891b2;"></div><div class="check-text">ブーリアン演算でシェイプを組み合わせられる</div></div>
+          <div class="check-item"><div class="check-box" style="border-color:#0891b2;"></div><div class="check-text">情報バッジ・円バッジ・CTA帯を作れる</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:16px; font-size:12px; color:#94a3b8;">Photoshop チュートリアル · Lesson 08｜シェイプ・パス完全解説</div>
+
+</div>
+</body>
+</html>
