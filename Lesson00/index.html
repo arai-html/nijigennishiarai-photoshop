@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photoshop 主要ショートカットキー｜Lesson 00</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f1a;
+    --surface: #1a1a2e;
+    --surface2: #252540;
+    --text: #f0f0f8;
+    --text-sub: #94a3b8;
+    --border: rgba(255,255,255,0.08);
+    --green: #10b981;
+    --blue: #38bdf8;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+    --pink: #f472b6;
+    --yellow: #fbbf24;
+    --cyan: #22d3ee;
+    --red: #f87171;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 0 0 80px; }
+
+  /* ヒーロー */
+  .hero {
+    padding: 60px 32px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(56,189,248,0.15) 0%, transparent 60%);
+  }
+  .hero-content { position: relative; max-width: 700px; margin: 0 auto; }
+  .hero-badge { display: inline-block; background: rgba(56,189,248,0.15); border: 1px solid rgba(56,189,248,0.3); color: var(--blue); font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 14px; border-radius: 20px; margin-bottom: 20px; letter-spacing: 0.08em; }
+  .hero h1 { font-size: 36px; font-weight: 900; line-height: 1.2; margin-bottom: 14px; color: #fff; }
+  .hero h1 span { background: linear-gradient(135deg, #38bdf8, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { font-size: 14px; color: var(--text-sub); line-height: 1.8; margin-bottom: 24px; }
+  .hero-note { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; padding: 8px 16px; font-size: 12px; color: var(--text-sub); }
+  .hero-note strong { color: var(--blue); }
+
+  /* コンテナ */
+  .container { max-width: 960px; margin: 0 auto; padding: 48px 24px 0; }
+
+  /* セクションタイトル */
+  .section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; margin-top: 40px; }
+  .section-head:first-child { margin-top: 0; }
+  .section-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .section-label { font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: 0.1em; }
+  .section-title { font-size: 18px; font-weight: 700; color: #fff; }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* ショートカットグリッド */
+  .sc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 8px; margin-bottom: 8px; }
+  .sc-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+
+  /* ショートカットカード */
+  .sc-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .sc-card:hover { border-color: rgba(255,255,255,0.15); background: var(--surface2); }
+
+  /* キーバッジ */
+  .key-wrap { display: flex; align-items: center; gap: 4px; flex-shrink: 0; flex-wrap: wrap; min-width: 120px; }
+  .key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: #2a2a3e;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-bottom: 2px solid rgba(0,0,0,0.4);
+    color: #e2e8f0;
+    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .key.mac { color: var(--blue); border-color: rgba(56,189,248,0.3); }
+  .key.win { color: var(--orange); border-color: rgba(251,146,60,0.3); }
+  .key.accent { color: var(--yellow); border-color: rgba(251,191,36,0.3); }
+  .key-plus { font-size: 11px; color: var(--text-sub); }
+
+  /* カード右側 */
+  .sc-info { flex: 1; min-width: 0; }
+  .sc-name { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .sc-desc { font-size: 11px; color: var(--text-sub); margin-top: 2px; line-height: 1.4; }
+
+  /* カラーバー */
+  .sc-bar { width: 3px; height: 36px; border-radius: 2px; flex-shrink: 0; }
+
+  /* 大きいカード（重要ショートカット） */
+  .sc-big {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .sc-big:hover { border-color: rgba(255,255,255,0.15); background: var(--surface2); }
+  .sc-big .key-wrap { min-width: 140px; }
+  .sc-big .sc-name { font-size: 14px; }
+
+  /* Mac/Win 切替 */
+  .platform-note {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .platform-badge { font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+
+  /* まとめ表 */
+  .summary { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-top: 48px; }
+  .summary-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .summary-body { padding: 20px; }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .summary-item { background: var(--surface2); border-radius: 8px; padding: 10px 12px; }
+  .summary-key { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; margin-bottom: 3px; }
+  .summary-label { font-size: 11px; color: var(--text-sub); }
+
+  .footer-note { text-align: center; margin-top: 48px; font-size: 12px; color: #475569; }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 26px; }
+    .hero { padding: 48px 20px 36px; }
+    .sc-grid { grid-template-columns: 1fr; }
+    .sc-grid-2 { grid-template-columns: 1fr; }
+    .key-wrap { min-width: 100px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Photoshop · Lesson 00</div>
+      <h1>⌨️ <span>主要ショートカット</span><br>完全リファレンス</h1>
+      <p>バナー制作で必ず使うショートカットキーを<br>カテゴリ別にまとめました。印刷して手元に置いておこう。</p>
+      <div class="hero-note">
+        <strong>Mac：</strong>Cmd &nbsp;|&nbsp; <strong>Win：</strong>Ctrl &nbsp;&nbsp;／&nbsp;&nbsp; <strong>Mac：</strong>Option &nbsp;|&nbsp; <strong>Win：</strong>Alt
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- Mac/Win 表記説明 -->
+    <div class="platform-note">
+      <span style="font-size:13px; color:var(--text-sub);">キー表記について：</span>
+      <span class="platform-badge" style="background:rgba(56,189,248,0.15); color:var(--blue);">Cmd = Mac の ⌘</span>
+      <span class="platform-badge" style="background:rgba(251,146,60,0.15); color:var(--orange);">Ctrl = Windows</span>
+      <span class="platform-badge" style="background:rgba(167,139,250,0.15); color:var(--purple);">Option = Mac の ⌥</span>
+      <span class="platform-badge" style="background:rgba(251,146,60,0.15); color:var(--orange);">Alt = Windows</span>
+    </div>
+
+    <!-- 1. ファイル操作 -->
+    <div class="section-head">
+      <div class="section-icon" style="background:rgba(16,185,129,0.15);">📁</div>
+      <div>
+        <div class="section-label" style="color:var(--green);">SECTION 01</div>
+        <div class="section-title">ファイル操作</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="sc-grid">
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--green);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">N</span></div>
+        <div class="sc-info"><div class="sc-name">新規ドキュメント</div><div class="sc-desc">サイズ・解像度・カラーモードを設定して新規作成</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--green);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">O</span></div>
+        <div class="sc-info"><div class="sc-name">ファイルを開く</div><div class="sc-desc">既存のファイルを開く</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--green);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">S</span></div>
+        <div class="sc-info"><div class="sc-name">上書き保存（PSD）</div><div class="sc-desc">Photoshop形式で保存。必ずこまめに！</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--green);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key">Shift</span><span class="key-plus">+</span><span class="key accent">S</span></div>
+        <div class="sc-info"><div class="sc-name">別名で保存</div><div class="sc-desc">別のファイル名・場所・形式で保存</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--green);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key">Shift</span><span class="key-plus">+</span><span class="key accent">Alt/Opt</span><span class="key-plus">+</span><span class="key">S</span></div>
+        <div class="sc-info"><div class="sc-name">Web用に保存（書き出し）</div><div class="sc-desc">PNG・JPGでWebサイト用に最適化して書き出し</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--green);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">W</span></div>
+        <div class="sc-info"><div class="sc-name">ファイルを閉じる</div><div class="sc-desc">現在のドキュメントを閉じる</div></div>
+      </div>
+    </div>
+
+    <!-- 2. 編集操作 -->
+    <div class="section-head">
+      <div class="section-icon" style="background:rgba(56,189,248,0.15);">✂️</div>
+      <div>
+        <div class="section-label" style="color:var(--blue);">SECTION 02</div>
+        <div class="section-title">編集・履歴操作</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="sc-grid">
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--blue);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">Z</span></div>
+        <div class="sc-info"><div class="sc-name">取り消し（アンドゥ）</div><div class="sc-desc">直前の操作を1つ取り消す。何度でも使える！</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--blue);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key">Shift</span><span class="key-plus">+</span><span class="key accent">Z</span></div>
+        <div class="sc-info"><div class="sc-name">やり直し（リドゥ）</div><div class="sc-desc">取り消した操作を戻す</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--blue);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">C</span></div>
+        <div class="sc-info"><div class="sc-name">コピー</div><div class="sc-desc">選択範囲・レイヤーをコピー</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--blue);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">V</span></div>
+        <div class="sc-info"><div class="sc-name">ペースト</div><div class="sc-desc">コピーした内容を貼り付け（新規レイヤーとして）</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--blue);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">X</span></div>
+        <div class="sc-info"><div class="sc-name">カット</div><div class="sc-desc">選択範囲を切り取ってクリップボードへ</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--blue);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">T</span></div>
+        <div class="sc-info"><div class="sc-name">自由変形</div><div class="sc-desc">サイズ変更・回転・歪め。Enterで確定・Escでキャンセル</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--blue);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">F</span></div>
+        <div class="sc-info"><div class="sc-name">直前のフィルターを再実行</div><div class="sc-desc">同じフィルターを同じ設定で繰り返し適用</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--blue);"></div>
+        <div class="key-wrap"><span class="key">Delete</span></div>
+        <div class="sc-info"><div class="sc-name">削除</div><div class="sc-desc">選択範囲内・選択レイヤーを削除</div></div>
+      </div>
+    </div>
+
+    <!-- 3. ツール選択 -->
+    <div class="section-head">
+      <div class="section-icon" style="background:rgba(167,139,250,0.15);">🛠</div>
+      <div>
+        <div class="section-label" style="color:var(--purple);">SECTION 03</div>
+        <div class="section-title">ツール選択（キー1文字）</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="sc-grid">
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">V</span></div>
+        <div class="sc-info"><div class="sc-name">移動ツール</div><div class="sc-desc">レイヤーを移動・選択する。最もよく使うツール</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">M</span></div>
+        <div class="sc-info"><div class="sc-name">長方形選択ツール</div><div class="sc-desc">四角形の選択範囲を作る。Shift+Mで楕円形選択に切替</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">L</span></div>
+        <div class="sc-info"><div class="sc-name">なげなわツール</div><div class="sc-desc">フリーハンドで選択範囲を作る</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">W</span></div>
+        <div class="sc-info"><div class="sc-name">クイック選択ツール</div><div class="sc-desc">ドラッグで自動選択。被写体の選択に便利</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">C</span></div>
+        <div class="sc-info"><div class="sc-name">切り抜きツール</div><div class="sc-desc">画像をトリミング・サイズ変更する</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">I</span></div>
+        <div class="sc-info"><div class="sc-name">スポイトツール</div><div class="sc-desc">画面上の色を採取して描画色に設定</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">B</span></div>
+        <div class="sc-info"><div class="sc-name">ブラシツール</div><div class="sc-desc">ブラシで描画。マスクの編集にもよく使う</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">E</span></div>
+        <div class="sc-info"><div class="sc-name">消しゴムツール</div><div class="sc-desc">ピクセルを消去。マスクでの代用推奨</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">G</span></div>
+        <div class="sc-info"><div class="sc-name">グラデーションツール</div><div class="sc-desc">グラデーションを描画。マスクのフェードにも使う</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">T</span></div>
+        <div class="sc-info"><div class="sc-name">文字ツール</div><div class="sc-desc">テキストを入力。Lesson10・11のメインツール</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">P</span></div>
+        <div class="sc-info"><div class="sc-name">ペンツール</div><div class="sc-desc">パス・シェイプを描く。Lesson08のメインツール</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">U</span></div>
+        <div class="sc-info"><div class="sc-name">シェイプツール</div><div class="sc-desc">長方形・楕円など。繰り返し押すと種類が切り替わる</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">H</span></div>
+        <div class="sc-info"><div class="sc-name">手のひらツール</div><div class="sc-desc">キャンバスをスクロール。Spaceキーでも一時切替</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">Z</span></div>
+        <div class="sc-info"><div class="sc-name">ズームツール</div><div class="sc-desc">クリックで拡大。Alt+クリックで縮小</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">A</span></div>
+        <div class="sc-info"><div class="sc-name">パス選択ツール</div><div class="sc-desc">パスのアンカーポイントを選択・移動</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">D</span></div>
+        <div class="sc-info"><div class="sc-name">描画色・背景色をリセット</div><div class="sc-desc">描画色を黒・背景色を白に戻す</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--purple);"></div>
+        <div class="key-wrap"><span class="key accent" style="font-size:14px; padding:4px 12px;">X</span></div>
+        <div class="sc-info"><div class="sc-name">描画色・背景色を入れ替え</div><div class="sc-desc">黒←→白など、描画色と背景色を交換</div></div>
+      </div>
+    </div>
+
+    <!-- 4. ズーム・表示 -->
+    <div class="section-head">
+      <div class="section-icon" style="background:rgba(34,211,238,0.15);">🔍</div>
+      <div>
+        <div class="section-label" style="color:var(--cyan);">SECTION 04</div>
+        <div class="section-title">表示・ズーム操作</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="sc-grid">
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--cyan);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">+</span></div>
+        <div class="sc-info"><div class="sc-name">ズームイン（拡大）</div><div class="sc-desc">画面を拡大。細かい作業をするときに</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--cyan);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">−</span></div>
+        <div class="sc-info"><div class="sc-name">ズームアウト（縮小）</div><div class="sc-desc">画面を縮小して全体を確認</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--cyan);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">0</span></div>
+        <div class="sc-info"><div class="sc-name">画面に合わせる</div><div class="sc-desc">キャンバス全体が見えるサイズに自動調整</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--cyan);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">1</span></div>
+        <div class="sc-info"><div class="sc-name">100%表示（実寸）</div><div class="sc-desc">ピクセル等倍で表示</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--cyan);"></div>
+        <div class="key-wrap"><span class="key">Space</span></div>
+        <div class="sc-info"><div class="sc-name">手のひらツールに一時切替</div><div class="sc-desc">スペースを押している間だけ移動できる</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--cyan);"></div>
+        <div class="key-wrap"><span class="key">Tab</span></div>
+        <div class="sc-info"><div class="sc-name">パネルを隠す/表示</div><div class="sc-desc">全パネルを非表示にして作業スペースを広げる</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--cyan);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">R</span></div>
+        <div class="sc-info"><div class="sc-name">ルーラーの表示/非表示</div><div class="sc-desc">定規を表示してガイドラインを引く</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--cyan);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">;</span></div>
+        <div class="sc-info"><div class="sc-name">ガイドの表示/非表示</div><div class="sc-desc">ガイドラインの表示を切り替える</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--cyan);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">H</span></div>
+        <div class="sc-info"><div class="sc-name">エクストラの表示/非表示</div><div class="sc-desc">選択範囲・グリッドなど補助表示を切替</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--cyan);"></div>
+        <div class="key-wrap"><span class="key">F</span></div>
+        <div class="sc-info"><div class="sc-name">スクリーンモード切替</div><div class="sc-desc">ウィンドウ→フルスクリーンと切り替わる</div></div>
+      </div>
+    </div>
+
+    <!-- 5. レイヤー操作 -->
+    <div class="section-head">
+      <div class="section-icon" style="background:rgba(251,146,60,0.15);">📑</div>
+      <div>
+        <div class="section-label" style="color:var(--orange);">SECTION 05</div>
+        <div class="section-title">レイヤー操作</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="sc-grid">
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--orange);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">J</span></div>
+        <div class="sc-info"><div class="sc-name">レイヤーを複製</div><div class="sc-desc">選択中のレイヤーをそのままコピー。超頻出！</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--orange);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">G</span></div>
+        <div class="sc-info"><div class="sc-name">レイヤーをグループ化</div><div class="sc-desc">複数のレイヤーをまとめてフォルダに</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--orange);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key">Shift</span><span class="key-plus">+</span><span class="key accent">G</span></div>
+        <div class="sc-info"><div class="sc-name">グループを解除</div><div class="sc-desc">グループをバラして個別レイヤーに戻す</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--orange);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">E</span></div>
+        <div class="sc-info"><div class="sc-name">レイヤーを結合</div><div class="sc-desc">選択中のレイヤーを1枚に合わせる</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--orange);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key">Shift</span><span class="key-plus">+</span><span class="key accent">E</span></div>
+        <div class="sc-info"><div class="sc-name">表示レイヤーを結合</div><div class="sc-desc">表示中の全レイヤーを1枚に合わせる</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--orange);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">]</span></div>
+        <div class="sc-info"><div class="sc-name">レイヤーを1つ上へ</div><div class="sc-desc">レイヤーパネルで1段上に移動</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--orange);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">[</span></div>
+        <div class="sc-info"><div class="sc-name">レイヤーを1つ下へ</div><div class="sc-desc">レイヤーパネルで1段下に移動</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--orange);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key">Shift</span><span class="key-plus">+</span><span class="key accent">]</span></div>
+        <div class="sc-info"><div class="sc-name">レイヤーを最前面へ</div><div class="sc-desc">一番上のレイヤーに移動</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--orange);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key">Shift</span><span class="key-plus">+</span><span class="key accent">[</span></div>
+        <div class="sc-info"><div class="sc-name">レイヤーを最背面へ</div><div class="sc-desc">一番下のレイヤーに移動</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--orange);"></div>
+        <div class="key-wrap"><span class="key">Alt/Opt</span><span class="key-plus">+</span><span class="key">クリック</span><span style="font-size:10px; color:var(--text-sub);">（目玉）</span></div>
+        <div class="sc-info"><div class="sc-name">そのレイヤーだけ表示</div><div class="sc-desc">他レイヤーを全部非表示にして1つだけ表示</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--orange);"></div>
+        <div class="key-wrap"><span class="key">Alt/Opt</span><span class="key-plus">+</span><span class="key accent">境界線クリック</span></div>
+        <div class="sc-info"><div class="sc-name">クリッピングマスク作成</div><div class="sc-desc">2レイヤーの境界線をAlt+クリックで適用</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--orange);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key">Shift</span><span class="key-plus">+</span><span class="key accent">N</span></div>
+        <div class="sc-info"><div class="sc-name">新規レイヤー作成</div><div class="sc-desc">空の新規レイヤーを追加</div></div>
+      </div>
+    </div>
+
+    <!-- 6. 選択範囲 -->
+    <div class="section-head">
+      <div class="section-icon" style="background:rgba(251,191,36,0.15);">⬚</div>
+      <div>
+        <div class="section-label" style="color:var(--yellow);">SECTION 06</div>
+        <div class="section-title">選択範囲の操作</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="sc-grid">
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--yellow);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">A</span></div>
+        <div class="sc-info"><div class="sc-name">すべてを選択</div><div class="sc-desc">キャンバス全体・テキスト全文字を選択</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--yellow);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">D</span></div>
+        <div class="sc-info"><div class="sc-name">選択を解除</div><div class="sc-desc">点線の選択範囲を消す。超頻出！</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--yellow);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key">Shift</span><span class="key-plus">+</span><span class="key accent">I</span></div>
+        <div class="sc-info"><div class="sc-name">選択範囲を反転</div><div class="sc-desc">選択していた部分と選択していない部分を入れ替え</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--yellow);"></div>
+        <div class="key-wrap"><span class="key">Shift</span><span class="key-plus">+</span><span class="key">ドラッグ</span></div>
+        <div class="sc-info"><div class="sc-name">選択範囲を追加</div><div class="sc-desc">既存の選択範囲に新しい範囲を足す</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--yellow);"></div>
+        <div class="key-wrap"><span class="key">Alt/Opt</span><span class="key-plus">+</span><span class="key">ドラッグ</span></div>
+        <div class="sc-info"><div class="sc-name">選択範囲から引く</div><div class="sc-desc">既存の選択範囲から新しい範囲を除外</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--yellow);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key">Enter</span></div>
+        <div class="sc-info"><div class="sc-name">パスを選択範囲に変換</div><div class="sc-desc">ペンツールで描いたパスを選択範囲にする</div></div>
+      </div>
+    </div>
+
+    <!-- 7. テキスト操作 -->
+    <div class="section-head">
+      <div class="section-icon" style="background:rgba(244,114,182,0.15);">Aa</div>
+      <div>
+        <div class="section-label" style="color:var(--pink);">SECTION 07</div>
+        <div class="section-title">テキスト操作（Lesson10・11）</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="sc-grid">
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--pink);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">Enter</span></div>
+        <div class="sc-info"><div class="sc-name">テキスト入力を確定</div><div class="sc-desc">文字入力モードを抜けてレイヤーを確定</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--pink);"></div>
+        <div class="key-wrap"><span class="key">Esc</span></div>
+        <div class="sc-info"><div class="sc-name">テキスト入力をキャンセル</div><div class="sc-desc">入力をやめて元の状態に戻す</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--pink);"></div>
+        <div class="key-wrap"><span class="key">Alt/Opt</span><span class="key-plus">+</span><span class="key accent">←→</span></div>
+        <div class="sc-info"><div class="sc-name">カーニング調整</div><div class="sc-desc">カーソルを2文字間に置いて文字間を調整</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--pink);"></div>
+        <div class="key-wrap"><span class="key">Alt/Opt</span><span class="key-plus">+</span><span class="key accent">↑↓</span></div>
+        <div class="sc-info"><div class="sc-name">行送り（行間）調整</div><div class="sc-desc">選択テキストの行間を調整</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--pink);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key">Shift</span><span class="key-plus">+</span><span class="key accent">L/C/R</span></div>
+        <div class="sc-info"><div class="sc-name">左・中央・右揃え</div><div class="sc-desc">L=左揃え　C=中央　R=右揃え</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--pink);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key">Shift</span><span class="key-plus">+</span><span class="key accent">&gt;</span></div>
+        <div class="sc-info"><div class="sc-name">フォントサイズを大きく</div><div class="sc-desc">選択テキストのサイズを2ptずつ拡大</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--pink);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key">Shift</span><span class="key-plus">+</span><span class="key accent">&lt;</span></div>
+        <div class="sc-info"><div class="sc-name">フォントサイズを小さく</div><div class="sc-desc">選択テキストのサイズを2ptずつ縮小</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--pink);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key">Shift</span><span class="key-plus">+</span><span class="key accent">B</span></div>
+        <div class="sc-info"><div class="sc-name">太字（Bold）</div><div class="sc-desc">選択テキストを太字に（フォント依存）</div></div>
+      </div>
+    </div>
+
+    <!-- 8. 整列・変形 -->
+    <div class="section-head">
+      <div class="section-icon" style="background:rgba(248,113,113,0.15);">⊞</div>
+      <div>
+        <div class="section-label" style="color:var(--red);">SECTION 08</div>
+        <div class="section-title">整列・変形操作</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="sc-grid">
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--red);"></div>
+        <div class="key-wrap"><span class="key">Shift</span><span class="key-plus">+</span><span class="key">ドラッグ</span></div>
+        <div class="sc-info"><div class="sc-name">水平・垂直・45°に固定</div><div class="sc-desc">移動・描画時にShiftで方向を固定</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--red);"></div>
+        <div class="key-wrap"><span class="key">矢印キー</span></div>
+        <div class="sc-info"><div class="sc-name">1pxずつ移動</div><div class="sc-desc">移動ツール選択中に矢印キーで微調整</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--red);"></div>
+        <div class="key-wrap"><span class="key">Shift</span><span class="key-plus">+</span><span class="key accent">矢印キー</span></div>
+        <div class="sc-info"><div class="sc-name">10pxずつ移動</div><div class="sc-desc">Shiftで10倍速の移動</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--red);"></div>
+        <div class="key-wrap"><span class="key">Shift</span><span class="key-plus">+</span><span class="key">T</span><span style="font-size:10px; color:var(--text-sub);">（変形中）</span></div>
+        <div class="sc-info"><div class="sc-name">縦横比を維持して変形</div><div class="sc-desc">Cmd+T後にShift+ドラッグで比率固定</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--red);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key accent">A</span><span style="font-size:10px; color:var(--text-sub);">→整列</span></div>
+        <div class="sc-info"><div class="sc-name">キャンバス基準で整列</div><div class="sc-desc">全選択後に移動ツールで整列ボタンを押す</div></div>
+      </div>
+    </div>
+
+    <!-- 9. ブラシ・塗り -->
+    <div class="section-head">
+      <div class="section-icon" style="background:rgba(16,185,129,0.15);">🎨</div>
+      <div>
+        <div class="section-label" style="color:var(--green);">SECTION 09</div>
+        <div class="section-title">ブラシ・塗り操作</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="sc-grid">
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--green);"></div>
+        <div class="key-wrap"><span class="key accent">[</span><span style="font-size:12px; color:var(--text-sub);">／</span><span class="key accent">]</span></div>
+        <div class="sc-info"><div class="sc-name">ブラシサイズを変更</div><div class="sc-desc">[ で縮小・] で拡大。頻繁に使う！</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--green);"></div>
+        <div class="key-wrap"><span class="key">Shift</span><span class="key-plus">+</span><span class="key accent">[</span><span style="font-size:12px; color:var(--text-sub);">／</span><span class="key">]</span></div>
+        <div class="sc-info"><div class="sc-name">ブラシの硬さを変更</div><div class="sc-desc">Shift+[ で柔らかく・Shift+] で硬く</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--green);"></div>
+        <div class="key-wrap"><span class="key">Alt/Opt</span><span class="key-plus">+</span><span class="key">Delete/Backspace</span></div>
+        <div class="sc-info"><div class="sc-name">描画色で塗りつぶし</div><div class="sc-desc">選択範囲（またはレイヤー全体）を描画色で塗る</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--green);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key">Delete/Backspace</span></div>
+        <div class="sc-info"><div class="sc-name">背景色で塗りつぶし</div><div class="sc-desc">選択範囲を背景色で塗る</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--green);"></div>
+        <div class="key-wrap"><span class="key">数字キー</span><span class="key-plus"> </span><span class="key accent">0〜9</span></div>
+        <div class="sc-info"><div class="sc-name">不透明度を変更</div><div class="sc-desc">1=10%・5=50%・0=100%。ブラシ・レイヤー共通</div></div>
+      </div>
+    </div>
+
+    <!-- 10. よく使うパネル表示 -->
+    <div class="section-head">
+      <div class="section-icon" style="background:rgba(56,189,248,0.15);">📋</div>
+      <div>
+        <div class="section-label" style="color:var(--blue);">SECTION 10</div>
+        <div class="section-title">パネル・ウィンドウ表示</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="sc-grid">
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--blue);"></div>
+        <div class="key-wrap"><span class="key">Cmd/Ctrl</span><span class="key-plus">+</span><span class="key">Shift</span><span class="key-plus">+</span><span class="key accent">T</span></div>
+        <div class="sc-info"><div class="sc-name">文字パネル</div><div class="sc-desc">フォント・サイズ・カーニング等を設定</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--blue);"></div>
+        <div class="key-wrap"><span class="key">F5</span></div>
+        <div class="sc-info"><div class="sc-name">ブラシパネル</div><div class="sc-desc">ブラシの詳細設定</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--blue);"></div>
+        <div class="key-wrap"><span class="key">F6</span></div>
+        <div class="sc-info"><div class="sc-name">カラーパネル</div><div class="sc-desc">色の設定パネル</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--blue);"></div>
+        <div class="key-wrap"><span class="key">F7</span></div>
+        <div class="sc-info"><div class="sc-name">レイヤーパネル</div><div class="sc-desc">レイヤーの管理パネル。非表示になったときに</div></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-bar" style="background:var(--blue);"></div>
+        <div class="key-wrap"><span class="key">F8</span></div>
+        <div class="sc-info"><div class="sc-name">インフォパネル</div><div class="sc-desc">カーソル位置の色情報・座標を表示</div></div>
+      </div>
+    </div>
+
+    <!-- まとめ：絶対覚えるTOP10 -->
+    <div class="summary">
+      <div class="summary-header">
+        <div style="width:32px; height:32px; border-radius:8px; background:rgba(251,191,36,0.2); display:flex; align-items:center; justify-content:center; font-size:16px;">⭐</div>
+        <div>
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:var(--text-sub); margin-bottom:1px;">MUST REMEMBER</div>
+          <div style="font-size:16px; font-weight:700; color:#fff;">絶対に覚えたいショートカット TOP 15</div>
+        </div>
+      </div>
+      <div class="summary-body">
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="summary-key" style="color:var(--yellow);">Cmd/Ctrl + Z</div>
+            <div class="summary-label">取り消し（最重要！）</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-key" style="color:var(--yellow);">Cmd/Ctrl + S</div>
+            <div class="summary-label">上書き保存（こまめに）</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-key" style="color:var(--blue);">Cmd/Ctrl + T</div>
+            <div class="summary-label">自由変形</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-key" style="color:var(--blue);">Cmd/Ctrl + J</div>
+            <div class="summary-label">レイヤーを複製</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-key" style="color:var(--purple);">V</div>
+            <div class="summary-label">移動ツール</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-key" style="color:var(--purple);">T</div>
+            <div class="summary-label">文字ツール</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-key" style="color:var(--purple);">B</div>
+            <div class="summary-label">ブラシツール</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-key" style="color:var(--purple);">G</div>
+            <div class="summary-label">グラデーションツール</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-key" style="color:var(--orange);">Cmd/Ctrl + G</div>
+            <div class="summary-label">グループ化</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-key" style="color:var(--orange);">Cmd/Ctrl + D</div>
+            <div class="summary-label">選択解除</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-key" style="color:var(--cyan);">Cmd/Ctrl + 0</div>
+            <div class="summary-label">画面に合わせる</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-key" style="color:var(--cyan);">Space</div>
+            <div class="summary-label">手のひらツール切替</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-key" style="color:var(--pink);">Alt/Opt + ←→</div>
+            <div class="summary-label">カーニング調整</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-key" style="color:var(--green);">[ / ]</div>
+            <div class="summary-label">ブラシサイズ変更</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-key" style="color:var(--green);">Cmd/Ctrl + Enter</div>
+            <div class="summary-label">パス→選択範囲変換</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-note" style="padding:32px 24px;">
+    <p>Photoshop チュートリアル · Lesson 00｜主要ショートカットキー完全リファレンス</p>
+  </div>
+
+</body>
+</html>
