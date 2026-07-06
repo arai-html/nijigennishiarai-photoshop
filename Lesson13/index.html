@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>フォントの種類 完全解説＋ワークシート｜Photoshop Lesson 13</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@400;700&family=JetBrains+Mono:wght@400;600&family=Oswald:wght@700&family=Dancing+Script:wght@700&family=Righteous&family=Playfair+Display:wght@700&family=Bebas+Neue&family=Libre+Baskerville:wght@700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --text: #1a1a2e;
+    --text-sub: #4a5568;
+    --border: #e2e8f0;
+    --accent: #7c3aed;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 40px 20px 80px; }
+  .container { max-width: 780px; margin: 0 auto; }
+
+  /* ヒーロー */
+  .hero { background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #818cf8 100%); border-radius: 20px; padding: 52px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::before { content: 'Aa'; position: absolute; right: 32px; top: 16px; font-size: 100px; font-weight: 900; opacity: 0.1; color: #fff; font-family: 'Playfair Display', serif; }
+  .hero-content { position: relative; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+  .hero h1 { font-size: 30px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.3; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.85); margin-bottom: 20px; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-tag { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+
+  /* セクション */
+  .section { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; }
+  .section-header { padding: 20px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 14px; }
+  .section-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-num { font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-bottom: 2px; }
+  .section-title { font-size: 18px; font-weight: 700; }
+  .section-body { padding: 24px; }
+  .desc { font-size: 14px; color: var(--text-sub); line-height: 1.85; margin-bottom: 20px; }
+
+  code { background: #ede9fe; color: #4c1d95; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  /* フォントカード */
+  .font-card { border-radius: 14px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 16px; }
+  .font-card-header { padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .font-card-name { font-size: 13px; font-weight: 700; }
+  .font-card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .font-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; font-family: 'JetBrains Mono', monospace; }
+  .font-preview { padding: 20px 24px; display: flex; align-items: center; justify-content: center; min-height: 90px; }
+  .font-card-body { padding: 12px 18px; border-top: 1px solid var(--border); background: #f8f9fa; }
+  .font-card-desc { font-size: 12px; color: var(--text-sub); line-height: 1.8; }
+  .font-usage { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .usage-tag { font-size: 10px; background: var(--bg); border: 1px solid var(--border); color: var(--text-sub); padding: 2px 8px; border-radius: 10px; }
+
+  /* 比較グリッド */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+
+  /* ヒント */
+  .tip { border-radius: 10px; padding: 14px 16px; margin-top: 16px; }
+  .tip p { font-size: 13px; line-height: 1.75; }
+
+  /* ワークカード */
+  .work-card { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 24px; }
+  .work-header { padding: 20px 24px; display: flex; align-items: center; gap: 16px; border-bottom: 2px solid var(--border); }
+  .work-num { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; color: #fff; }
+  .work-title-wrap { flex: 1; }
+  .work-subtitle { font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-bottom: 2px; }
+  .work-title { font-size: 17px; font-weight: 700; }
+  .work-badge { font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
+  .work-body { padding: 24px; }
+
+  /* 課題ボックス */
+  .task-box { border-radius: 12px; padding: 16px 18px; margin-bottom: 20px; }
+  .task-label { font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .task-text { font-size: 14px; font-weight: 500; line-height: 1.7; }
+
+  /* チェックリスト */
+  .checklist { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+  .check-item { display: flex; align-items: flex-start; gap: 10px; }
+  .check-box { width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--border); flex-shrink: 0; margin-top: 2px; }
+  .check-text { font-size: 13px; color: var(--text-sub); line-height: 1.6; }
+
+  /* 選択問題 */
+  .choices { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+  .choice { background: #f8f9fa; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--text-sub); cursor: default; }
+
+  /* まとめ表 */
+  .summary-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 16px 0; }
+  .summary-table th { padding: 10px 14px; text-align: left; font-weight: 700; }
+  .summary-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text-sub); line-height: 1.7; }
+  .summary-table tr:nth-child(even) td { background: #f8f9fa; }
+
+  .caption { font-size: 12px; color: #94a3b8; margin-top: 6px; font-style: italic; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 24px; }
+    .hero h1 { font-size: 22px; }
+    .section-body, .work-body { padding: 16px; }
+    .compare-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Photoshop チュートリアル · Lesson 13</div>
+      <h1>🔤 フォントの種類<br>完全解説＋ワークシート</h1>
+      <p>日本語・欧文フォントの4大分類から選び方・組み合わせ方まで。バナー制作で即使えるフォント知識を身につける。</p>
+      <div class="hero-tags">
+        <span class="hero-tag">ゴシック体</span>
+        <span class="hero-tag">明朝体</span>
+        <span class="hero-tag">サンセリフ</span>
+        <span class="hero-tag">セリフ体</span>
+        <span class="hero-tag">手書き・筆記体</span>
+        <span class="hero-tag">装飾体</span>
+        <span class="hero-tag">フォントの組み合わせ</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 1: フォントの4大分類 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#ede9fe;">📖</div>
+      <div>
+        <div class="section-num" style="color:#7c3aed;">CHAPTER 01</div>
+        <div class="section-title">フォントの4大分類を知る</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">フォントは大きく<strong>4種類</strong>に分けられます。日本語・欧文どちらにも対応する分類です。まずここをしっかり理解しましょう。</p>
+
+      <!-- 4分類マップ -->
+      <div style="background:#1e1b4b; border-radius:14px; padding:20px; margin-bottom:20px;">
+        <div style="font-size:10px; color:#a78bfa; font-family:'JetBrains Mono',monospace; margin-bottom:16px; letter-spacing:0.08em;">フォント4大分類マップ</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div style="background:#2e1b6b; border-radius:10px; padding:14px; border-left:4px solid #7c3aed;">
+            <div style="font-size:10px; color:#a78bfa; font-family:'JetBrains Mono',monospace; margin-bottom:6px; font-weight:700;">① ゴシック体 / サンセリフ</div>
+            <div style="font-size:22px; font-weight:900; color:#fff; font-family:'Noto Sans JP',sans-serif; margin-bottom:4px;">あAa</div>
+            <div style="font-size:10px; color:#c4b5fd; line-height:1.6;">線が均一・飾りなし<br>モダン・読みやすい</div>
+          </div>
+          <div style="background:#1a2e1a; border-radius:10px; padding:14px; border-left:4px solid #059669;">
+            <div style="font-size:10px; color:#34d399; font-family:'JetBrains Mono',monospace; margin-bottom:6px; font-weight:700;">② 明朝体 / セリフ体</div>
+            <div style="font-size:22px; font-weight:700; color:#fff; font-family:'Noto Serif JP',serif; margin-bottom:4px;">あAa</div>
+            <div style="font-size:10px; color:#6ee7b7; line-height:1.6;">端に飾り（セリフ）あり<br>上品・伝統的・高級感</div>
+          </div>
+          <div style="background:#2e1a10; border-radius:10px; padding:14px; border-left:4px solid #ea580c;">
+            <div style="font-size:10px; color:#fb923c; font-family:'JetBrains Mono',monospace; margin-bottom:6px; font-weight:700;">③ 手書き / 筆記体（スクリプト）</div>
+            <div style="font-size:22px; font-weight:700; color:#fff; font-family:'Dancing Script',cursive; margin-bottom:4px;">あAa</div>
+            <div style="font-size:10px; color:#fdba74; line-height:1.6;">手書き風・流れる形<br>温かみ・カジュアル</div>
+          </div>
+          <div style="background:#1a1020; border-radius:10px; padding:14px; border-left:4px solid #db2777;">
+            <div style="font-size:10px; color:#f9a8d4; font-family:'JetBrains Mono',monospace; margin-bottom:6px; font-weight:700;">④ 装飾体（ディスプレイ）</div>
+            <div style="font-size:22px; font-weight:700; color:#fff; font-family:'Bebas Neue',cursive; margin-bottom:4px;">Aa</div>
+            <div style="font-size:10px; color:#f9a8d4; line-height:1.6;">個性的・インパクト重視<br>タイトル・ロゴ向け</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 日本語と欧文の対応表 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px;">日本語フォントと欧文フォントの対応関係</div>
+      <table class="summary-table">
+        <thead><tr style="background:#4338ca; color:#fff;"><th>分類</th><th>日本語フォント</th><th>欧文フォント</th><th>印象</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>① ゴシック体<br>/ サンセリフ</strong></td>
+            <td>游ゴシック<br>ヒラギノ角ゴ<br>Noto Sans JP</td>
+            <td>Helvetica<br>Arial<br>Futura<br>Noto Sans</td>
+            <td>シンプル・清潔・現代的<br>Webバナーの定番</td>
+          </tr>
+          <tr>
+            <td><strong>② 明朝体<br>/ セリフ体</strong></td>
+            <td>游明朝<br>ヒラギノ明朝<br>Noto Serif JP</td>
+            <td>Times New Roman<br>Georgia<br>Garamond<br>Playfair Display</td>
+            <td>上品・伝統・高級感<br>雑誌・ブランド系</td>
+          </tr>
+          <tr>
+            <td><strong>③ 手書き体<br>/ スクリプト</strong></td>
+            <td>あおとフォント<br>ロゴたいぷゴシック<br>手書き系フォント</td>
+            <td>Dancing Script<br>Pacifico<br>Great Vibes<br>Satisfy</td>
+            <td>温かみ・カジュアル<br>カフェ・ウェディング系</td>
+          </tr>
+          <tr>
+            <td><strong>④ 装飾体<br>/ ディスプレイ</strong></td>
+            <td>コンデンスド系<br>極太ゴシック<br>ポップ体</td>
+            <td>Oswald<br>Bebas Neue<br>Righteous<br>Impact</td>
+            <td>インパクト・個性的<br>セール・スポーツ系</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="tip" style="background:#ede9fe; border-left:3px solid #7c3aed;">
+        <p style="color:#3b0764;"><strong>フォント選びの出発点：</strong>まず「このバナーはどんな印象を与えたいか？」を決めます。<br>
+        清潔・信頼感 → <strong>ゴシック体</strong>　　上品・高級 → <strong>明朝体</strong><br>
+        温かみ・手作り感 → <strong>手書き体</strong>　　インパクト重視 → <strong>装飾体</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 2: 日本語フォント詳細 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#ecfdf5;">🇯🇵</div>
+      <div>
+        <div class="section-num" style="color:#059669;">CHAPTER 02</div>
+        <div class="section-title">日本語フォントを深掘りする</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">Photoshopで使える主な日本語フォントを詳しく見ていきます。同じゴシック体でも<strong>ウェイト（太さ）や雰囲気が大きく違う</strong>ことを体感しましょう。</p>
+
+      <!-- 游ゴシック -->
+      <div class="font-card">
+        <div class="font-card-header" style="background:#eef6ff;">
+          <div class="font-card-name" style="color:#1e40af;">游ゴシック（Yu Gothic）</div>
+          <div class="font-card-tags">
+            <span class="font-tag" style="background:#dbeafe; color:#1e40af;">ゴシック体</span>
+            <span class="font-tag" style="background:#e0f2fe; color:#0369a1;">Mac/Win標準</span>
+          </div>
+        </div>
+        <div class="font-preview" style="background:#f0f9ff;">
+          <div style="text-align:center;">
+            <div style="font-family:'Noto Sans JP',sans-serif; font-size:36px; font-weight:300; color:#1e293b; margin-bottom:4px;">バナーデザイン</div>
+            <div style="font-family:'Noto Sans JP',sans-serif; font-size:36px; font-weight:900; color:#1e293b;">バナーデザイン</div>
+          </div>
+        </div>
+        <div class="font-card-body">
+          <div class="font-card-desc">MacとWindowsどちらにも標準搭載。<strong>Light〜Boldまで複数のウェイト</strong>が使えるのが特徴。上の例はLight（細）とHeavy（極太）の比較。同じフォントでもウェイトでここまで印象が変わる。</div>
+          <div class="font-usage">
+            <span class="usage-tag">本文テキスト</span>
+            <span class="usage-tag">バナーキャッチ</span>
+            <span class="usage-tag">UI・Webサイト</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 游明朝 -->
+      <div class="font-card">
+        <div class="font-card-header" style="background:#fdf4ff;">
+          <div class="font-card-name" style="color:#7e22ce;">游明朝（Yu Mincho）</div>
+          <div class="font-card-tags">
+            <span class="font-tag" style="background:#f3e8ff; color:#7e22ce;">明朝体</span>
+            <span class="font-tag" style="background:#fdf4ff; color:#9333ea;">Mac/Win標準</span>
+          </div>
+        </div>
+        <div class="font-preview" style="background:#faf5ff;">
+          <div style="text-align:center;">
+            <div style="font-family:'Noto Serif JP',serif; font-size:36px; font-weight:400; color:#1e293b; margin-bottom:4px;">上質なデザイン</div>
+            <div style="font-family:'Noto Serif JP',serif; font-size:36px; font-weight:700; color:#1e293b;">上質なデザイン</div>
+          </div>
+        </div>
+        <div class="font-card-body">
+          <div class="font-card-desc">縦線が太く横線が細い。端に「うろこ」と呼ばれる飾りがある。<strong>品格・高級感・伝統的な雰囲気</strong>。ファッション系・ブランド系・和風バナーに最適。</div>
+          <div class="font-usage">
+            <span class="usage-tag">高級ブランド</span>
+            <span class="usage-tag">和風・日本的</span>
+            <span class="usage-tag">雑誌・書籍風</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ウェイト解説 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:20px 0 12px;">フォントのウェイト（太さ）について</div>
+      <div style="background:#1e1e2e; border-radius:12px; padding:18px; margin-bottom:16px;">
+        <div style="font-size:10px; color:#a78bfa; font-family:'JetBrains Mono',monospace; margin-bottom:14px;">ウェイトの種類（細→太）</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div style="font-size:10px; color:#888; font-family:'JetBrains Mono',monospace; width:80px; flex-shrink:0;">Thin / 100</div>
+            <div style="font-family:'Noto Sans JP',sans-serif; font-size:22px; font-weight:100; color:#e2e8f0;">バナーデザイン</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div style="font-size:10px; color:#888; font-family:'JetBrains Mono',monospace; width:80px; flex-shrink:0;">Light / 300</div>
+            <div style="font-family:'Noto Sans JP',sans-serif; font-size:22px; font-weight:300; color:#e2e8f0;">バナーデザイン</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div style="font-size:10px; color:#888; font-family:'JetBrains Mono',monospace; width:80px; flex-shrink:0;">Regular / 400</div>
+            <div style="font-family:'Noto Sans JP',sans-serif; font-size:22px; font-weight:400; color:#e2e8f0;">バナーデザイン</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div style="font-size:10px; color:#888; font-family:'JetBrains Mono',monospace; width:80px; flex-shrink:0;">Bold / 700</div>
+            <div style="font-family:'Noto Sans JP',sans-serif; font-size:22px; font-weight:700; color:#e2e8f0;">バナーデザイン</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div style="font-size:10px; color:#888; font-family:'JetBrains Mono',monospace; width:80px; flex-shrink:0;">Black / 900</div>
+            <div style="font-family:'Noto Sans JP',sans-serif; font-size:22px; font-weight:900; color:#e2e8f0;">バナーデザイン</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#ecfdf5; border-left:3px solid #059669;">
+        <p style="color:#14532d;"><strong>バナー制作でのウェイト選び：</strong><br>
+        メインキャッチ（大きい文字）→ <strong>Bold / Black（太め）</strong>でインパクトを出す<br>
+        サブテキスト（説明文）→ <strong>Regular / Medium（標準）</strong>で読みやすく<br>
+        ラグジュアリー系 → <strong>Light / Thin（細め）</strong>で上品に</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 3: 欧文フォント詳細 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fff7ed;">🔤</div>
+      <div>
+        <div class="section-num" style="color:#ea580c;">CHAPTER 03</div>
+        <div class="section-title">欧文フォントを深掘りする</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">バナー制作でよく使う欧文フォントを紹介します。Adobe FontsやGoogle Fontsで無料で使えるものが多いです。</p>
+
+      <!-- サンセリフ系 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px;">① サンセリフ系（ゴシック体相当）</div>
+
+      <div class="compare-grid">
+        <div class="font-card">
+          <div class="font-card-header" style="background:#eff6ff;">
+            <div class="font-card-name" style="color:#1e40af; font-size:12px;">Helvetica / Arial</div>
+            <span class="font-tag" style="background:#dbeafe; color:#1e40af;">サンセリフ</span>
+          </div>
+          <div class="font-preview" style="background:#f8faff; min-height:70px;">
+            <div style="font-size:28px; font-weight:700; color:#1e293b; letter-spacing:-0.02em;">DESIGN</div>
+          </div>
+          <div class="font-card-body">
+            <div class="font-card-desc">世界で最も使われる定番サンセリフ。シンプルで清潔感があり、どんなデザインにも馴染む。</div>
+          </div>
+        </div>
+
+        <div class="font-card">
+          <div class="font-card-header" style="background:#f0fdf4;">
+            <div class="font-card-name" style="color:#15803d; font-size:12px;">Oswald（コンデンスド）</div>
+            <span class="font-tag" style="background:#dcfce7; color:#15803d;">コンデンスド</span>
+          </div>
+          <div class="font-preview" style="background:#f8fffa; min-height:70px;">
+            <div style="font-family:'Oswald',sans-serif; font-size:32px; font-weight:700; color:#1e293b; letter-spacing:-0.01em;">WINTER SALE</div>
+          </div>
+          <div class="font-card-body">
+            <div class="font-card-desc">縦長・幅が狭い（コンデンスド）。Lesson06のベイクルーズで使用。大きな文字でも横に広がらない。</div>
+          </div>
+        </div>
+
+        <div class="font-card">
+          <div class="font-card-header" style="background:#fefce8;">
+            <div class="font-card-name" style="color:#854d0e; font-size:12px;">Bebas Neue</div>
+            <span class="font-tag" style="background:#fef9c3; color:#854d0e;">ディスプレイ</span>
+          </div>
+          <div class="font-preview" style="background:#fffef0; min-height:70px;">
+            <div style="font-family:'Bebas Neue',cursive; font-size:40px; color:#1e293b; letter-spacing:0.05em;">SALE 50% OFF</div>
+          </div>
+          <div class="font-card-body">
+            <div class="font-card-desc">すべて大文字のみの極太コンデンスド。インパクト最強。スポーツ・セール系バナーに最適。</div>
+          </div>
+        </div>
+
+        <div class="font-card">
+          <div class="font-card-header" style="background:#fdf2f8;">
+            <div class="font-card-name" style="color:#9d174d; font-size:12px;">Righteous（丸み系）</div>
+            <span class="font-tag" style="background:#fce7f3; color:#9d174d;">ラウンド</span>
+          </div>
+          <div class="font-preview" style="background:#fff5f8; min-height:70px;">
+            <div style="font-family:'Righteous',cursive; font-size:30px; color:#1e293b;">LATE WINTER SALE</div>
+          </div>
+          <div class="font-card-body">
+            <div class="font-card-desc">丸みのある極太フォント。Lesson07のユナイテッドアローズで使用。ポップ・カジュアル・温かみ。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- セリフ系 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:20px 0 12px;">② セリフ体（明朝体相当）</div>
+
+      <div class="compare-grid">
+        <div class="font-card">
+          <div class="font-card-header" style="background:#faf5ff;">
+            <div class="font-card-name" style="color:#6b21a8; font-size:12px;">Playfair Display</div>
+            <span class="font-tag" style="background:#f3e8ff; color:#6b21a8;">セリフ体</span>
+          </div>
+          <div class="font-preview" style="background:#fdfbff; min-height:70px;">
+            <div style="font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:#1e293b; font-style:italic;">Luxury Brand</div>
+          </div>
+          <div class="font-card-body">
+            <div class="font-card-desc">エレガントで高級感のあるセリフ体。イタリック体（斜体）が特に美しい。ラグジュアリー系に最適。</div>
+          </div>
+        </div>
+
+        <div class="font-card">
+          <div class="font-card-header" style="background:#fff7ed;">
+            <div class="font-card-name" style="color:#9a3412; font-size:12px;">Libre Baskerville</div>
+            <span class="font-tag" style="background:#ffedd5; color:#9a3412;">セリフ体</span>
+          </div>
+          <div class="font-preview" style="background:#fffcf8; min-height:70px;">
+            <div style="font-family:'Libre Baskerville',serif; font-size:26px; font-weight:700; color:#1e293b;">Premium Quality</div>
+          </div>
+          <div class="font-card-body">
+            <div class="font-card-desc">クラシックで読みやすいセリフ体。Times New Romanより洗練された印象。ブランド系・雑誌風に。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 手書き体 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:20px 0 12px;">③ 手書き・筆記体（スクリプト）</div>
+
+      <div class="compare-grid">
+        <div class="font-card">
+          <div class="font-card-header" style="background:#fff7ed;">
+            <div class="font-card-name" style="color:#ea580c; font-size:12px;">Dancing Script</div>
+            <span class="font-tag" style="background:#ffedd5; color:#ea580c;">筆記体</span>
+          </div>
+          <div class="font-preview" style="background:#fffbf0; min-height:70px;">
+            <div style="font-family:'Dancing Script',cursive; font-size:36px; font-weight:700; color:#1e293b;">All Free Day</div>
+          </div>
+          <div class="font-card-body">
+            <div class="font-card-desc">Lesson02のAll Free Dayバナーで使用した筆記体。流れるような手書き感がある。カジュアルでおしゃれ。</div>
+          </div>
+        </div>
+
+        <div class="font-card">
+          <div class="font-card-header" style="background:#f0fdf4;">
+            <div class="font-card-name" style="color:#15803d; font-size:12px;">Pacifico</div>
+            <span class="font-tag" style="background:#dcfce7; color:#15803d;">手書き体</span>
+          </div>
+          <div class="font-preview" style="background:#f8fff9; min-height:70px;">
+            <div style="font-family:'Pacifico',cursive; font-size:32px; color:#1e293b;">Cafe Menu</div>
+          </div>
+          <div class="font-card-body">
+            <div class="font-card-desc">丸みのある手書き体。カフェ・フード系・夏らしいデザインに。Dancing Scriptよりカジュアルな印象。</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#fff7ed; border-left:3px solid #ea580c;">
+        <p style="color:#7c2d12;"><strong>手書き体を使うときの注意：</strong>手書き体は<strong>メインのキャッチコピーや1〜2行だけ</strong>に使いましょう。本文や細かい説明に使うと読みにくくなります。また他のフォントと組み合わせるときは手書き体を「アクセント」として使うのがコツです。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 4: フォントの組み合わせ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fef2f8;">🎨</div>
+      <div>
+        <div class="section-num" style="color:#db2777;">CHAPTER 04</div>
+        <div class="section-title">フォントの組み合わせ方（ペアリング）</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">1つのバナーで使うフォントは<strong>最大2種類</strong>が鉄則です。組み合わせのパターンを覚えましょう。</p>
+
+      <!-- 組み合わせ例 -->
+      <div style="display:flex; flex-direction:column; gap:14px; margin-bottom:20px;">
+
+        <!-- パターン1 -->
+        <div style="border-radius:12px; overflow:hidden; border:2px solid #db2777;">
+          <div style="background:#fdf2f8; padding:10px 16px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-size:12px; font-weight:700; color:#9d174d;">✅ パターン①「装飾体 ＋ ゴシック体」（最頻出）</div>
+            <span style="font-size:10px; background:#db2777; color:#fff; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">Lesson06・07で使用</span>
+          </div>
+          <div style="background:#fff5f8; padding:16px 24px;">
+            <div style="display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap;">
+              <div>
+                <div style="font-family:'Oswald',sans-serif; font-size:42px; font-weight:700; color:#1e293b; line-height:1;">WINTER<br>SALE</div>
+                <div style="font-family:'Noto Sans JP',sans-serif; font-size:13px; color:#4a5568; margin-top:6px;">2026.01.01 THU</div>
+                <div style="font-family:'Noto Sans JP',sans-serif; font-size:11px; color:#64748b;">BAYCREW'S GROUP</div>
+              </div>
+              <div style="flex:1; min-width:160px; font-size:12px; color:var(--text-sub); line-height:1.9; padding-top:4px;">
+                <strong style="color:#9d174d;">メイン：</strong>Oswald Bold（装飾体）<br>
+                <strong style="color:#9d174d;">サブ：</strong>游ゴシック Medium（ゴシック体）<br>
+                → インパクトと読みやすさを両立
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- パターン2 -->
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:#f0fdf4; padding:10px 16px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-size:12px; font-weight:700; color:#15803d;">✅ パターン②「筆記体 ＋ ゴシック体」</div>
+            <span style="font-size:10px; background:#059669; color:#fff; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">Lesson02・03で使用</span>
+          </div>
+          <div style="background:#f8fff9; padding:16px 24px;">
+            <div style="display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap;">
+              <div>
+                <div style="font-family:'Dancing Script',cursive; font-size:38px; font-weight:700; color:#1e293b; line-height:1.1;">All Free Day</div>
+                <div style="font-family:'Noto Sans JP',sans-serif; font-size:13px; color:#4a5568; margin-top:6px;">サントリー ザ・プレミアム・モルツ</div>
+              </div>
+              <div style="flex:1; min-width:160px; font-size:12px; color:var(--text-sub); line-height:1.9; padding-top:4px;">
+                <strong style="color:#15803d;">メイン：</strong>Dancing Script（筆記体）<br>
+                <strong style="color:#15803d;">サブ：</strong>游ゴシック（ゴシック体）<br>
+                → おしゃれさと読みやすさを両立
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- パターン3 -->
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:#faf5ff; padding:10px 16px;">
+            <div style="font-size:12px; font-weight:700; color:#6b21a8;">✅ パターン③「明朝体 ＋ ゴシック体」（高級系）</div>
+          </div>
+          <div style="background:#fdfbff; padding:16px 24px;">
+            <div style="display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap;">
+              <div>
+                <div style="font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:#1e293b; font-style:italic;">Premium</div>
+                <div style="font-family:'Noto Serif JP',serif; font-size:22px; font-weight:700; color:#1e293b;">高品質な転職支援</div>
+                <div style="font-family:'Noto Sans JP',sans-serif; font-size:12px; color:#4a5568; margin-top:6px; letter-spacing:0.1em;">CAREER AGENT</div>
+              </div>
+              <div style="flex:1; min-width:160px; font-size:12px; color:var(--text-sub); line-height:1.9; padding-top:4px;">
+                <strong style="color:#6b21a8;">メイン：</strong>明朝体 / Playfair Display<br>
+                <strong style="color:#6b21a8;">サブ：</strong>ゴシック体（小さいテキスト）<br>
+                → 高級感と読みやすさの組み合わせ
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NGパターン -->
+        <div style="border-radius:12px; overflow:hidden; border:2px solid #ef4444;">
+          <div style="background:#fef2f2; padding:10px 16px;">
+            <div style="font-size:12px; font-weight:700; color:#991b1b;">❌ NGパターン「手書き体 ＋ 明朝体」（組み合わせNG）</div>
+          </div>
+          <div style="background:#fff8f8; padding:16px 24px;">
+            <div style="display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap;">
+              <div>
+                <div style="font-family:'Pacifico',cursive; font-size:28px; color:#1e293b;">Special Sale</div>
+                <div style="font-family:'Noto Serif JP',serif; font-size:18px; font-weight:700; color:#1e293b; margin-top:4px;">高品質な商品が揃う</div>
+              </div>
+              <div style="flex:1; min-width:160px; font-size:12px; color:#dc2626; line-height:1.9; padding-top:4px;">
+                ⚠️ カジュアルな手書き体と上品な明朝体は雰囲気が合わない<br>
+                ⚠️ 2つとも「個性的」なフォントで主役がぶつかる<br>
+                → 組み合わせるなら片方をゴシック体にする
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#fdf2f8; border-left:3px solid #db2777;">
+        <p style="color:#831843;"><strong>フォントペアリングの3つのルール：</strong><br>
+        ① <strong>1バナーにフォントは最大2種類</strong>（3種類以上はごちゃごちゃする）<br>
+        ② <strong>「主役」と「脇役」を決める</strong>（両方目立つフォントはNG）<br>
+        ③ <strong>同じ系統を重ねない</strong>（手書き体＋手書き体・装飾体＋装飾体はNG）</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 5: Adobe Fonts / Google Fonts -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#ecfeff;">🌐</div>
+      <div>
+        <div class="section-num" style="color:#0891b2;">CHAPTER 05</div>
+        <div class="section-title">フォントの入手方法（Adobe Fonts / Google Fonts）</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">Photoshopで使えるフォントは<strong>Adobe Fonts</strong>と<strong>Google Fonts</strong>の2つが主な入手先です。</p>
+
+      <div style="display:flex; flex-direction:column; gap:14px; margin-bottom:16px;">
+
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:linear-gradient(135deg,#c30000,#ff4b00); padding:14px 18px; display:flex; align-items:center; gap:12px;">
+            <div style="width:36px; height:36px; background:rgba(255,255,255,0.2); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:900; color:#fff;">A</div>
+            <div>
+              <div style="font-size:14px; font-weight:700; color:#fff;">Adobe Fonts</div>
+              <div style="font-size:11px; color:rgba(255,255,255,0.8);">fonts.adobe.com</div>
+            </div>
+            <span style="margin-left:auto; background:rgba(255,255,255,0.2); color:#fff; font-size:10px; padding:3px 10px; border-radius:10px; font-family:'JetBrains Mono',monospace;">CC契約者は無料</span>
+          </div>
+          <div style="padding:14px 18px; font-size:13px; color:var(--text-sub); line-height:1.9;">
+            Adobe Creative Cloud契約者は<strong>全フォントが無料</strong>で使える。<br>
+            Photoshop内から直接アクティベートできるのが便利。<br>
+            <code>書体 → フォントを追加</code> → ブラウザが開く → フォントをアクティベート → Photoshopで使える<br>
+            <strong style="color:#0891b2;">おすすめ：</strong>Acumin Pro Condensed・Futura PT・Industry
+          </div>
+        </div>
+
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:linear-gradient(135deg,#1a73e8,#34a853); padding:14px 18px; display:flex; align-items:center; gap:12px;">
+            <div style="width:36px; height:36px; background:rgba(255,255,255,0.2); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:900; color:#fff;">G</div>
+            <div>
+              <div style="font-size:14px; font-weight:700; color:#fff;">Google Fonts</div>
+              <div style="font-size:11px; color:rgba(255,255,255,0.8);">fonts.google.com</div>
+            </div>
+            <span style="margin-left:auto; background:rgba(255,255,255,0.2); color:#fff; font-size:10px; padding:3px 10px; border-radius:10px; font-family:'JetBrains Mono',monospace;">完全無料</span>
+          </div>
+          <div style="padding:14px 18px; font-size:13px; color:var(--text-sub); line-height:1.9;">
+            誰でも無料でダウンロードして使える。商用利用もOK。<br>
+            ① fonts.google.com でフォントを検索 → 「Download family」ボタン<br>
+            ② ZIPを解凍 → フォントファイル（.ttf / .otf）をダブルクリックでインストール<br>
+            ③ Photoshopを再起動 → 使えるようになる<br>
+            <strong style="color:#1a73e8;">おすすめ：</strong>Oswald・Noto Sans JP・Dancing Script・Righteous・Bebas Neue
+          </div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#ecfeff; border-left:3px solid #0891b2;">
+        <p style="color:#0c4a6e;"><strong>フォントをインストールしたらPhotoshopを再起動！</strong><br>Photoshopが起動している状態でフォントをインストールしても認識されません。必ず<strong>Photoshopを一度閉じて再起動</strong>してから確認しましょう。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ワークシート -->
+  <div style="background:linear-gradient(135deg,#1e1b4b,#4338ca); border-radius:20px; padding:28px 24px; margin-bottom:24px; text-align:center;">
+    <div style="font-size:11px; color:#a78bfa; font-family:'JetBrains Mono',monospace; margin-bottom:8px; letter-spacing:0.1em;">WORKSHEET</div>
+    <div style="font-size:22px; font-weight:700; color:#fff; margin-bottom:6px;">✏️ ワークシート</div>
+    <div style="font-size:13px; color:rgba(255,255,255,0.75);">解説で学んだことを課題で定着させよう</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="work-card">
+    <div class="work-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#4c1d95,#7c3aed);">Q1</div>
+      <div class="work-title-wrap">
+        <div class="work-subtitle" style="color:#7c3aed;">分類問題</div>
+        <div class="work-title">フォントの種類を当てよう</div>
+      </div>
+      <div class="work-badge" style="background:#ede9fe; color:#7c3aed;">⏱ 5分</div>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#ede9fe; border:1px solid #c4b5fd;">
+        <div class="task-label" style="color:#7c3aed;">📋 課題</div>
+        <div class="task-text">下記の4つのフォントサンプルを見て、それぞれの<strong>種類（ゴシック・明朝・手書き・装飾）</strong>を答えてください。</div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+          <div style="font-family:'Noto Serif JP',serif; font-size:28px; font-weight:700; color:#1e293b; min-width:200px;">上質な暮らし</div>
+          <div style="font-size:12px; color:var(--text-sub);">種類：_______________</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+          <div style="font-family:'Bebas Neue',cursive; font-size:36px; color:#1e293b; min-width:200px;">SPECIAL SALE</div>
+          <div style="font-size:12px; color:var(--text-sub);">種類：_______________</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+          <div style="font-family:'Dancing Script',cursive; font-size:32px; font-weight:700; color:#1e293b; min-width:200px;">Cafe Latte</div>
+          <div style="font-size:12px; color:var(--text-sub);">種類：_______________</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+          <div style="font-family:'Noto Sans JP',sans-serif; font-size:26px; font-weight:700; color:#1e293b; min-width:200px;">転職バナー制作</div>
+          <div style="font-size:12px; color:var(--text-sub);">種類：_______________</div>
+        </div>
+      </div>
+
+      <details style="background:#f8f9fa; border-radius:10px; padding:14px 16px; cursor:pointer; border:1px solid var(--border);">
+        <summary style="font-size:13px; font-weight:700; color:var(--text-sub); list-style:none; display:flex; align-items:center; gap:8px;">
+          <span style="background:#7c3aed; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">答え合わせ</span> クリックして確認
+        </summary>
+        <div style="margin-top:12px; display:flex; flex-direction:column; gap:6px; font-size:12px; color:var(--text-sub); line-height:2;">
+          <div>①「上質な暮らし」→ <strong style="color:#7c3aed;">明朝体</strong>（游明朝・Noto Serif JP）</div>
+          <div>②「SPECIAL SALE」→ <strong style="color:#7c3aed;">装飾体（ディスプレイ）</strong>（Bebas Neue）</div>
+          <div>③「Cafe Latte」→ <strong style="color:#7c3aed;">手書き体（スクリプト）</strong>（Dancing Script）</div>
+          <div>④「転職バナー制作」→ <strong style="color:#7c3aed;">ゴシック体</strong>（游ゴシック・Noto Sans JP）</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="work-card">
+    <div class="work-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#065f46,#059669);">Q2</div>
+      <div class="work-title-wrap">
+        <div class="work-subtitle" style="color:#059669;">選択問題</div>
+        <div class="work-title">バナーに合うフォントを選ぼう</div>
+      </div>
+      <div class="work-badge" style="background:#ecfdf5; color:#059669;">⏱ 8分</div>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#ecfdf5; border:1px solid #86efac;">
+        <div class="task-label" style="color:#059669;">📋 課題</div>
+        <div class="task-text">下記の4つのバナーシーンに対して、最も適したフォントを選んで理由も答えてください。</div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:14px; margin-bottom:16px;">
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:12px; font-weight:700; color:#059669; margin-bottom:10px;">① 焼肉店の夏の食べ放題キャンペーンバナー（にぎやか・食欲をそそる）</div>
+          <div class="choices">
+            <div class="choice">A：游明朝 Light（細くて上品）</div>
+            <div class="choice">B：Bebas Neue / 丸ゴシック Black（太くてポップ）</div>
+            <div class="choice">C：Dancing Script（手書き風・流れる）</div>
+            <div class="choice">D：Helvetica Regular（シンプル・標準）</div>
+          </div>
+          <div style="background:#fff; border-radius:6px; padding:8px 12px; border:1px dashed #e2e8f0; margin-top:8px;">
+            <div style="font-size:11px; color:#94a3b8; font-family:'JetBrains Mono',monospace;">答え：___　理由：</div>
+          </div>
+        </div>
+
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:12px; font-weight:700; color:#059669; margin-bottom:10px;">② 結婚式場の春のブライダルフェアバナー（上品・ロマンチック）</div>
+          <div class="choices">
+            <div class="choice">A：Oswald Bold（縦長・力強い）</div>
+            <div class="choice">B：Bebas Neue（極太・インパクト）</div>
+            <div class="choice">C：Playfair Display Italic ＋ 游明朝（エレガント）</div>
+            <div class="choice">D：丸ゴシック Black（丸みのある太め）</div>
+          </div>
+          <div style="background:#fff; border-radius:6px; padding:8px 12px; border:1px dashed #e2e8f0; margin-top:8px;">
+            <div style="font-size:11px; color:#94a3b8; font-family:'JetBrains Mono',monospace;">答え：___　理由：</div>
+          </div>
+        </div>
+
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:12px; font-weight:700; color:#059669; margin-bottom:10px;">③ スポーツジムの入会キャンペーンバナー（力強い・やる気が出る）</div>
+          <div class="choices">
+            <div class="choice">A：游明朝 Light（繊細・上品）</div>
+            <div class="choice">B：Pacifico（丸みのある手書き体）</div>
+            <div class="choice">C：Oswald / Bebas Neue（コンデンスド・極太）</div>
+            <div class="choice">D：Dancing Script（筆記体・流れる）</div>
+          </div>
+          <div style="background:#fff; border-radius:6px; padding:8px 12px; border:1px dashed #e2e8f0; margin-top:8px;">
+            <div style="font-size:11px; color:#94a3b8; font-family:'JetBrains Mono',monospace;">答え：___　理由：</div>
+          </div>
+        </div>
+
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:12px; font-weight:700; color:#059669; margin-bottom:10px;">④ ハンドメイド雑貨のオンラインショップバナー（手作り感・温かみ）</div>
+          <div class="choices">
+            <div class="choice">A：Bebas Neue（ゴリゴリの太字）</div>
+            <div class="choice">B：Dancing Script / Pacifico（手書き風）</div>
+            <div class="choice">C：Oswald Bold（縦長コンデンスド）</div>
+            <div class="choice">D：Helvetica Bold（クリーン・無機質）</div>
+          </div>
+          <div style="background:#fff; border-radius:6px; padding:8px 12px; border:1px dashed #e2e8f0; margin-top:8px;">
+            <div style="font-size:11px; color:#94a3b8; font-family:'JetBrains Mono',monospace;">答え：___　理由：</div>
+          </div>
+        </div>
+      </div>
+
+      <details style="background:#f8f9fa; border-radius:10px; padding:14px 16px; cursor:pointer; border:1px solid var(--border);">
+        <summary style="font-size:13px; font-weight:700; color:var(--text-sub); list-style:none; display:flex; align-items:center; gap:8px;">
+          <span style="background:#059669; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">答え合わせ</span> クリックして確認
+        </summary>
+        <div style="margin-top:12px; display:flex; flex-direction:column; gap:6px; font-size:12px; color:var(--text-sub); line-height:2;">
+          <div>① → <strong style="color:#059669;">B</strong>（太くてポップなフォントで食欲・にぎやかさを演出）</div>
+          <div>② → <strong style="color:#059669;">C</strong>（エレガントなセリフ体・筆記体でロマンチックな雰囲気に）</div>
+          <div>③ → <strong style="color:#059669;">C</strong>（コンデンスドの極太で力強さ・スピード感を演出）</div>
+          <div>④ → <strong style="color:#059669;">B</strong>（手書き風フォントで温かみ・手作り感を表現）</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="work-card">
+    <div class="work-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#9a3412,#ea580c);">Q3</div>
+      <div class="work-title-wrap">
+        <div class="work-subtitle" style="color:#ea580c;">実践問題</div>
+        <div class="work-title">フォントの組み合わせを作ろう</div>
+      </div>
+      <div class="work-badge" style="background:#fff7ed; color:#ea580c;">⏱ 15分</div>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#fff7ed; border:1px solid #fed7aa;">
+        <div class="task-label" style="color:#ea580c;">📋 課題</div>
+        <div class="task-text">Photoshopで<strong>600×600pxの新規ドキュメント</strong>を作り、下記の3つのテキストを入力してください。フォントと色は自由。ただし<strong>使うフォントは最大2種類</strong>まで！</div>
+      </div>
+
+      <div style="background:#1e1e2e; border-radius:12px; padding:16px 18px; margin-bottom:16px;">
+        <div style="font-size:10px; color:#fb923c; font-family:'JetBrains Mono',monospace; margin-bottom:12px;">入力するテキスト（内容は変えてOK）</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <div style="font-size:11px; color:#fb923c; font-weight:700; flex-shrink:0; width:20px;">①</div>
+            <div>
+              <div style="font-size:12px; color:#ccc;">メインキャッチ（大きめ）</div>
+              <div style="font-size:11px; color:#888;">例：「SUMMER SALE」「特別キャンペーン」など</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <div style="font-size:11px; color:#fb923c; font-weight:700; flex-shrink:0; width:20px;">②</div>
+            <div>
+              <div style="font-size:12px; color:#ccc;">サブテキスト（中くらい）</div>
+              <div style="font-size:11px; color:#888;">例：「最大50%OFF」「期間限定」など</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <div style="font-size:11px; color:#fb923c; font-weight:700; flex-shrink:0; width:20px;">③</div>
+            <div>
+              <div style="font-size:12px; color:#ccc;">小テキスト（小さめ）</div>
+              <div style="font-size:11px; color:#888;">例：「2026.7.1〜7.31」「詳細はこちら」など</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:12px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ 完成後のチェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#ea580c;"></div><div class="check-text">使ったフォントが2種類以内になっている</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#ea580c;"></div><div class="check-text">メイン・サブ・小テキストでフォントサイズに差がある</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#ea580c;"></div><div class="check-text">バナーのジャンルに合ったフォントを選べている</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#ea580c;"></div><div class="check-text">カーニング・トラッキングを意識して調整している</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="work-card">
+    <div class="work-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#1e40af,#0070f3);">Q4</div>
+      <div class="work-title-wrap">
+        <div class="work-subtitle" style="color:#0070f3;">インストール実践</div>
+        <div class="work-title">Google Fontsからフォントを入れてみよう</div>
+      </div>
+      <div class="work-badge" style="background:#eff6ff; color:#0070f3;">⏱ 10分</div>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#eff6ff; border:1px solid #bfdbfe;">
+        <div class="task-label" style="color:#0070f3;">📋 課題</div>
+        <div class="task-text">Google Fontsから<strong>好きなフォントを1つ選んでインストール</strong>し、Photoshopで使えることを確認してください。</div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+        <div style="background:#f8f9fa; border-radius:8px; padding:12px 14px; display:flex; gap:10px; align-items:flex-start;">
+          <div style="width:24px; height:24px; border-radius:50%; background:#0070f3; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">1</div>
+          <p style="font-size:12px; color:var(--text-sub); line-height:1.7;"><strong>fonts.google.com</strong> を開く → 検索欄に好きなフォント名を入力（例：「Oswald」「Dancing Script」）</p>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:12px 14px; display:flex; gap:10px; align-items:flex-start;">
+          <div style="width:24px; height:24px; border-radius:50%; background:#0070f3; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">2</div>
+          <p style="font-size:12px; color:var(--text-sub); line-height:1.7;">フォントをクリック → 右上の「<strong>Download family</strong>」ボタンをクリック</p>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:12px 14px; display:flex; gap:10px; align-items:flex-start;">
+          <div style="width:24px; height:24px; border-radius:50%; background:#0070f3; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">3</div>
+          <p style="font-size:12px; color:var(--text-sub); line-height:1.7;">ZIPファイルを解凍 → <code>.ttf</code> または <code>.otf</code> ファイルを<strong>ダブルクリック</strong> → 「インストール」をクリック</p>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:12px 14px; display:flex; gap:10px; align-items:flex-start;">
+          <div style="width:24px; height:24px; border-radius:50%; background:#0070f3; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">4</div>
+          <p style="font-size:12px; color:var(--text-sub); line-height:1.7;"><strong>Photoshopを再起動</strong> → 文字ツール（T）でフォント名を検索 → 使えることを確認！</p>
+        </div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:12px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#0070f3;"></div><div class="check-text">Google Fontsからフォントをダウンロードできた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#0070f3;"></div><div class="check-text">インストールしてPhotoshopで使えることを確認できた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- まとめ -->
+  <div style="background:#fff; border-radius:16px; border:1px solid var(--border); padding:24px; margin-top:8px;">
+    <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:16px;">📚 Lesson13 フォント早見表</div>
+    <table class="summary-table">
+      <thead><tr style="background:#4338ca; color:#fff;"><th>種類</th><th>代表フォント</th><th>印象・雰囲気</th><th>向いているジャンル</th></tr></thead>
+      <tbody>
+        <tr><td><strong>ゴシック体<br>サンセリフ</strong></td><td>游ゴシック<br>Helvetica / Arial<br>Noto Sans JP</td><td>シンプル・モダン<br>読みやすい</td><td>IT・転職・Webバナー<br>何でも使える定番</td></tr>
+        <tr><td><strong>明朝体<br>セリフ体</strong></td><td>游明朝<br>Playfair Display<br>Noto Serif JP</td><td>上品・高級感<br>伝統的・格調</td><td>ブランド・ファッション<br>雑誌風・和風</td></tr>
+        <tr><td><strong>コンデンスド<br>（縦長系）</strong></td><td>Oswald<br>Bebas Neue<br>Acumin Pro Cond</td><td>インパクト<br>力強い・スタイリッシュ</td><td>セール・スポーツ<br>Lesson06・07</td></tr>
+        <tr><td><strong>ラウンド<br>（丸み系）</strong></td><td>Righteous<br>Fredoka One<br>丸ゴシック</td><td>ポップ・かわいい<br>カジュアル・温かみ</td><td>子供向け・食品<br>Lesson07</td></tr>
+        <tr><td><strong>手書き体<br>スクリプト</strong></td><td>Dancing Script<br>Pacifico<br>Great Vibes</td><td>手作り感・温かみ<br>おしゃれ・個性的</td><td>カフェ・ウェディング<br>Lesson02・03</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="text-align:center; margin-top:32px; font-size:12px; color:#94a3b8;">Photoshop チュートリアル · Lesson 13｜フォントの種類 完全解説＋ワークシート</div>
+
+</div>
+</body>
+</html>
