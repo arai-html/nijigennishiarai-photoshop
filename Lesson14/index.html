@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商工会議所 交流会 有効活用ガイド</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --text: #1a202c;
+    --text-sub: #4a5568;
+    --border: #e2e8f0;
+    --navy: #1a365d;
+    --blue: #2b6cb0;
+    --blue-light: #ebf8ff;
+    --gold: #d69e2e;
+    --gold-light: #fffff0;
+    --green: #276749;
+    --green-light: #f0fff4;
+    --red: #c53030;
+    --red-light: #fff5f5;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 40px 20px 80px; }
+  .container { max-width: 800px; margin: 0 auto; }
+
+  /* ヒーロー */
+  .hero { background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 60%, #4299e1 100%); border-radius: 20px; padding: 48px 40px; margin-bottom: 36px; position: relative; overflow: hidden; }
+  .hero::before { content: '🤝'; position: absolute; right: 36px; top: 24px; font-size: 80px; opacity: 0.15; }
+  .hero-content { position: relative; }
+  .hero-label { display: inline-block; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; letter-spacing: 0.06em; }
+  .hero h1 { font-size: 28px; font-weight: 900; color: #fff; line-height: 1.3; margin-bottom: 10px; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.85); }
+  .hero-points { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .hero-point { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 12px; padding: 4px 12px; border-radius: 20px; font-weight: 700; }
+
+  /* カード */
+  .card { background: var(--surface); border-radius: 18px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .card-header { padding: 18px 24px; display: flex; align-items: center; gap: 14px; border-bottom: 2px solid var(--border); }
+  .card-icon { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .card-num { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; margin-bottom: 2px; }
+  .card-title { font-size: 18px; font-weight: 700; }
+  .card-body { padding: 24px; }
+
+  /* タイムライン（自己紹介60秒） */
+  .timeline { display: flex; flex-direction: column; gap: 0; margin: 16px 0; }
+  .tl-item { display: flex; gap: 16px; position: relative; }
+  .tl-item:not(:last-child)::after { content: ''; position: absolute; left: 23px; top: 46px; bottom: -16px; width: 2px; background: var(--border); }
+  .tl-left { flex-shrink: 0; text-align: center; width: 46px; }
+  .tl-dot { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; }
+  .tl-time { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-sub); margin-top: 4px; }
+  .tl-content { flex: 1; background: #f8f9fa; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+  .tl-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .tl-desc { font-size: 13px; color: var(--text-sub); line-height: 1.7; }
+  .tl-example { background: #fff; border-radius: 8px; padding: 10px 12px; margin-top: 10px; border-left: 3px solid; }
+  .tl-example-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; margin-bottom: 4px; }
+  .tl-example-text { font-size: 12px; color: var(--text-sub); line-height: 1.7; }
+
+  /* ポイントリスト */
+  .point-list { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+  .point-item { display: flex; gap: 12px; align-items: flex-start; background: #f8f9fa; border-radius: 10px; padding: 12px 14px; }
+  .point-icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .point-text { font-size: 13px; color: var(--text-sub); line-height: 1.7; flex: 1; padding-top: 2px; }
+  .point-text strong { color: var(--text); }
+
+  /* ヒント */
+  .tip { border-radius: 10px; padding: 14px 16px; margin-top: 14px; }
+  .tip p { font-size: 13px; line-height: 1.75; }
+
+  /* NG/OK比較 */
+  .ngok { display: flex; gap: 12px; margin: 16px 0; flex-wrap: wrap; }
+  .ngok-box { flex: 1; min-width: 200px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+  .ngok-header { padding: 8px 14px; font-size: 12px; font-weight: 700; }
+  .ngok-body { padding: 12px 14px; font-size: 13px; color: var(--text-sub); line-height: 1.8; }
+
+  /* チェックリスト */
+  .checklist { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+  .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: #f8f9fa; border-radius: 8px; }
+  .check-box { width: 20px; height: 20px; border-radius: 5px; border: 2px solid #cbd5e0; flex-shrink: 0; margin-top: 2px; }
+  .check-text { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
+
+  /* 数字強調 */
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+  .stat-box { background: var(--navy); border-radius: 12px; padding: 16px; text-align: center; }
+  .stat-num { font-size: 32px; font-weight: 900; font-family: 'JetBrains Mono', monospace; color: #fff; line-height: 1; margin-bottom: 4px; }
+  .stat-unit { font-size: 14px; color: rgba(255,255,255,0.7); }
+  .stat-label { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+  /* 差別化ワード */
+  .diff-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 14px 0; }
+  .diff-box { background: var(--blue-light); border: 1px solid #bee3f8; border-radius: 10px; padding: 12px; text-align: center; }
+  .diff-label { font-size: 11px; color: var(--blue); font-weight: 700; font-family: 'JetBrains Mono', monospace; margin-bottom: 6px; }
+  .diff-example { font-size: 13px; color: var(--navy); font-weight: 700; }
+
+  code { background: #edf2f7; color: #2d3748; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 20px; }
+    .hero h1 { font-size: 22px; }
+    .card-body { padding: 16px; }
+    .stat-grid { grid-template-columns: 1fr; }
+    .diff-grid { grid-template-columns: 1fr; }
+    .ngok { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-label">商工会議所 交流会ガイド</div>
+      <h1>🤝 交流会を最大限に<br>活用するための完全ガイド</h1>
+      <p>準備・当日の立ち回り・フォローまで。交流会をビジネスチャンスに変えるノウハウをまとめました。</p>
+      <div class="hero-points">
+        <span class="hero-point">📋 事前準備</span>
+        <span class="hero-point">🎤 自己紹介60秒</span>
+        <span class="hero-point">💬 当日のコツ</span>
+        <span class="hero-point">📩 フォローアップ</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 数字で見る目標 -->
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="stat-num">10<span class="stat-unit" style="font-size:18px;">〜</span>15</div>
+      <div class="stat-label">目標名刺交換数（社）</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">10</div>
+      <div class="stat-unit">分</div>
+      <div class="stat-label">1社あたりの交流時間</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">60</div>
+      <div class="stat-unit">秒</div>
+      <div class="stat-label">自己紹介の目標時間</div>
+    </div>
+  </div>
+
+  <!-- 1. 事前準備 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:#ebf8ff;">📋</div>
+      <div>
+        <div class="card-num" style="color:#2b6cb0;">STEP 01</div>
+        <div class="card-title">交流会前の事前準備</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p style="font-size:14px; color:var(--text-sub); line-height:1.8; margin-bottom:20px;">当日ぶっつけ本番はNG。<strong>事前にターゲットを絞っておく</strong>ことで、限られた時間を最大限に使えます。</p>
+
+      <div class="point-list">
+        <div class="point-item">
+          <div class="point-icon" style="background:#ebf8ff;">👥</div>
+          <div class="point-text"><strong>名刺交換したい相手を事前にピックアップ</strong><br>参加者リストが公開されている場合は事前に確認し、「この人とは絶対に話したい」という相手を3〜5人に絞っておく。当日は優先してその相手を探す。</div>
+        </div>
+        <div class="point-item">
+          <div class="point-icon" style="background:#f0fff4;">🎯</div>
+          <div class="point-text"><strong>相手の目的を事前に想定する</strong><br>「この人は何を目的に来ているのか？」を想像しておく。<br>→ 新規開拓？情報収集？人脈づくり？ 相手の目的を知ることで話が弾みやすくなる。</div>
+        </div>
+        <div class="point-item">
+          <div class="point-icon" style="background:#fffff0;">📇</div>
+          <div class="point-text"><strong>名刺を十分に用意する</strong><br>目標15社なら<strong>20枚以上</strong>を用意。名刺入れに入れておき、すぐ出せるようにしておく。名刺切れは機会損失。</div>
+        </div>
+        <div class="point-item">
+          <div class="point-icon" style="background:#fff5f5;">🎤</div>
+          <div class="point-text"><strong>自己紹介を事前に練習する</strong><br>60秒の自己紹介を声に出して練習しておく。本番で焦らないために。次のSTEP02で構成を確認しよう。</div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#ebf8ff; border-left:3px solid #2b6cb0;">
+        <p style="color:#1a365d;"><strong>ターゲットの絞り方：</strong>「10〜15社」という目標はあくまで目安。質の高い会話が3社できれば十分なこともある。ターゲットを絞った上で、残り時間で出会いを広げるイメージで動こう。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 自己紹介60秒 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:#fffff0;">🎤</div>
+      <div>
+        <div class="card-num" style="color:#d69e2e;">STEP 02</div>
+        <div class="card-title">自己紹介60秒の構成</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p style="font-size:14px; color:var(--text-sub); line-height:1.8; margin-bottom:20px;">交流会での自己紹介は<strong>60秒が目安</strong>。3つのパートで構成します。短すぎても長すぎてもNG。相手が「もっと聞きたい」と思うくらいがちょうどいい。</p>
+
+      <div class="timeline">
+
+        <!-- つかみ10秒 -->
+        <div class="tl-item">
+          <div class="tl-left">
+            <div class="tl-dot" style="background:#e53e3e;">①</div>
+            <div class="tl-time">10秒</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-title" style="color:#c53030;">つかみ（インパクトのある一言）</div>
+            <div class="tl-desc">最初の10秒で相手の興味を引く。名前＋記憶に残るキーワードを入れる。「また話したい」と思わせる第一印象が大事。</div>
+            <div class="tl-example" style="border-color:#c53030;">
+              <div class="tl-example-label" style="color:#c53030;">✏️ 例文</div>
+              <div class="tl-example-text">「○○（名前）と申します。一言でいうと、<strong>中小企業のWebを売上につながる仕組みに変える</strong>専門家です。」</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 仕事内容20秒 -->
+        <div class="tl-item">
+          <div class="tl-left">
+            <div class="tl-dot" style="background:#2b6cb0;">②</div>
+            <div class="tl-time">20秒</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-title" style="color:#2b6cb0;">仕事内容（誰に・何を・どのように）</div>
+            <div class="tl-desc">「誰に」「何を」「どのように」の3点を明確に。抽象的な説明はNG。具体的であるほど相手は紹介しやすくなる。</div>
+            <div class="tl-example" style="border-color:#2b6cb0;">
+              <div class="tl-example-label" style="color:#2b6cb0;">✏️ 例文</div>
+              <div class="tl-example-text">「主に<strong>飲食店・美容室など店舗ビジネスを経営している方</strong>に対して、<strong>ホームページ制作とSNS運用</strong>を通じて、<strong>新規集客を月20件増やす</strong>支援をしています。」</div>
+            </div>
+            <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+              <span style="background:#ebf8ff; color:#2b6cb0; font-size:11px; font-weight:700; padding:3px 10px; border-radius:10px;">👥 誰に → ターゲット</span>
+              <span style="background:#ebf8ff; color:#2b6cb0; font-size:11px; font-weight:700; padding:3px 10px; border-radius:10px;">📦 何を → サービス内容</span>
+              <span style="background:#ebf8ff; color:#2b6cb0; font-size:11px; font-weight:700; padding:3px 10px; border-radius:10px;">⚙️ どのように → 方法・結果</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 特徴・お得情報20秒 -->
+        <div class="tl-item">
+          <div class="tl-left">
+            <div class="tl-dot" style="background:#276749;">③</div>
+            <div class="tl-time">20秒</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-title" style="color:#276749;">特徴・お得情報（差別化ポイント）</div>
+            <div class="tl-desc">他と何が違うのか、今だけのお得情報があるかを伝える。相手が「紹介したい！」と思うきっかけになる。</div>
+            <div class="tl-example" style="border-color:#276749;">
+              <div class="tl-example-label" style="color:#276749;">✏️ 例文</div>
+              <div class="tl-example-text">「弊社の特徴は<strong>制作後も月1回のレポートで効果を数値でお伝えする</strong>ことです。今月中にご相談いただいた方には<strong>無料のサイト診断</strong>もご提供しています。」</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- メッセージ10秒 -->
+        <div class="tl-item">
+          <div class="tl-left">
+            <div class="tl-dot" style="background:#d69e2e;">④</div>
+            <div class="tl-time">10秒</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-title" style="color:#d69e2e;">クロージングメッセージ</div>
+            <div class="tl-desc">最後に「どんな人を紹介してほしいか」または「今日話したいこと」を一言添える。紹介につながりやすくなる。</div>
+            <div class="tl-example" style="border-color:#d69e2e;">
+              <div class="tl-example-label" style="color:#d69e2e;">✏️ 例文</div>
+              <div class="tl-example-text">「もし<strong>集客に悩んでいる店舗オーナーの方</strong>がいらっしゃれば、ぜひご紹介ください。今日はどうぞよろしくお願いします！」</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="tip" style="background:#fffff0; border-left:3px solid #d69e2e;">
+        <p style="color:#744210;"><strong>練習のコツ：</strong>スマホで録音して聞き返してみる。「えー」「あのー」が多すぎないか、60秒に収まっているかをチェック。家族や友人に聞いてもらうのも効果的。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 交流のコツ -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:#f0fff4;">💬</div>
+      <div>
+        <div class="card-num" style="color:#276749;">STEP 03</div>
+        <div class="card-title">当日の交流のコツ</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p style="font-size:14px; color:var(--text-sub); line-height:1.8; margin-bottom:20px;">交流会は<strong>商談会ではありません</strong>。まずは「この人と仕事したい」と思ってもらう関係づくりが目的です。</p>
+
+      <!-- コツ一覧 -->
+      <div class="point-list">
+        <div class="point-item">
+          <div class="point-icon" style="background:#f0fff4;">👂</div>
+          <div class="point-text"><strong>相手の自己紹介をしっかり聞く</strong><br>自分が話すより相手の話を引き出すことを意識する。「どんなお客様が多いですか？」「最近どんな案件が多いですか？」など質問で会話を広げる。</div>
+        </div>
+        <div class="point-item">
+          <div class="point-icon" style="background:#fffff0;">⏱</div>
+          <div class="point-text"><strong>1社10分を目安に動く</strong><br>長居しすぎると他の出会いを逃す。話が盛り上がっても「また改めてご連絡させてください！」と切り上げる勇気を持つ。</div>
+        </div>
+        <div class="point-item">
+          <div class="point-icon" style="background:#ebf8ff;">✨</div>
+          <div class="point-text"><strong>差別化ワードを織り交ぜる</strong><br>会話の中で自然に自分の強みや特徴を伝える。「実は〜が得意で」「〜の分野では」など。売り込みにならないよう自然に入れるのがポイント。</div>
+        </div>
+        <div class="point-item">
+          <div class="point-icon" style="background:#fff5f5;">🏷</div>
+          <div class="point-text"><strong>名刺には一言メモを書く</strong><br>もらった名刺の裏に「〇〇に興味あり」「紹介できそう」など一言メモ。後で見返したときに話した内容を思い出しやすくなる。</div>
+        </div>
+      </div>
+
+      <!-- 差別化の方法 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:20px 0 12px;">差別化が難しい場合の解決策</div>
+      <p style="font-size:13px; color:var(--text-sub); line-height:1.8; margin-bottom:14px;">「うちのサービスは他社と同じで差別化できない…」という場合は<strong>3つの軸で差別化</strong>しましょう。</p>
+
+      <div class="diff-grid">
+        <div class="diff-box">
+          <div class="diff-label">📍 エリア</div>
+          <div class="diff-example">「○○市専門」<br>「地域密着型」</div>
+        </div>
+        <div class="diff-box">
+          <div class="diff-label">🏭 得意業界</div>
+          <div class="diff-example">「飲食店専門」<br>「医療・介護特化」</div>
+        </div>
+        <div class="diff-box">
+          <div class="diff-label">⚙️ サービス</div>
+          <div class="diff-example">「即日対応」<br>「定額制・予算固定」</div>
+        </div>
+      </div>
+
+      <!-- NG/OK -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:20px 0 12px;">交流会でのNG・OK行動</div>
+      <div class="ngok">
+        <div class="ngok-box">
+          <div class="ngok-header" style="background:#fff5f5; color:#c53030;">❌ NG行動</div>
+          <div class="ngok-body">
+            ・最初から営業トークをする<br>
+            ・名刺を渡すだけで会話しない<br>
+            ・同業者とだけ話して終わる<br>
+            ・スマホを見ながら話す<br>
+            ・相手の話を遮って自分の話をする<br>
+            ・1社に長居しすぎて他を回れない
+          </div>
+        </div>
+        <div class="ngok-box">
+          <div class="ngok-header" style="background:#f0fff4; color:#276749;">✅ OK行動</div>
+          <div class="ngok-body">
+            ・まず相手の話をしっかり聞く<br>
+            ・「どんなお客様が多いですか？」と質問<br>
+            ・異業種の人とも積極的に話す<br>
+            ・名刺に一言メモを書く<br>
+            ・自然に自分の強みを会話に入れる<br>
+            ・10分を目安に次の人へ移動する
+          </div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#f0fff4; border-left:3px solid #276749;">
+        <p style="color:#1a4731;"><strong>交流会は「商談会」ではない：</strong>その場で契約を取ろうとしないこと。目的は<strong>「また会いたい」と思ってもらう関係づくり</strong>。ビジネスは後から自然についてくる。まずは「この人面白い・信頼できそう」と思ってもらうことを優先しよう。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. フォローアップ -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:#faf5ff;">📩</div>
+      <div>
+        <div class="card-num" style="color:#6b46c1;">STEP 04</div>
+        <div class="card-title">交流会後のフォローアップ</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p style="font-size:14px; color:var(--text-sub); line-height:1.8; margin-bottom:20px;">交流会の価値は<strong>当日だけではなく、その後のフォロー</strong>で決まります。サンクスメールとSNS接続を必ず行いましょう。</p>
+
+      <!-- フォローの手順 -->
+      <div class="point-list">
+        <div class="point-item">
+          <div class="point-icon" style="background:#faf5ff;">📧</div>
+          <div class="point-text">
+            <strong>交流会当日中にサンクスメールを送る</strong><br>
+            「今日はお会いできて嬉しかった」という内容で。長文は不要。<strong>当日中か翌朝まで</strong>に送るのがポイント（記憶が新鮮なうちに）。
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-icon" style="background:#ebf8ff;">🔗</div>
+          <div class="point-text">
+            <strong>SNSでつながる（LinkedIn・Facebook等）</strong><br>
+            メールと合わせてSNSのつながり申請を送る。SNSがあることで相手の近況がわかり、次の会話のきっかけになる。
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-icon" style="background:#f0fff4;">📅</div>
+          <div class="point-text">
+            <strong>1〜2週間後に軽いフォローを入れる</strong><br>
+            「先日の交流会でお話した件ですが…」という形で、何か役立つ情報やイベントの案内を送ってみる。売り込みではなく<strong>価値提供</strong>を意識する。
+          </div>
+        </div>
+      </div>
+
+      <!-- サンクスメール例 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:20px 0 12px;">📝 サンクスメールの例文</div>
+      <div style="background:#f8f9fa; border-radius:12px; padding:18px; border:1px solid var(--border); margin-bottom:16px;">
+        <div style="font-size:11px; color:#6b46c1; font-family:'JetBrains Mono',monospace; margin-bottom:10px; font-weight:700;">件名：本日の交流会にてご挨拶させていただきました ○○（名前）です</div>
+        <div style="font-size:13px; color:var(--text-sub); line-height:2; white-space:pre-line;">○○様
+
+本日の交流会でお名刺をいただきました、△△（会社名）の○○と申します。
+
+○○様の「□□（相手の仕事・印象的だったこと）」というお話がとても印象的でした。
+
+ぜひ一度、改めてお話できる機会をいただけますと幸いです。
+
+引き続きどうぞよろしくお願いいたします。
+
+○○（名前）
+△△（会社名）
+TEL: xxx-xxxx-xxxx</div>
+      </div>
+
+      <div class="tip" style="background:#faf5ff; border-left:3px solid #6b46c1;">
+        <p style="color:#44337a;"><strong>フォローのポイント：</strong>相手の名前・話した内容を必ず入れる。テンプレートそのままでは「大量送信してるな」と思われる。<strong>一人ひとりに合わせた一言</strong>を添えるだけで印象が大きく変わる。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. オンライン交流会のコツ -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:#ebf8ff;">💻</div>
+      <div>
+        <div class="card-num" style="color:#2b6cb0;">STEP 05</div>
+        <div class="card-title">オンライン交流会のコツ</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p style="font-size:14px; color:var(--text-sub); line-height:1.8; margin-bottom:20px;">オンライン交流会はリアルとは異なるコツが必要です。画面越しでも<strong>印象を良くする工夫</strong>をしましょう。</p>
+
+      <div class="point-list">
+        <div class="point-item">
+          <div class="point-icon" style="background:#ebf8ff;">💡</div>
+          <div class="point-text">
+            <strong>照明・背景を整える</strong><br>
+            顔に光が当たるよう照明を正面に。背景はシンプルな壁か、バーチャル背景（会社ロゴ入りがベスト）。暗い・散らかった背景はそれだけで信頼感が下がる。
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-icon" style="background:#f0fff4;">🎙</div>
+          <div class="point-text">
+            <strong>マイク・音声品質に注意</strong><br>
+            雑音が多い場所は避ける。できればイヤホンマイクを使う。話すとき以外はミュートにするのがマナー。
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-icon" style="background:#fffff0;">👀</div>
+          <div class="point-text">
+            <strong>カメラを見て話す（目線に注意）</strong><br>
+            画面上の相手の顔を見がちだが、相手には「目線が下を向いている」ように見える。意識的に<strong>カメラのレンズを見て</strong>話すと「目が合っている」感じになる。
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-icon" style="background:#fff5f5;">📋</div>
+          <div class="point-text">
+            <strong>チャット機能を活用する</strong><br>
+            URLやSNSアカウントはチャットに貼る。自己紹介後すぐにチャットでLPやポートフォリオのリンクを送ると興味を持ってもらいやすい。
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-icon" style="background:#ebf8ff;">⚡</div>
+          <div class="point-text">
+            <strong>オンラインこそ簡潔に話す</strong><br>
+            オンラインは対面より疲れやすく集中力が途切れやすい。自己紹介は<strong>対面より10秒短め</strong>を意識。要点を絞って話す。
+          </div>
+        </div>
+      </div>
+
+      <!-- オンラインチェックリスト -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:20px 0 12px;">オンライン交流会 直前チェックリスト</div>
+      <div class="checklist">
+        <div class="check-item"><div class="check-box"></div><div class="check-text">カメラ・マイクの動作確認済み</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">背景・照明を整えた</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">自己紹介を50秒以内に収めた</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">チャットに貼るURLを準備した</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">SNSのプロフィールを最新にした</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">通知をオフにした（ポップアップが映り込まないよう）</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 全体チェックリスト -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:#fffff0;">⭐</div>
+      <div>
+        <div class="card-num" style="color:#d69e2e;">SUMMARY</div>
+        <div class="card-title">交流会 完全チェックリスト</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div>
+          <div style="font-size:12px; font-weight:700; color:#2b6cb0; font-family:'JetBrains Mono',monospace; margin-bottom:8px;">📋 事前準備</div>
+          <div class="checklist" style="margin-top:0;">
+            <div class="check-item"><div class="check-box"></div><div class="check-text">名刺を20枚以上用意した</div></div>
+            <div class="check-item"><div class="check-box"></div><div class="check-text">話したいターゲットを3〜5人ピックアップした</div></div>
+            <div class="check-item"><div class="check-box"></div><div class="check-text">自己紹介60秒を練習した</div></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px; font-weight:700; color:#276749; font-family:'JetBrains Mono',monospace; margin-bottom:8px;">💬 当日</div>
+          <div class="checklist" style="margin-top:0;">
+            <div class="check-item"><div class="check-box"></div><div class="check-text">まず相手の話を聞くことを意識した</div></div>
+            <div class="check-item"><div class="check-box"></div><div class="check-text">1社10分を目安に動いた</div></div>
+            <div class="check-item"><div class="check-box"></div><div class="check-text">名刺の裏にメモを書いた</div></div>
+            <div class="check-item"><div class="check-box"></div><div class="check-text">差別化ワードを自然に入れた</div></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px; font-weight:700; color:#6b46c1; font-family:'JetBrains Mono',monospace; margin-bottom:8px;">📩 交流会後</div>
+          <div class="checklist" style="margin-top:0;">
+            <div class="check-item"><div class="check-box"></div><div class="check-text">当日中にサンクスメールを送った</div></div>
+            <div class="check-item"><div class="check-box"></div><div class="check-text">SNSでつながり申請を送った</div></div>
+            <div class="check-item"><div class="check-box"></div><div class="check-text">1〜2週間後のフォローを予定した</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:16px; font-size:12px; color:#94a3b8;">商工会議所 交流会 有効活用ガイド</div>
+
+</div>
+</body>
+</html>
