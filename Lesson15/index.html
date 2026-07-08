@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ペンツール練習｜Photoshop Lesson 15</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --text: #1a1a2e;
+    --text-sub: #4a5568;
+    --border: #e2e8f0;
+    --blue: #0070f3;
+    --blue-light: #eff6ff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 40px 20px 80px; }
+  .container { max-width: 860px; margin: 0 auto; }
+
+  /* ヒーロー */
+  .hero { background: linear-gradient(135deg, #0c4a6e 0%, #0284c7 50%, #38bdf8 100%); border-radius: 20px; padding: 48px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::after { content: '✏️'; position: absolute; right: 40px; top: 24px; font-size: 72px; opacity: 0.18; }
+  .hero-content { position: relative; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+  .hero h1 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.85); margin-bottom: 18px; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-tag { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+
+  /* 難易度バッジ */
+  .level { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+
+  /* 練習カード */
+  .practice-card { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 32px; }
+  .practice-header { padding: 18px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .practice-title-wrap { display: flex; align-items: center; gap: 14px; }
+  .practice-num { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .practice-title { font-size: 17px; font-weight: 700; }
+  .practice-body { padding: 24px; }
+
+  /* SVGエリア */
+  .svg-wrap { background: #f0f6ff; border-radius: 14px; border: 2px dashed #93c5fd; display: flex; align-items: center; justify-content: center; padding: 20px; margin-bottom: 16px; }
+  .svg-wrap svg { max-width: 100%; height: auto; }
+
+  /* ポイントリスト */
+  .points { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+  .point { display: flex; gap: 10px; align-items: flex-start; background: #f8f9fa; border-radius: 8px; padding: 10px 14px; }
+  .point-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .point-text { font-size: 13px; color: var(--text-sub); line-height: 1.6; }
+  .point-text strong { color: var(--text); }
+
+  /* 操作手順 */
+  .steps { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+  .step { display: flex; gap: 10px; align-items: flex-start; }
+  .step-num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .step-text { font-size: 13px; color: var(--text-sub); line-height: 1.6; padding-top: 3px; }
+
+  /* ヒント */
+  .tip { border-radius: 10px; padding: 12px 16px; margin-top: 14px; }
+  .tip p { font-size: 13px; line-height: 1.75; }
+
+  /* チェックリスト */
+  .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; }
+  .check-item { display: flex; gap: 10px; align-items: flex-start; }
+  .check-box { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border); flex-shrink: 0; margin-top: 3px; }
+  .check-text { font-size: 12px; color: var(--text-sub); }
+
+  code { background: #eff6ff; color: #1e40af; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  /* アンカーポイント凡例 */
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin: 12px 0; padding: 10px 14px; background: #f8f9fa; border-radius: 8px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-sub); }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 20px; }
+    .hero h1 { font-size: 22px; }
+    .practice-body { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Photoshop · Lesson 15</div>
+      <h1>✏️ ペンツール<br>練習ドリル</h1>
+      <p>直線→曲線→複合形状の順番でステップアップ。各問題のパスをPhotoshopでトレースしよう。</p>
+      <div class="hero-tags">
+        <span class="hero-tag">直線パス</span>
+        <span class="hero-tag">曲線パス</span>
+        <span class="hero-tag">数字・文字トレース</span>
+        <span class="hero-tag">複合シェイプ</span>
+        <span class="hero-tag">バナーへの応用</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 凡例 -->
+  <div style="background:#fff; border-radius:12px; border:1px solid var(--border); padding:14px 18px; margin-bottom:28px;">
+    <div style="font-size:12px; font-weight:700; color:var(--text); margin-bottom:10px;">🔵 図の見方</div>
+    <div class="legend">
+      <div class="legend-item">
+        <svg width="16" height="16"><rect x="4" y="4" width="8" height="8" fill="none" stroke="#0284c7" stroke-width="2"/></svg>
+        アンカーポイント（クリックで追加）
+      </div>
+      <div class="legend-item">
+        <svg width="16" height="16"><circle cx="8" cy="8" r="4" fill="none" stroke="#0284c7" stroke-width="2"/></svg>
+        スムーズポイント（ドラッグで曲線）
+      </div>
+      <div class="legend-item">
+        <svg width="20" height="16"><line x1="2" y1="8" x2="18" y2="8" stroke="#0284c7" stroke-width="2" stroke-dasharray="3,2"/></svg>
+        ハンドル（方向線）
+      </div>
+      <div class="legend-item">
+        <svg width="16" height="16"><circle cx="8" cy="8" r="4" fill="none" stroke="#f472b6" stroke-width="1.5" stroke-dasharray="2,2"/></svg>
+        始点（ここからスタート）
+      </div>
+    </div>
+  </div>
+
+  <!-- PRACTICE 1: 直線の基本 -->
+  <div class="practice-card">
+    <div class="practice-header">
+      <div class="practice-title-wrap">
+        <div class="practice-num" style="background:linear-gradient(135deg,#059669,#34d399);">1</div>
+        <div>
+          <div class="practice-title">直線パスで三角形を描く</div>
+          <div style="font-size:12px; color:var(--text-sub);">クリックだけで描ける直線の基本</div>
+        </div>
+      </div>
+      <span class="level" style="background:#dcfce7; color:#15803d;">⭐ 初級</span>
+    </div>
+    <div class="practice-body">
+      <div class="svg-wrap">
+        <svg width="340" height="280" viewBox="0 0 340 280">
+          <!-- グリッド -->
+          <defs>
+            <pattern id="grid1" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#dbeafe" stroke-width="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="340" height="280" fill="url(#grid1)"/>
+
+          <!-- 三角形 -->
+          <polygon points="170,30 310,240 30,240" fill="rgba(14,165,233,0.08)" stroke="#0284c7" stroke-width="2.5"/>
+
+          <!-- ハンドルなし（直線のみ） -->
+          <!-- アンカーポイント -->
+          <rect x="162" y="22" width="16" height="16" fill="white" stroke="#0284c7" stroke-width="2" rx="2"/>
+          <rect x="302" y="232" width="16" height="16" fill="white" stroke="#0284c7" stroke-width="2" rx="2"/>
+          <rect x="22" y="232" width="16" height="16" fill="white" stroke="#0284c7" stroke-width="2" rx="2"/>
+
+          <!-- 番号 -->
+          <circle cx="170" cy="30" r="10" fill="#0284c7" opacity="0.8"/>
+          <text x="170" y="34" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="JetBrains Mono">1</text>
+          <circle cx="310" cy="240" r="10" fill="#0284c7" opacity="0.8"/>
+          <text x="310" y="244" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="JetBrains Mono">2</text>
+          <circle cx="30" cy="240" r="10" fill="#0284c7" opacity="0.8"/>
+          <text x="30" y="244" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="JetBrains Mono">3</text>
+
+          <!-- 始点マーカー -->
+          <circle cx="170" cy="30" r="16" fill="none" stroke="#f472b6" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.8"/>
+          <text x="190" y="20" fill="#f472b6" font-size="11" font-family="Noto Sans JP">← スタート</text>
+
+          <!-- 矢印 -->
+          <path d="M 178 48 L 290 220" stroke="#f472b6" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow1)" opacity="0.5"/>
+          <path d="M 300 244 L 50 244" stroke="#f472b6" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+          <path d="M 38 232 L 162 52" stroke="#f472b6" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+
+          <text x="170" y="270" text-anchor="middle" fill="#64748b" font-size="12" font-family="Noto Sans JP">すべて クリックだけ で描ける</text>
+        </svg>
+      </div>
+
+      <div class="points">
+        <div class="point"><div class="point-icon">📌</div><div class="point-text">ペンツール（P）を選択 → オプションバーで<strong>「パス」モード</strong>を選ぶ</div></div>
+        <div class="point"><div class="point-icon">🖱</div><div class="point-text">①②③の順に<strong>クリックするだけ</strong>（ドラッグしない）→ 最後に①をクリックして閉じる</div></div>
+        <div class="point"><div class="point-icon">💡</div><div class="point-text"><code>Shift</code>を押しながらクリックすると水平・垂直・45°に固定できる</div></div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">パスが閉じた（点線の丸マークが出た）</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">Cmd/Ctrl+Enterで選択範囲に変換できた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRACTICE 2: 直線応用 -->
+  <div class="practice-card">
+    <div class="practice-header">
+      <div class="practice-title-wrap">
+        <div class="practice-num" style="background:linear-gradient(135deg,#0284c7,#38bdf8);">2</div>
+        <div>
+          <div class="practice-title">直線パスで星を描く</div>
+          <div style="font-size:12px; color:var(--text-sub);">クリックの繰り返し・10点のアンカー</div>
+        </div>
+      </div>
+      <span class="level" style="background:#dcfce7; color:#15803d;">⭐ 初級</span>
+    </div>
+    <div class="practice-body">
+      <div class="svg-wrap">
+        <svg width="320" height="300" viewBox="0 0 320 300">
+          <defs>
+            <pattern id="grid2" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#dbeafe" stroke-width="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="320" height="300" fill="url(#grid2)"/>
+
+          <!-- 星形 -->
+          <polygon points="160,20 190,100 275,100 208,150 232,232 160,185 88,232 112,150 45,100 130,100" fill="rgba(234,179,8,0.12)" stroke="#d69e2e" stroke-width="2.5"/>
+
+          <!-- アンカーポイント（10個） -->
+          <rect x="152" y="12" width="16" height="16" fill="white" stroke="#d69e2e" stroke-width="2" rx="2"/>
+          <text x="145" y="8" fill="#d69e2e" font-size="10" font-family="JetBrains Mono" font-weight="bold">①</text>
+          <rect x="182" y="92" width="16" height="16" fill="white" stroke="#d69e2e" stroke-width="2" rx="2"/>
+          <text x="204" y="106" fill="#d69e2e" font-size="10" font-family="JetBrains Mono" font-weight="bold">②</text>
+          <rect x="267" y="92" width="16" height="16" fill="white" stroke="#d69e2e" stroke-width="2" rx="2"/>
+          <text x="284" y="106" fill="#d69e2e" font-size="10" font-family="JetBrains Mono" font-weight="bold">③</text>
+          <rect x="200" y="142" width="16" height="16" fill="white" stroke="#d69e2e" stroke-width="2" rx="2"/>
+          <text x="222" y="156" fill="#d69e2e" font-size="10" font-family="JetBrains Mono" font-weight="bold">④</text>
+          <rect x="224" y="224" width="16" height="16" fill="white" stroke="#d69e2e" stroke-width="2" rx="2"/>
+          <text x="244" y="246" fill="#d69e2e" font-size="10" font-family="JetBrains Mono" font-weight="bold">⑤</text>
+          <rect x="152" y="177" width="16" height="16" fill="white" stroke="#d69e2e" stroke-width="2" rx="2"/>
+          <text x="140" y="204" fill="#d69e2e" font-size="10" font-family="JetBrains Mono" font-weight="bold">⑥</text>
+          <rect x="80" y="224" width="16" height="16" fill="white" stroke="#d69e2e" stroke-width="2" rx="2"/>
+          <text x="58" y="246" fill="#d69e2e" font-size="10" font-family="JetBrains Mono" font-weight="bold">⑦</text>
+          <rect x="104" y="142" width="16" height="16" fill="white" stroke="#d69e2e" stroke-width="2" rx="2"/>
+          <text x="80" y="156" fill="#d69e2e" font-size="10" font-family="JetBrains Mono" font-weight="bold">⑧</text>
+          <rect x="37" y="92" width="16" height="16" fill="white" stroke="#d69e2e" stroke-width="2" rx="2"/>
+          <text x="16" y="106" fill="#d69e2e" font-size="10" font-family="JetBrains Mono" font-weight="bold">⑨</text>
+          <rect x="122" y="92" width="16" height="16" fill="white" stroke="#d69e2e" stroke-width="2" rx="2"/>
+          <text x="100" y="106" fill="#d69e2e" font-size="10" font-family="JetBrains Mono" font-weight="bold">⑩</text>
+
+          <!-- 始点マーカー -->
+          <circle cx="160" cy="20" r="14" fill="none" stroke="#f472b6" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.8"/>
+
+          <text x="160" y="286" text-anchor="middle" fill="#64748b" font-size="12" font-family="Noto Sans JP">①〜⑩の順にクリック → 最後に①で閉じる</text>
+        </svg>
+      </div>
+
+      <div class="points">
+        <div class="point"><div class="point-icon">🌟</div><div class="point-text">①〜⑩の順番にクリック。10個のアンカーポイントすべて<strong>ドラッグなし</strong></div></div>
+        <div class="point"><div class="point-icon">⚠️</div><div class="point-text">アンカーポイントが多いので、間違えたら<code>Cmd/Ctrl+Z</code>で1つ戻れる</div></div>
+        <div class="point"><div class="point-icon">💡</div><div class="point-text">多角形ツール（U）でも同じ形が作れる。ペンツールで作る練習をしてから比べてみよう</div></div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">10個のアンカーポイントを正確に打てた</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">パスを閉じて星形になった</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRACTICE 3: 曲線入門 -->
+  <div class="practice-card">
+    <div class="practice-header">
+      <div class="practice-title-wrap">
+        <div class="practice-num" style="background:linear-gradient(135deg,#7c3aed,#a78bfa);">3</div>
+        <div>
+          <div class="practice-title">曲線パスでSカーブを描く</div>
+          <div style="font-size:12px; color:var(--text-sub);">ドラッグでハンドルを引き出す練習</div>
+        </div>
+      </div>
+      <span class="level" style="background:#fef9c3; color:#854d0e;">⭐⭐ 中級</span>
+    </div>
+    <div class="practice-body">
+      <div class="svg-wrap">
+        <svg width="360" height="220" viewBox="0 0 360 220">
+          <defs>
+            <pattern id="grid3" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#dbeafe" stroke-width="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="360" height="220" fill="url(#grid3)"/>
+
+          <!-- Sカーブ -->
+          <path d="M 40,110 C 40,40 160,40 180,110 C 200,180 320,180 320,110" fill="none" stroke="#7c3aed" stroke-width="3"/>
+
+          <!-- ハンドル -->
+          <line x1="40" y1="110" x2="40" y2="40" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="180" y1="110" x2="160" y2="40" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="180" y1="110" x2="200" y2="180" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="320" y1="110" x2="320" y2="180" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+          <!-- ハンドル先端 -->
+          <circle cx="40" cy="40" r="4" fill="#a78bfa"/>
+          <circle cx="160" cy="40" r="4" fill="#a78bfa"/>
+          <circle cx="200" cy="180" r="4" fill="#a78bfa"/>
+          <circle cx="320" cy="180" r="4" fill="#a78bfa"/>
+
+          <!-- アンカーポイント -->
+          <rect x="32" y="102" width="16" height="16" fill="white" stroke="#7c3aed" stroke-width="2" rx="2"/>
+          <rect x="172" y="102" width="16" height="16" fill="white" stroke="#7c3aed" stroke-width="2" rx="2"/>
+          <rect x="312" y="102" width="16" height="16" fill="white" stroke="#7c3aed" stroke-width="2" rx="2"/>
+
+          <!-- 番号・説明 -->
+          <text x="30" y="98" fill="#7c3aed" font-size="11" font-family="JetBrains Mono" font-weight="bold">①</text>
+          <text x="170" y="98" fill="#7c3aed" font-size="11" font-family="JetBrains Mono" font-weight="bold">②</text>
+          <text x="312" y="98" fill="#7c3aed" font-size="11" font-family="JetBrains Mono" font-weight="bold">③</text>
+
+          <!-- ドラッグ方向の矢印と説明 -->
+          <text x="42" y="36" fill="#7c3aed" font-size="10" font-family="Noto Sans JP">↑ ドラッグ方向</text>
+          <text x="204" y="188" fill="#7c3aed" font-size="10" font-family="Noto Sans JP">↓ ドラッグ方向</text>
+
+          <!-- 始点マーカー -->
+          <circle cx="40" cy="110" r="14" fill="none" stroke="#f472b6" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.8"/>
+
+          <text x="180" y="210" text-anchor="middle" fill="#64748b" font-size="12" font-family="Noto Sans JP">①上にドラッグ → ②下にドラッグ → ③上にドラッグ</text>
+        </svg>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num" style="background:#7c3aed;">1</div>
+          <div class="step-text">①の位置でクリックして<strong>上方向にドラッグ</strong>（ハンドルが上に伸びる）</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#7c3aed;">2</div>
+          <div class="step-text">②の位置でクリックして<strong>下方向にドラッグ</strong>（Sカーブの曲がりが決まる）</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#7c3aed;">3</div>
+          <div class="step-text">③の位置でクリックして<strong>上方向にドラッグ</strong>→ Enterで完成</div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#ede9fe; border-left:3px solid #7c3aed;">
+        <p style="color:#3b0764;"><strong>曲線のコツ：</strong>ドラッグする方向が曲線の「引っ張り方向」になります。反対方向にドラッグすると曲線の向きが逆になります。最初はゆっくり試しながら感覚をつかみましょう。</p>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">Sカーブの形に近づけられた</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">ハンドルの方向で曲線の向きが変わることを体感できた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRACTICE 4: 数字「3」のトレース -->
+  <div class="practice-card">
+    <div class="practice-header">
+      <div class="practice-title-wrap">
+        <div class="practice-num" style="background:linear-gradient(135deg,#0891b2,#22d3ee);">4</div>
+        <div>
+          <div class="practice-title">数字「3」をトレースする</div>
+          <div style="font-size:12px; color:var(--text-sub);">直線と曲線を組み合わせた複合パス</div>
+        </div>
+      </div>
+      <span class="level" style="background:#fef9c3; color:#854d0e;">⭐⭐ 中級</span>
+    </div>
+    <div class="practice-body">
+      <div style="background:#f0f9ff; border-radius:12px; padding:14px; margin-bottom:14px; font-size:13px; color:#0369a1; line-height:1.7;">
+        📋 <strong>やり方：</strong>PhotoshopでOswaldやHelveticaなどのフォントで数字「3」をテキストとして入力 → テキストレイヤーを半透明（不透明度40%）にする → 上からペンツールでなぞっていく（アウトラインをトレース）
+      </div>
+      <div class="svg-wrap">
+        <svg width="280" height="360" viewBox="0 0 280 360">
+          <defs>
+            <pattern id="grid4" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#dbeafe" stroke-width="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="280" height="360" fill="url(#grid4)"/>
+
+          <!-- 数字「3」のパス -->
+          <path d="M 60,60 L 200,60 C 240,60 260,90 260,130 C 260,160 240,180 210,190 C 245,200 265,225 265,260 C 265,305 240,340 195,340 L 60,340" fill="rgba(8,145,178,0.1)" stroke="#0891b2" stroke-width="3" fill-rule="nonzero"/>
+
+          <!-- 上部の凹み -->
+          <path d="M 200,60 C 235,60 255,85 255,125 C 255,155 238,175 210,185" fill="none" stroke="#0891b2" stroke-width="3"/>
+          <path d="M 60,190 L 200,190" fill="none" stroke="#0891b2" stroke-width="3"/>
+
+          <!-- アンカーポイント（主要なもの） -->
+          <!-- 上端左 -->
+          <rect x="52" y="52" width="16" height="16" fill="white" stroke="#0891b2" stroke-width="2" rx="2"/>
+          <text x="28" y="64" fill="#0891b2" font-size="11" font-family="JetBrains Mono" font-weight="bold">①</text>
+
+          <!-- 上端右 -->
+          <rect x="192" y="52" width="16" height="16" fill="white" stroke="#0891b2" stroke-width="2" rx="2"/>
+          <text x="214" y="64" fill="#0891b2" font-size="11" font-family="JetBrains Mono" font-weight="bold">②</text>
+
+          <!-- 右上カーブ頂点 -->
+          <circle cx="258" cy="120" r="6" fill="white" stroke="#0891b2" stroke-width="2"/>
+          <text x="266" y="124" fill="#0891b2" font-size="11" font-family="JetBrains Mono" font-weight="bold">③</text>
+
+          <!-- 中央右 -->
+          <circle cx="210" cy="188" r="6" fill="white" stroke="#0891b2" stroke-width="2"/>
+          <text x="220" y="192" fill="#0891b2" font-size="11" font-family="JetBrains Mono" font-weight="bold">④</text>
+
+          <!-- 中央左 -->
+          <rect x="52" y="182" width="16" height="16" fill="white" stroke="#0891b2" stroke-width="2" rx="2"/>
+          <text x="28" y="194" fill="#0891b2" font-size="11" font-family="JetBrains Mono" font-weight="bold">⑤</text>
+
+          <!-- 右下カーブ頂点 -->
+          <circle cx="262" cy="258" r="6" fill="white" stroke="#0891b2" stroke-width="2"/>
+          <text x="270" y="262" fill="#0891b2" font-size="11" font-family="JetBrains Mono" font-weight="bold">⑥</text>
+
+          <!-- 下端右 -->
+          <rect x="192" y="332" width="16" height="16" fill="white" stroke="#0891b2" stroke-width="2" rx="2"/>
+          <text x="214" y="344" fill="#0891b2" font-size="11" font-family="JetBrains Mono" font-weight="bold">⑦</text>
+
+          <!-- 下端左 -->
+          <rect x="52" y="332" width="16" height="16" fill="white" stroke="#0891b2" stroke-width="2" rx="2"/>
+          <text x="28" y="344" fill="#0891b2" font-size="11" font-family="JetBrains Mono" font-weight="bold">⑧</text>
+
+          <!-- 始点マーカー -->
+          <circle cx="60" cy="60" r="14" fill="none" stroke="#f472b6" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.8"/>
+
+          <!-- ハンドル例示（右上カーブ） -->
+          <line x1="258" y1="120" x2="258" y2="80" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <line x1="258" y1="120" x2="258" y2="160" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <circle cx="258" cy="80" r="3.5" fill="#22d3ee"/>
+          <circle cx="258" cy="160" r="3.5" fill="#22d3ee"/>
+        </svg>
+      </div>
+
+      <div class="points">
+        <div class="point"><div class="point-icon">📝</div><div class="point-text">①②は<strong>クリックだけ（直線）</strong>、②→③→④は<strong>ドラッグ（曲線）</strong></div></div>
+        <div class="point"><div class="point-icon">🔄</div><div class="point-text">③④は<strong>スムーズポイント</strong>。左右にハンドルが出て曲線が続く</div></div>
+        <div class="point"><div class="point-icon">💡</div><div class="point-text"><code>Alt/Option + クリック</code>でハンドルを折って<strong>曲線→直線</strong>に切り替えられる</div></div>
+      </div>
+
+      <div class="tip" style="background:#ecfeff; border-left:3px solid #0891b2;">
+        <p style="color:#0c4a6e;"><strong>実際のやり方：</strong>Photoshopで「3」をテキストで入力 → レイヤーの不透明度を40%にして半透明にする → ペンツールに切り替えて上からなぞる。完成したら文字レイヤーを削除。</p>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">「3」の上部の曲線をなぞれた</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">「3」の下部の曲線をなぞれた</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">境界線を適用してアウトライン文字にできた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRACTICE 5: ハート -->
+  <div class="practice-card">
+    <div class="practice-header">
+      <div class="practice-title-wrap">
+        <div class="practice-num" style="background:linear-gradient(135deg,#be185d,#f472b6);">5</div>
+        <div>
+          <div class="practice-title">ハート形を描く</div>
+          <div style="font-size:12px; color:var(--text-sub);">左右対称の曲線・方向の切り替え</div>
+        </div>
+      </div>
+      <span class="level" style="background:#fef9c3; color:#854d0e;">⭐⭐ 中級</span>
+    </div>
+    <div class="practice-body">
+      <div class="svg-wrap">
+        <svg width="300" height="280" viewBox="0 0 300 280">
+          <defs>
+            <pattern id="grid5" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#fce7f3" stroke-width="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="300" height="280" fill="url(#grid5)"/>
+
+          <!-- ハート -->
+          <path d="M 150,240 C 80,190 20,150 20,95 C 20,55 50,30 85,30 C 110,30 135,45 150,65 C 165,45 190,30 215,30 C 250,30 280,55 280,95 C 280,150 220,190 150,240 Z" fill="rgba(244,114,182,0.12)" stroke="#be185d" stroke-width="2.5"/>
+
+          <!-- アンカーポイント -->
+          <!-- 下端（先端） -->
+          <rect x="142" y="232" width="16" height="16" fill="white" stroke="#be185d" stroke-width="2" rx="2"/>
+          <text x="155" y="264" fill="#be185d" font-size="11" font-family="JetBrains Mono" font-weight="bold">①始点</text>
+
+          <!-- 左カーブ上 -->
+          <circle cx="20" cy="95" r="7" fill="white" stroke="#be185d" stroke-width="2"/>
+          <text x="2" y="92" fill="#be185d" font-size="11" font-family="JetBrains Mono" font-weight="bold">②</text>
+
+          <!-- 左上 -->
+          <rect x="77" y="22" width="16" height="16" fill="white" stroke="#be185d" stroke-width="2" rx="2"/>
+          <text x="60" y="20" fill="#be185d" font-size="11" font-family="JetBrains Mono" font-weight="bold">③</text>
+
+          <!-- 中央上（谷） -->
+          <rect x="142" y="57" width="16" height="16" fill="white" stroke="#be185d" stroke-width="2" rx="2"/>
+          <text x="152" y="54" fill="#be185d" font-size="11" font-family="JetBrains Mono" font-weight="bold">④</text>
+
+          <!-- 右上 -->
+          <rect x="207" y="22" width="16" height="16" fill="white" stroke="#be185d" stroke-width="2" rx="2"/>
+          <text x="226" y="20" fill="#be185d" font-size="11" font-family="JetBrains Mono" font-weight="bold">⑤</text>
+
+          <!-- 右カーブ上 -->
+          <circle cx="280" cy="95" r="7" fill="white" stroke="#be185d" stroke-width="2"/>
+          <text x="286" y="92" fill="#be185d" font-size="11" font-family="JetBrains Mono" font-weight="bold">⑥</text>
+
+          <!-- ハンドル（主要なもの） -->
+          <line x1="150" y1="240" x2="80" y2="240" stroke="#f472b6" stroke-width="1" stroke-dasharray="3,2"/>
+          <line x1="150" y1="240" x2="220" y2="240" stroke="#f472b6" stroke-width="1" stroke-dasharray="3,2"/>
+          <circle cx="80" cy="240" r="3.5" fill="#f472b6"/>
+          <circle cx="220" cy="240" r="3.5" fill="#f472b6"/>
+
+          <line x1="150" y1="65" x2="130" y2="40" stroke="#f472b6" stroke-width="1" stroke-dasharray="3,2"/>
+          <line x1="150" y1="65" x2="170" y2="40" stroke="#f472b6" stroke-width="1" stroke-dasharray="3,2"/>
+          <circle cx="130" cy="40" r="3.5" fill="#f472b6"/>
+          <circle cx="170" cy="40" r="3.5" fill="#f472b6"/>
+
+          <!-- 始点マーカー -->
+          <circle cx="150" cy="240" r="14" fill="none" stroke="#f472b6" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.8"/>
+        </svg>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num" style="background:#be185d;">1</div>
+          <div class="step-text">①（下の先端）でクリック＋<strong>左にドラッグ</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#be185d;">2</div>
+          <div class="step-text">②（左の丸い部分）でクリック＋<strong>上にドラッグ</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#be185d;">3</div>
+          <div class="step-text">③（左の山）でクリック＋<strong>右にドラッグ</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#be185d;">4</div>
+          <div class="step-text">④（中央の谷）で<code>Alt/Option+クリック</code>してハンドルを折る → <strong>右にドラッグ</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#be185d;">5</div>
+          <div class="step-text">⑤⑥と続けて右半分を描く → ①で閉じる</div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#fdf2f8; border-left:3px solid #be185d;">
+        <p style="color:#831843;"><strong>④の中央（谷）のコツ：</strong><code>Alt/Option+クリック</code>でハンドルを一方向だけに折ることができます。これをしないと中央の「へこみ」が作れません。ハートの一番難しい部分です！</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRACTICE 6: 吹き出し -->
+  <div class="practice-card">
+    <div class="practice-header">
+      <div class="practice-title-wrap">
+        <div class="practice-num" style="background:linear-gradient(135deg,#ea580c,#fb923c);">6</div>
+        <div>
+          <div class="practice-title">吹き出しシェイプを描く</div>
+          <div style="font-size:12px; color:var(--text-sub);">直線＋角丸の組み合わせ・バナーで使える形</div>
+        </div>
+      </div>
+      <span class="level" style="background:#ffedd5; color:#9a3412;">⭐⭐⭐ 上級</span>
+    </div>
+    <div class="practice-body">
+      <div class="svg-wrap">
+        <svg width="360" height="260" viewBox="0 0 360 260">
+          <defs>
+            <pattern id="grid6" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#fed7aa" stroke-width="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="360" height="260" fill="url(#grid6)"/>
+
+          <!-- 吹き出し -->
+          <path d="M 40,40 L 280,40 Q 320,40 320,80 L 320,160 Q 320,200 280,200 L 140,200 L 100,240 L 110,200 L 80,200 Q 40,200 40,160 L 40,80 Q 40,40 80,40 Z" fill="rgba(234,88,12,0.08)" stroke="#ea580c" stroke-width="2.5"/>
+
+          <!-- アンカーポイント -->
+          <rect x="32" y="32" width="16" height="16" fill="white" stroke="#ea580c" stroke-width="2" rx="2"/>
+          <text x="14" y="30" fill="#ea580c" font-size="11" font-family="JetBrains Mono" font-weight="bold">①</text>
+
+          <rect x="272" y="32" width="16" height="16" fill="white" stroke="#ea580c" stroke-width="2" rx="2"/>
+          <text x="292" y="30" fill="#ea580c" font-size="11" font-family="JetBrains Mono" font-weight="bold">②</text>
+
+          <circle cx="320" cy="80" r="7" fill="white" stroke="#ea580c" stroke-width="2"/>
+          <text x="326" y="78" fill="#ea580c" font-size="11" font-family="JetBrains Mono" font-weight="bold">③</text>
+
+          <rect x="312" y="152" width="16" height="16" fill="white" stroke="#ea580c" stroke-width="2" rx="2"/>
+          <text x="326" y="170" fill="#ea580c" font-size="11" font-family="JetBrains Mono" font-weight="bold">④</text>
+
+          <circle cx="280" cy="200" r="7" fill="white" stroke="#ea580c" stroke-width="2"/>
+          <text x="286" y="218" fill="#ea580c" font-size="11" font-family="JetBrains Mono" font-weight="bold">⑤</text>
+
+          <rect x="132" y="192" width="16" height="16" fill="white" stroke="#ea580c" stroke-width="2" rx="2"/>
+          <text x="138" y="220" fill="#ea580c" font-size="11" font-family="JetBrains Mono" font-weight="bold">⑥</text>
+
+          <!-- しっぽ先端 -->
+          <rect x="92" y="232" width="16" height="16" fill="white" stroke="#ea580c" stroke-width="2" rx="2"/>
+          <text x="80" y="254" fill="#ea580c" font-size="11" font-family="JetBrains Mono" font-weight="bold">⑦</text>
+
+          <rect x="102" y="192" width="16" height="16" fill="white" stroke="#ea580c" stroke-width="2" rx="2"/>
+          <text x="72" y="210" fill="#ea580c" font-size="11" font-family="JetBrains Mono" font-weight="bold">⑧</text>
+
+          <circle cx="40" cy="160" r="7" fill="white" stroke="#ea580c" stroke-width="2"/>
+          <text x="14" y="164" fill="#ea580c" font-size="11" font-family="JetBrains Mono" font-weight="bold">⑨</text>
+
+          <circle cx="40" cy="80" r="7" fill="white" stroke="#ea580c" stroke-width="2"/>
+          <text x="14" y="84" fill="#ea580c" font-size="11" font-family="JetBrains Mono" font-weight="bold">⑩</text>
+
+          <!-- 始点マーカー -->
+          <circle cx="40" cy="40" r="14" fill="none" stroke="#f472b6" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.8"/>
+        </svg>
+      </div>
+
+      <div class="points">
+        <div class="point"><div class="point-icon">📐</div><div class="point-text">①②④⑥⑦⑧は<strong>クリックだけ（直線・角に使う）</strong></div></div>
+        <div class="point"><div class="point-icon">🔵</div><div class="point-text">③⑤⑨⑩は角の丸み部分。<strong>クリック＋少しドラッグ</strong>で角丸を作る</div></div>
+        <div class="point"><div class="point-icon">💬</div><div class="point-text">バナーの吹き出し・ツールチップ・コメント風バッジに使える実践的な形</div></div>
+      </div>
+
+      <div class="tip" style="background:#fff7ed; border-left:3px solid #ea580c;">
+        <p style="color:#7c2d12;"><strong>実は長方形ツール＋ペンツールで作る方が楽：</strong>今回は練習なのでペンツールで全部描いていますが、実際のバナー制作では「角丸長方形を描いてからしっぽ部分だけペンツールで追加」する方法の方が速いです。ブーリアン演算を使ってもOK。</p>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">吹き出しの形を描けた</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">角の丸みをハンドルで表現できた</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">中に文字を入れてバナーパーツとして使えた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRACTICE 7: 総合 -->
+  <div class="practice-card" style="border:2px solid #0070f3;">
+    <div class="practice-header" style="background:linear-gradient(135deg,#1e3a8a,#0070f3);">
+      <div class="practice-title-wrap">
+        <div class="practice-num" style="background:rgba(255,255,255,0.2); border:2px solid rgba(255,255,255,0.4);">7</div>
+        <div>
+          <div class="practice-title" style="color:#fff;">総合課題：自分の名前の頭文字をトレース</div>
+          <div style="font-size:12px; color:rgba(255,255,255,0.75);">全テクニックを組み合わせた最終課題</div>
+        </div>
+      </div>
+      <span class="level" style="background:rgba(255,255,255,0.2); color:#fff; border:1px solid rgba(255,255,255,0.3);">⭐⭐⭐ 上級</span>
+    </div>
+    <div class="practice-body">
+      <div style="background:#eff6ff; border-radius:12px; padding:16px 18px; margin-bottom:16px; border:1px solid #bfdbfe;">
+        <div style="font-size:12px; font-weight:700; color:#1e40af; margin-bottom:10px;">📋 課題内容</div>
+        <div style="font-size:13px; color:var(--text-sub); line-height:1.9;">
+          自分の名前の頭文字（アルファベット）をPhotoshopでテキスト入力 → 不透明度40%にして半透明化 → ペンツールで上からアウトラインをトレースしてシェイプを作る
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num" style="background:#0070f3;">1</div>
+          <div class="step-text">好きなフォント（Oswald・Helvetica・Arial等）で<strong>大きめの文字</strong>（300〜400px）を入力</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#0070f3;">2</div>
+          <div class="step-text">レイヤーの<strong>不透明度を40%</strong>に下げて文字を半透明にする</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#0070f3;">3</div>
+          <div class="step-text">新規レイヤーを作成 → ペンツール（P）に切り替えて文字の輪郭をなぞる</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#0070f3;">4</div>
+          <div class="step-text">パスを閉じたらレイヤースタイルで<strong>境界線（アウトライン）</strong>を適用</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#0070f3;">5</div>
+          <div class="step-text">元のテキストレイヤーを非表示にして完成を確認</div>
+        </div>
+      </div>
+
+      <!-- 文字難易度 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:16px 0 10px;">アルファベット別の難易度目安</div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+        <div style="background:#dcfce7; border-radius:8px; padding:8px 14px; text-align:center;">
+          <div style="font-size:10px; color:#15803d; font-family:'JetBrains Mono',monospace; margin-bottom:4px; font-weight:700;">⭐ 簡単</div>
+          <div style="font-size:16px; font-weight:700; color:#166534; letter-spacing:0.1em;">I L T V W X Y Z</div>
+          <div style="font-size:10px; color:#15803d;">直線が多い</div>
+        </div>
+        <div style="background:#fef9c3; border-radius:8px; padding:8px 14px; text-align:center;">
+          <div style="font-size:10px; color:#854d0e; font-family:'JetBrains Mono',monospace; margin-bottom:4px; font-weight:700;">⭐⭐ 普通</div>
+          <div style="font-size:16px; font-weight:700; color:#713f12; letter-spacing:0.1em;">A B D E F H K M N P R U</div>
+          <div style="font-size:10px; color:#854d0e;">直線＋少し曲線</div>
+        </div>
+        <div style="background:#ffe4e6; border-radius:8px; padding:8px 14px; text-align:center;">
+          <div style="font-size:10px; color:#9f1239; font-family:'JetBrains Mono',monospace; margin-bottom:4px; font-weight:700;">⭐⭐⭐ 難しい</div>
+          <div style="font-size:16px; font-weight:700; color:#881337; letter-spacing:0.1em;">C G J O Q S</div>
+          <div style="font-size:10px; color:#9f1239;">曲線が多い</div>
+        </div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ 完成チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#0070f3;"></div><div class="check-text">テキストのアウトラインをペンツールでトレースできた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#0070f3;"></div><div class="check-text">境界線スタイルでアウトライン文字として仕上げた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#0070f3;"></div><div class="check-text">テキストレイヤーを消してもパスだけで形が成立している</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- まとめ -->
+  <div style="background:#1e1b4b; border-radius:16px; padding:24px; margin-top:8px;">
+    <div style="font-size:13px; font-weight:700; color:#a78bfa; font-family:'JetBrains Mono',monospace; margin-bottom:14px; letter-spacing:0.08em;">📚 Lesson15 ペンツール まとめ</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:10px 12px;">
+        <div style="font-size:10px; color:#a78bfa; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">直線を描く</div>
+        <div style="font-size:12px; color:#e2e8f0;">クリックだけ</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:10px 12px;">
+        <div style="font-size:10px; color:#a78bfa; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">曲線を描く</div>
+        <div style="font-size:12px; color:#e2e8f0;">クリック＋ドラッグ</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:10px 12px;">
+        <div style="font-size:10px; color:#a78bfa; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">曲線→直線に切替</div>
+        <div style="font-size:12px; color:#e2e8f0;">Alt/Option+クリック</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:10px 12px;">
+        <div style="font-size:10px; color:#a78bfa; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">パスを閉じる</div>
+        <div style="font-size:12px; color:#e2e8f0;">最初のポイントをクリック</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:10px 12px;">
+        <div style="font-size:10px; color:#a78bfa; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">選択範囲に変換</div>
+        <div style="font-size:12px; color:#e2e8f0;">Cmd/Ctrl + Enter</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:10px 12px;">
+        <div style="font-size:10px; color:#a78bfa; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">1つ戻る</div>
+        <div style="font-size:12px; color:#e2e8f0;">Cmd/Ctrl + Z</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:24px; font-size:12px; color:#94a3b8;">Photoshop · Lesson 15｜ペンツール練習ドリル</div>
+
+</div>
+</body>
+</html>
