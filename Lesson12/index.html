@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>グラデーション完全解説｜Photoshop Lesson 12</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --text: #1a1a2e;
+    --text-sub: #4a5568;
+    --border: #e2e8f0;
+    --code-bg: #f0f4ff;
+    --code-text: #2d3a8c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 40px 20px 80px; }
+  .container { max-width: 780px; margin: 0 auto; }
+
+  /* ヒーロー */
+  .hero {
+    border-radius: 20px;
+    padding: 52px 40px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  }
+  .hero-grad-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg,
+      rgba(255,0,128,0.25) 0%,
+      rgba(255,140,0,0.2) 25%,
+      rgba(0,200,255,0.2) 50%,
+      rgba(100,0,255,0.25) 75%,
+      rgba(255,0,128,0.2) 100%);
+  }
+  .hero-content { position: relative; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+  .hero h1 { font-size: 30px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.3; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 20px; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-tag { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+
+  /* セクション */
+  .section { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; }
+  .section-header { padding: 20px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 14px; }
+  .section-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-title { font-size: 18px; font-weight: 700; }
+  .section-sub { font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-bottom: 3px; }
+  .section-body { padding: 24px; }
+  .desc { font-size: 14px; color: var(--text-sub); line-height: 1.85; margin-bottom: 20px; }
+
+  code { background: var(--code-bg); color: var(--code-text); font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  /* グラデーションプレビュー */
+  .grad-preview { width: 100%; height: 80px; border-radius: 12px; margin-bottom: 8px; border: 1px solid rgba(0,0,0,0.06); }
+  .grad-label { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--text-sub); text-align: center; margin-bottom: 16px; }
+
+  /* グリッド */
+  .grad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .grad-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .grad-card { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+  .grad-card-preview { height: 90px; }
+  .grad-card-label { padding: 8px 12px; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .grad-card-desc { padding: 0 12px 10px; font-size: 11px; color: var(--text-sub); line-height: 1.7; }
+
+  /* PSモックUI */
+  .ps-mock { background: #2b2b2b; border-radius: 14px; overflow: hidden; margin: 16px 0; border: 1px solid #111; }
+  .ps-titlebar { background: #1e1e1e; padding: 7px 14px; display: flex; align-items: center; gap: 6px; }
+  .ps-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .ps-dot.r { background: #ff5f56; } .ps-dot.y { background: #ffbd2e; } .ps-dot.g { background: #27c93f; }
+  .ps-win-title { font-size: 10px; color: #888; margin-left: 8px; font-family: 'JetBrains Mono', monospace; }
+  .ps-body { display: flex; }
+  .ps-toolbar { background: #1f1f1f; width: 32px; border-right: 1px solid #111; padding: 10px 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .ps-tool { width: 20px; height: 20px; background: #444; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #ccc; }
+  .ps-canvas { flex: 1; background: #535353; padding: 16px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px; }
+  .ps-panel { background: #404040; border: 1px solid #666; border-radius: 8px; padding: 14px 16px; min-width: 220px; }
+  .ps-panel-title { font-size: 10px; font-weight: 700; color: #ddd; margin-bottom: 10px; border-bottom: 1px solid #555; padding-bottom: 7px; font-family: 'JetBrains Mono', monospace; }
+  .ps-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; gap: 10px; }
+  .ps-key { font-size: 10px; color: #bbb; }
+  .ps-val { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; padding: 2px 7px; border-radius: 4px; }
+  .ps-val.hl { border: 1px solid; }
+  .ps-select { background: #333; border: 1px solid #666; border-radius: 3px; padding: 3px 6px; font-size: 10px; color: #fff; width: 130px; }
+  .ps-layers { background: #252525; width: 210px; border-left: 1px solid #111; padding: 8px; }
+  .ps-layers-title { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .ps-layer { display: flex; align-items: center; gap: 7px; padding: 5px 7px; border-radius: 4px; margin-bottom: 3px; background: #3a3a3a; }
+  .ps-layer.sel { background: #1a3a5a; }
+  .ps-layer-thumb { width: 24px; height: 18px; border-radius: 3px; flex-shrink: 0; border: 1px solid #555; }
+  .ps-layer-name { font-size: 9px; color: #ddd; line-height: 1.3; }
+  .ps-layer-mode { font-size: 8px; color: #7dc4f0; }
+
+  /* ステップリスト */
+  .steps { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+  .step { display: flex; gap: 12px; align-items: flex-start; background: #f8f9fa; border-radius: 10px; padding: 12px 14px; }
+  .step-num { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .step-text { font-size: 13px; color: var(--text-sub); line-height: 1.7; }
+
+  /* ヒント */
+  .tip { border-radius: 10px; padding: 12px 16px; margin-top: 14px; }
+  .tip p { font-size: 13px; line-height: 1.75; }
+
+  /* 角度ダイアグラム */
+  .angle-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 16px 0; }
+  .angle-card { border-radius: 10px; overflow: hidden; border: 1px solid var(--border); text-align: center; }
+  .angle-preview { height: 64px; }
+  .angle-label { padding: 6px; font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-sub); }
+
+  /* カラーストップ図解 */
+  .colorstop-bar { position: relative; margin: 20px 0 40px; }
+  .cs-grad { height: 40px; border-radius: 8px; }
+  .cs-stops { display: flex; justify-content: space-between; margin-top: 6px; }
+  .cs-stop { text-align: center; font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-sub); }
+  .cs-stop-dot { width: 10px; height: 10px; border-radius: 50%; margin: 0 auto 3px; border: 2px solid #fff; box-shadow: 0 0 0 1px #666; }
+
+  /* 比較テーブル */
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 16px 0; }
+  .compare-table th { background: #1a1a2e; color: #fff; padding: 10px 14px; text-align: left; }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text-sub); }
+  .compare-table tr:nth-child(even) td { background: #f8f9fa; }
+  .compare-table .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+
+  .caption { font-size: 12px; color: #94a3b8; margin-top: 6px; font-style: italic; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 24px; }
+    .hero h1 { font-size: 22px; }
+    .grad-grid, .grad-grid-3 { grid-template-columns: 1fr; }
+    .angle-grid { grid-template-columns: repeat(2, 1fr); }
+    .section-body { padding: 16px; }
+    .ps-layers { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-grad-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">Photoshop チュートリアル · Lesson 12 — 解説編</div>
+      <h1>🎨 グラデーション<br>完全解説</h1>
+      <p>基本ツールから全5スタイル・グラデーションエディター・レイヤーマスク・実践テクニックまで、Photoshopのグラデーションをすべて解説します。</p>
+      <div class="hero-tags">
+        <span class="hero-tag">グラデーションツール</span>
+        <span class="hero-tag">5つのスタイル</span>
+        <span class="hero-tag">グラデーションエディター</span>
+        <span class="hero-tag">調整レイヤー</span>
+        <span class="hero-tag">レイヤースタイル</span>
+        <span class="hero-tag">マスクへの応用</span>
+        <span class="hero-tag">実践テクニック</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 1: グラデーションとは -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#f0f4ff;">🌈</div>
+      <div>
+        <div class="section-sub" style="color:#4338ca;">CHAPTER 01</div>
+        <div class="section-title">グラデーションとは？Photoshopで使う3つの方法</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">グラデーションとは<strong>2色以上の色がなめらかに変化する表現</strong>です。Photoshopでは大きく3つの方法で使えます。それぞれ用途が異なるので最初に整理しましょう。</p>
+
+      <!-- 3つの方法 -->
+      <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;">
+
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:linear-gradient(135deg,#4338ca,#7c3aed,#a78bfa); height:60px; display:flex; align-items:center; padding:0 20px;">
+            <div style="font-size:15px; font-weight:700; color:#fff;">① グラデーションツール（G）</div>
+          </div>
+          <div style="padding:14px 16px;">
+            <p style="font-size:13px; color:var(--text-sub); line-height:1.8;">ツールバーから「グラデーションツール」を選択してキャンバスをドラッグ。<strong>直接レイヤーに描画</strong>する最も基本的な方法。バナーの背景やテクスチャ作りに最もよく使う。</p>
+            <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+              <span style="background:#f0f4ff; color:#4338ca; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">背景作成</span>
+              <span style="background:#f0f4ff; color:#4338ca; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">テクスチャ</span>
+              <span style="background:#f0f4ff; color:#4338ca; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">グラデーション合成</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:linear-gradient(135deg,#059669,#10b981,#6ee7b7); height:60px; display:flex; align-items:center; padding:0 20px;">
+            <div style="font-size:15px; font-weight:700; color:#fff;">② グラデーション調整レイヤー</div>
+          </div>
+          <div style="padding:14px 16px;">
+            <p style="font-size:13px; color:var(--text-sub); line-height:1.8;"><code>レイヤー → 新規塗りつぶしレイヤー → グラデーション</code> から追加。<strong>後から何度でも編集できる</strong>のが最大の特徴。Lesson02〜05のバナーで使ってきた方法。</p>
+            <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+              <span style="background:#ecfdf5; color:#059669; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">後から編集OK</span>
+              <span style="background:#ecfdf5; color:#059669; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">非破壊編集</span>
+              <span style="background:#ecfdf5; color:#059669; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">最推奨</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:linear-gradient(135deg,#ea580c,#f97316,#fdba74); height:60px; display:flex; align-items:center; padding:0 20px;">
+            <div style="font-size:15px; font-weight:700; color:#fff;">③ レイヤースタイル → グラデーションオーバーレイ</div>
+          </div>
+          <div style="padding:14px 16px;">
+            <p style="font-size:13px; color:var(--text-sub); line-height:1.8;">テキスト・シェイプ・画像レイヤーにダブルクリックで適用。<strong>そのレイヤーにだけグラデーションを上乗せ</strong>する方法。テキストのグラデーション・ボタンのグラデーションなどに使う。</p>
+            <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+              <span style="background:#fff7ed; color:#ea580c; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">テキストに適用</span>
+              <span style="background:#fff7ed; color:#ea580c; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">シェイプに適用</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#f0f4ff; border-left:3px solid #4338ca;">
+        <p style="color:#1e1b4b;"><strong>どれを使うべき？</strong><br>
+        バナー背景 → <strong>②調整レイヤー</strong>（後から変更できる）<br>
+        テキストに色 → <strong>③レイヤースタイル</strong><br>
+        マスクに描く → <strong>①グラデーションツール</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 2: グラデーションツールの基本 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fdf2f8;">🖌</div>
+      <div>
+        <div class="section-sub" style="color:#db2777;">CHAPTER 02</div>
+        <div class="section-title">グラデーションツールの基本操作</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">グラデーションツール（ショートカット：<code>G</code>）の基本操作を覚えましょう。ドラッグの方向と距離でグラデーションの向きと広がりが決まります。</p>
+
+      <!-- 基本操作 -->
+      <div class="ps-mock">
+        <div class="ps-titlebar"><div class="ps-dot r"></div><div class="ps-dot y"></div><div class="ps-dot g"></div><span class="ps-win-title">グラデーションツール — オプションバー</span></div>
+        <div style="background:#3c3c3c; padding:8px 14px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; border-bottom:1px solid #111;">
+          <div style="background:#555; border-radius:4px; padding:4px 10px; font-size:10px; color:#ccc; display:flex; align-items:center; gap:6px;">
+            <div style="width:40px; height:14px; background:linear-gradient(to right,#000,#fff); border-radius:2px;"></div>
+            <span>▼</span>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <div style="width:22px; height:22px; background:#555; border-radius:3px; display:flex; align-items:center; justify-content:center; border:2px solid #7c3aed;" title="線形">⬜</div>
+            <div style="width:22px; height:22px; background:#444; border-radius:3px; display:flex; align-items:center; justify-content:center;" title="円形">⭕</div>
+            <div style="width:22px; height:22px; background:#444; border-radius:3px; display:flex; align-items:center; justify-content:center;" title="角度">🔺</div>
+            <div style="width:22px; height:22px; background:#444; border-radius:3px; display:flex; align-items:center; justify-content:center;" title="対称">↔</div>
+            <div style="width:22px; height:22px; background:#444; border-radius:3px; display:flex; align-items:center; justify-content:center;" title="菱形">◇</div>
+          </div>
+          <div style="font-size:10px; color:#aaa;">不透明度: <span style="color:#fff; font-weight:700;">100%</span></div>
+          <div style="font-size:10px; color:#aaa;">□ 逆方向　□ ディザ　□ 透明部分</div>
+        </div>
+        <div class="ps-body">
+          <div class="ps-toolbar">
+            <div class="ps-tool" style="background:#5555aa; border:1px solid #7777cc; font-size:9px;">G</div>
+          </div>
+          <div class="ps-canvas" style="flex-direction:column; align-items:flex-start; gap:10px; padding:14px;">
+            <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+              <div class="step-num" style="background:#db2777; width:26px; height:26px; border-radius:50%; flex-shrink:0;">1</div>
+              <p style="font-size:11px; color:#ccc; line-height:1.7;">ショートカット <code style="background:#333; color:#f9a8d4; padding:1px 5px; border-radius:3px;">G</code> でグラデーションツールを選択</p>
+            </div>
+            <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+              <div class="step-num" style="background:#db2777; width:26px; height:26px; border-radius:50%; flex-shrink:0;">2</div>
+              <p style="font-size:11px; color:#ccc; line-height:1.7;">オプションバーでグラデーションのプリセットをクリック → 色を選ぶ</p>
+            </div>
+            <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+              <div class="step-num" style="background:#db2777; width:26px; height:26px; border-radius:50%; flex-shrink:0;">3</div>
+              <p style="font-size:11px; color:#ccc; line-height:1.7;">スタイルを選ぶ（線形・円形・角度・対称・菱形）</p>
+            </div>
+            <div style="display:flex; gap:10px; align-items:flex-start; width:100%;">
+              <div class="step-num" style="background:#db2777; width:26px; height:26px; border-radius:50%; flex-shrink:0;">4</div>
+              <p style="font-size:11px; color:#ccc; line-height:1.7;">キャンバスを<strong style="color:#f9a8d4;">ドラッグ</strong>して描画。ドラッグの向き＝グラデーションの方向。<code style="background:#333; color:#f9a8d4; padding:1px 5px; border-radius:3px;">Shift</code>を押すと45°ずつ固定</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ドラッグの方向と結果 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:20px 0 12px;">ドラッグの方向で何が変わる？</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--border);">
+          <div style="height:70px; background:linear-gradient(to right, #7c3aed, #db2777); position:relative;">
+            <div style="position:absolute; top:50%; left:20%; right:20%; height:2px; background:rgba(255,255,255,0.8); transform:translateY(-50%);">
+              <div style="position:absolute; right:-5px; top:-4px; width:0; height:0; border-left:10px solid rgba(255,255,255,0.8); border-top:5px solid transparent; border-bottom:5px solid transparent;"></div>
+            </div>
+          </div>
+          <div style="padding:8px 12px; font-size:11px; font-family:'JetBrains Mono',monospace; color:var(--text-sub); font-weight:700;">→ 左から右へドラッグ<br><span style="color:#94a3b8; font-weight:400;">水平グラデーション</span></div>
+        </div>
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--border);">
+          <div style="height:70px; background:linear-gradient(to bottom, #7c3aed, #db2777); position:relative;">
+            <div style="position:absolute; left:50%; top:15%; bottom:15%; width:2px; background:rgba(255,255,255,0.8); transform:translateX(-50%);">
+              <div style="position:absolute; bottom:-5px; left:-4px; width:0; height:0; border-top:10px solid rgba(255,255,255,0.8); border-left:5px solid transparent; border-right:5px solid transparent;"></div>
+            </div>
+          </div>
+          <div style="padding:8px 12px; font-size:11px; font-family:'JetBrains Mono',monospace; color:var(--text-sub); font-weight:700;">↓ 上から下へドラッグ<br><span style="color:#94a3b8; font-weight:400;">垂直グラデーション</span></div>
+        </div>
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--border);">
+          <div style="height:70px; background:linear-gradient(135deg, #7c3aed, #db2777); position:relative;">
+            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;">
+              <div style="font-size:22px; opacity:0.7;">↘</div>
+            </div>
+          </div>
+          <div style="padding:8px 12px; font-size:11px; font-family:'JetBrains Mono',monospace; color:var(--text-sub); font-weight:700;">↘ 斜めにドラッグ<br><span style="color:#94a3b8; font-weight:400;">斜めグラデーション（135°）</span></div>
+        </div>
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--border);">
+          <div style="height:70px; background:linear-gradient(to right, #7c3aed, #db2777 30%, #db2777 70%, #7c3aed); position:relative;">
+            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;">
+              <div style="font-size:11px; color:rgba(255,255,255,0.8); font-family:'JetBrains Mono',monospace;">短くドラッグ</div>
+            </div>
+          </div>
+          <div style="padding:8px 12px; font-size:11px; font-family:'JetBrains Mono',monospace; color:var(--text-sub); font-weight:700;">短くドラッグ<br><span style="color:#94a3b8; font-weight:400;">急な変化・くっきり</span></div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#fdf2f8; border-left:3px solid #db2777;">
+        <p style="color:#831843;"><strong>キーボードのコツ：</strong><br>
+        <code>Shift</code>を押しながらドラッグ → 水平・垂直・45°に固定<br>
+        短くドラッグ → 色の変化が急（くっきり）<br>
+        長くドラッグ → 色の変化がゆるやか（なめらか）</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 3: 5つのスタイル -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#ecfdf5;">🔷</div>
+      <div>
+        <div class="section-sub" style="color:#059669;">CHAPTER 03</div>
+        <div class="section-title">グラデーションの5つのスタイル</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">Photoshopには<strong>5種類のグラデーションスタイル</strong>があります。それぞれ形が違うので用途に応じて使い分けましょう。</p>
+
+      <!-- 5つのスタイル -->
+      <div style="display:flex; flex-direction:column; gap:14px; margin-bottom:20px;">
+
+        <!-- 線形 -->
+        <div style="border-radius:12px; overflow:hidden; border:2px solid #059669;">
+          <div style="display:flex; gap:0; flex-wrap:wrap;">
+            <div style="width:160px; flex-shrink:0; background:linear-gradient(135deg, #059669, #10b981, #6ee7b7); display:flex; align-items:center; justify-content:center; padding:16px; min-height:100px;">
+              <div style="text-align:center; color:#fff;">
+                <div style="font-size:28px; margin-bottom:4px;">→</div>
+                <div style="font-size:12px; font-weight:700; font-family:'JetBrains Mono',monospace;">線形</div>
+              </div>
+            </div>
+            <div style="flex:1; padding:16px; min-width:200px;">
+              <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:8px;">① 線形グラデーション（最もよく使う）</div>
+              <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">
+                一直線に色が変化。バナー背景・テキスト背景・帯などに最適。<br>
+                <code>角度</code>で方向を指定。0°=水平・90°=垂直・135°=斜め
+              </div>
+              <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+                <span style="background:#ecfdf5; color:#059669; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">バナー背景</span>
+                <span style="background:#ecfdf5; color:#059669; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">帯・ボタン</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 円形 -->
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="display:flex; gap:0; flex-wrap:wrap;">
+            <div style="width:160px; flex-shrink:0; background:radial-gradient(circle at center, #f97316, #7c3aed); display:flex; align-items:center; justify-content:center; padding:16px; min-height:100px;">
+              <div style="text-align:center; color:#fff;">
+                <div style="font-size:28px; margin-bottom:4px;">⭕</div>
+                <div style="font-size:12px; font-weight:700; font-family:'JetBrains Mono',monospace;">円形</div>
+              </div>
+            </div>
+            <div style="flex:1; padding:16px; min-width:200px;">
+              <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:8px;">② 円形グラデーション（放射状）</div>
+              <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">
+                中心から外側に向かって放射状に変化。スポットライト効果・強調表現・背景のアクセントに使う。
+              </div>
+              <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+                <span style="background:#fff7ed; color:#ea580c; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">スポットライト</span>
+                <span style="background:#fff7ed; color:#ea580c; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">ビネット効果</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 角度 -->
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="display:flex; gap:0; flex-wrap:wrap;">
+            <div style="width:160px; flex-shrink:0; background:conic-gradient(from 0deg at center, #4338ca, #7c3aed, #db2777, #ea580c, #ca8a04, #059669, #0891b2, #4338ca); display:flex; align-items:center; justify-content:center; padding:16px; min-height:100px;">
+              <div style="text-align:center; color:#fff;">
+                <div style="font-size:28px; margin-bottom:4px;">🔺</div>
+                <div style="font-size:12px; font-weight:700; font-family:'JetBrains Mono',monospace;">角度</div>
+              </div>
+            </div>
+            <div style="flex:1; padding:16px; min-width:200px;">
+              <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:8px;">③ 角度グラデーション（コニカル）</div>
+              <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">
+                時計のように中心から回転しながら変化。虹色効果・カラーホイール風の表現に使う。個性的なテクスチャ作りに活用。
+              </div>
+              <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+                <span style="background:#ede9fe; color:#7c3aed; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">虹色テクスチャ</span>
+                <span style="background:#ede9fe; color:#7c3aed; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">個性的な背景</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 対称 -->
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="display:flex; gap:0; flex-wrap:wrap;">
+            <div style="width:160px; flex-shrink:0; background:linear-gradient(to right, #0891b2, #ecfeff, #0891b2); display:flex; align-items:center; justify-content:center; padding:16px; min-height:100px;">
+              <div style="text-align:center; color:#0e7490;">
+                <div style="font-size:28px; margin-bottom:4px;">↔</div>
+                <div style="font-size:12px; font-weight:700; font-family:'JetBrains Mono',monospace; color:#fff;">対称</div>
+              </div>
+            </div>
+            <div style="flex:1; padding:16px; min-width:200px;">
+              <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:8px;">④ 対称グラデーション（リフレクション）</div>
+              <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">
+                中心から両方向に同じグラデーションが広がる。光の反射・ハイライト表現・金属的なテクスチャに使う。
+              </div>
+              <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+                <span style="background:#ecfeff; color:#0891b2; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">光の反射</span>
+                <span style="background:#ecfeff; color:#0891b2; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">ハイライト</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 菱形 -->
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="display:flex; gap:0; flex-wrap:wrap;">
+            <div style="width:160px; flex-shrink:0; background:radial-gradient(ellipse at center, #ffd700, #ea580c, #1a1a2e); display:flex; align-items:center; justify-content:center; padding:16px; min-height:100px;">
+              <div style="text-align:center; color:#fff;">
+                <div style="font-size:28px; margin-bottom:4px;">◇</div>
+                <div style="font-size:12px; font-weight:700; font-family:'JetBrains Mono',monospace;">菱形</div>
+              </div>
+            </div>
+            <div style="flex:1; padding:16px; min-width:200px;">
+              <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:8px;">⑤ 菱形グラデーション（ダイヤモンド）</div>
+              <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">
+                円形に似ているが四角形に変化。宝石・ダイヤモンドのようなテクスチャ・個性的な背景に使う。
+              </div>
+              <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+                <span style="background:#fefce8; color:#ca8a04; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">宝石テクスチャ</span>
+                <span style="background:#fefce8; color:#ca8a04; font-size:10px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:10px; font-weight:700;">個性的な背景</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 比較表 -->
+      <table class="compare-table">
+        <thead>
+          <tr><th>スタイル</th><th>形の特徴</th><th>主な用途</th><th>よく使う場面</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>線形</td><td>一直線に変化</td><td>背景・帯</td><td>⭐⭐⭐ 最頻出</td></tr>
+          <tr><td>円形</td><td>中心から放射状</td><td>スポットライト</td><td>⭐⭐ よく使う</td></tr>
+          <tr><td>角度</td><td>回転しながら変化</td><td>虹・テクスチャ</td><td>⭐ 特殊用途</td></tr>
+          <tr><td>対称</td><td>両方向に同じ変化</td><td>光の反射</td><td>⭐ 特殊用途</td></tr>
+          <tr><td>菱形</td><td>四角形に放射状</td><td>宝石・装飾</td><td>⭐ 特殊用途</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CHAPTER 4: グラデーションエディター -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fff7ed;">🎛</div>
+      <div>
+        <div class="section-sub" style="color:#ea580c;">CHAPTER 04</div>
+        <div class="section-title">グラデーションエディターを使いこなす</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">グラデーションエディターは<strong>色の種類・位置・透明度をカスタマイズ</strong>する画面です。ここを使いこなせるとオリジナルのグラデーションが作れます。</p>
+
+      <!-- エディター図解 -->
+      <div style="background:#1e1e2e; border-radius:14px; padding:20px; margin-bottom:20px;">
+        <div style="font-size:10px; color:#888; font-family:'JetBrains Mono',monospace; margin-bottom:14px; letter-spacing:0.08em;">グラデーションエディター — 各部の名称</div>
+
+        <!-- グラデーションバー -->
+        <div style="position:relative; margin-bottom:8px;">
+          <!-- 透明度ストップ（上） -->
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px; padding:0 2px;">
+            <div style="text-align:center;">
+              <div style="width:10px; height:10px; background:#555; border:1px solid #888; border-radius:2px; margin:0 auto;"></div>
+              <div style="font-size:8px; color:#aaa; margin-top:2px;">不透明度<br>ストップ</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:10px; height:10px; background:#555; border:1px solid #888; border-radius:2px; margin:0 auto;"></div>
+              <div style="font-size:8px; color:#aaa; margin-top:2px;">不透明度<br>ストップ</div>
+            </div>
+          </div>
+
+          <!-- グラデーションバー本体 -->
+          <div style="height:28px; border-radius:4px; background:linear-gradient(to right, #4338ca, #db2777, #ea580c); border:1px solid #555; margin-bottom:4px;"></div>
+
+          <!-- カラーストップ（下） -->
+          <div style="display:flex; justify-content:space-between; padding:0 2px;">
+            <div style="text-align:center;">
+              <div style="width:10px; height:10px; border-radius:50%; background:#4338ca; border:2px solid #fff; margin:0 auto;"></div>
+              <div style="font-size:8px; color:#7c3aed; margin-top:2px; font-weight:700;">カラー<br>ストップ①</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:10px; height:10px; border-radius:50%; background:#db2777; border:2px solid #fff; margin:0 auto; border:2px solid #ffd700;"></div>
+              <div style="font-size:8px; color:#ffd700; margin-top:2px; font-weight:700;">中間点<br>（ドラッグ可）</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:10px; height:10px; border-radius:50%; background:#ea580c; border:2px solid #fff; margin:0 auto;"></div>
+              <div style="font-size:8px; color:#fb923c; margin-top:2px; font-weight:700;">カラー<br>ストップ②</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 設定欄 -->
+        <div style="background:#2a2a3e; border-radius:8px; padding:12px 14px; margin-top:14px;">
+          <div style="font-size:9px; color:#888; font-family:'JetBrains Mono',monospace; margin-bottom:8px;">選択中のストップの設定</div>
+          <div style="display:flex; gap:16px; flex-wrap:wrap;">
+            <div>
+              <div style="font-size:9px; color:#aaa; margin-bottom:4px;">カラー（クリックで変更）</div>
+              <div style="width:40px; height:20px; background:#4338ca; border:1px solid #888; border-radius:3px;"></div>
+            </div>
+            <div>
+              <div style="font-size:9px; color:#aaa; margin-bottom:4px;">位置（0〜100%）</div>
+              <div style="background:#333; border:1px solid #666; border-radius:3px; padding:2px 8px; font-size:10px; color:#fff; font-family:'JetBrains Mono',monospace;">0 %</div>
+            </div>
+            <div>
+              <div style="font-size:9px; color:#aaa; margin-bottom:4px;">不透明度（0〜100%）</div>
+              <div style="background:#333; border:1px solid #666; border-radius:3px; padding:2px 8px; font-size:10px; color:#fff; font-family:'JetBrains Mono',monospace;">100 %</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- カラーストップの操作 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px;">カラーストップの操作方法</div>
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+        <div style="display:flex; gap:10px; background:#f8f9fa; border-radius:8px; padding:10px 14px; align-items:flex-start;">
+          <span style="background:#ea580c; color:#fff; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; flex-shrink:0; font-family:'JetBrains Mono',monospace;">追加</span>
+          <p style="font-size:12px; color:var(--text-sub); line-height:1.7;">グラデーションバーの<strong>下側をクリック</strong>するとカラーストップが追加される。3色以上のグラデーションに使う。</p>
+        </div>
+        <div style="display:flex; gap:10px; background:#f8f9fa; border-radius:8px; padding:10px 14px; align-items:flex-start;">
+          <span style="background:#ea580c; color:#fff; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; flex-shrink:0; font-family:'JetBrains Mono',monospace;">移動</span>
+          <p style="font-size:12px; color:var(--text-sub); line-height:1.7;">ストップを<strong>左右にドラッグ</strong>して位置を変更。または「位置」欄に数値を入力（0〜100%）。</p>
+        </div>
+        <div style="display:flex; gap:10px; background:#f8f9fa; border-radius:8px; padding:10px 14px; align-items:flex-start;">
+          <span style="background:#ea580c; color:#fff; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; flex-shrink:0; font-family:'JetBrains Mono',monospace;">色変更</span>
+          <p style="font-size:12px; color:var(--text-sub); line-height:1.7;">ストップを選択してから「カラー」の色見本を<strong>ダブルクリック</strong> → カラーピッカーが開く。</p>
+        </div>
+        <div style="display:flex; gap:10px; background:#f8f9fa; border-radius:8px; padding:10px 14px; align-items:flex-start;">
+          <span style="background:#ea580c; color:#fff; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; flex-shrink:0; font-family:'JetBrains Mono',monospace;">削除</span>
+          <p style="font-size:12px; color:var(--text-sub); line-height:1.7;">ストップを選択して<strong>「削除」ボタン</strong>をクリック。または下方向にドラッグ。</p>
+        </div>
+        <div style="display:flex; gap:10px; background:#f8f9fa; border-radius:8px; padding:10px 14px; align-items:flex-start;">
+          <span style="background:#0891b2; color:#fff; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; flex-shrink:0; font-family:'JetBrains Mono',monospace;">透明度</span>
+          <p style="font-size:12px; color:var(--text-sub); line-height:1.7;">バーの<strong>上側をクリック</strong>すると不透明度ストップが追加される。透明→不透明のフェードに使う。</p>
+        </div>
+      </div>
+
+      <!-- 3色以上の実例 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px;">3色以上のグラデーション実例</div>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+        <div>
+          <div style="height:50px; border-radius:8px; background:linear-gradient(to right, #0a1628, #0070f3, #00c896); margin-bottom:4px;"></div>
+          <div style="display:flex; justify-content:space-between; font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-sub);">
+            <span>#0a1628（0%）</span><span>#0070f3（50%）</span><span>#00c896（100%）</span>
+          </div>
+          <p class="caption">← Lesson05（ITバナー）で使ったネイビー→ブルー→グリーン</p>
+        </div>
+        <div>
+          <div style="height:50px; border-radius:8px; background:linear-gradient(to right, #cc0000, #e85d04, #ff8533, rgba(232,93,4,0)); margin-bottom:4px;"></div>
+          <div style="display:flex; justify-content:space-between; font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-sub);">
+            <span>#cc0000（0%）</span><span>#e85d04（40%）</span><span>透明（100%）</span>
+          </div>
+          <p class="caption">← Lesson04（パソナ）の赤→オレンジ→透明の帯</p>
+        </div>
+        <div>
+          <div style="height:50px; border-radius:8px; background:linear-gradient(to right, #ff0080, #ff8c00, #40e0d0, #7b2fff, #ff0080); margin-bottom:4px;"></div>
+          <div style="display:flex; justify-content:space-between; font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-sub);">
+            <span>ピンク</span><span>オレンジ</span><span>シアン</span><span>紫</span><span>ピンク</span>
+          </div>
+          <p class="caption">← 虹色グラデーション（SNS系バナーで映える）</p>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#fff7ed; border-left:3px solid #ea580c;">
+        <p style="color:#7c2d12;"><strong>プリセットの保存：</strong>よく使うグラデーションはエディター上部の「新規グラデーション」ボタンで保存できます。次回からプリセットとして選べるので便利です。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 5: 角度・位置の設定 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#ede9fe;">📐</div>
+      <div>
+        <div class="section-sub" style="color:#7c3aed;">CHAPTER 05</div>
+        <div class="section-title">角度・位置・比率の設定（調整レイヤー編）</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">グラデーション調整レイヤーで設定できる<strong>角度・位置・比率</strong>の使い方を詳しく解説します。これを理解すると思い通りの配置ができるようになります。</p>
+
+      <!-- 角度 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px;">① 角度（0〜360°）</div>
+      <div class="angle-grid">
+        <div class="angle-card">
+          <div class="angle-preview" style="background:linear-gradient(0deg, #7c3aed, #a78bfa);"></div>
+          <div class="angle-label">0°（垂直・下→上）</div>
+        </div>
+        <div class="angle-card">
+          <div class="angle-preview" style="background:linear-gradient(90deg, #7c3aed, #a78bfa);"></div>
+          <div class="angle-label">90°（水平・左→右）</div>
+        </div>
+        <div class="angle-card">
+          <div class="angle-preview" style="background:linear-gradient(135deg, #7c3aed, #a78bfa);"></div>
+          <div class="angle-label">135°（斜め↘）</div>
+        </div>
+        <div class="angle-card">
+          <div class="angle-preview" style="background:linear-gradient(45deg, #7c3aed, #a78bfa);"></div>
+          <div class="angle-label">45°（斜め↗）</div>
+        </div>
+      </div>
+
+      <!-- 位置（オフセット） -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:20px 0 12px;">② 位置（グラデーションの中心を移動）</div>
+      <div style="background:#f8f9fa; border-radius:12px; padding:16px; margin-bottom:16px;">
+        <p style="font-size:13px; color:var(--text-sub); line-height:1.8; margin-bottom:12px;">調整レイヤーのダイアログで<strong>グラデーションをドラッグ</strong>すると中心位置を動かせます。または「位置」の数値を変更（デフォルト：50% 50%）。</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <div style="flex:1; min-width:140px; border-radius:8px; overflow:hidden; border:1px solid var(--border);">
+            <div style="height:70px; background:radial-gradient(circle at 30% 50%, #a78bfa, #4338ca 70%);"></div>
+            <div style="padding:6px 10px; font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-sub);">中心を左に移動<br>位置：30% 50%</div>
+          </div>
+          <div style="flex:1; min-width:140px; border-radius:8px; overflow:hidden; border:1px solid var(--border);">
+            <div style="height:70px; background:radial-gradient(circle at 50% 50%, #a78bfa, #4338ca 70%);"></div>
+            <div style="padding:6px 10px; font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-sub);">標準（中央）<br>位置：50% 50%</div>
+          </div>
+          <div style="flex:1; min-width:140px; border-radius:8px; overflow:hidden; border:1px solid var(--border);">
+            <div style="height:70px; background:radial-gradient(circle at 80% 30%, #a78bfa, #4338ca 70%);"></div>
+            <div style="padding:6px 10px; font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--text-sub);">右上に移動<br>位置：80% 30%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 比率 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px;">③ 比率（グラデーションの広がりを調整）</div>
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+        <div style="border-radius:8px; overflow:hidden; border:1px solid var(--border);">
+          <div style="height:50px; background:linear-gradient(to right, #7c3aed 10%, #a78bfa 90%); position:relative;">
+            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:10px; color:rgba(255,255,255,0.8); font-family:'JetBrains Mono',monospace;">比率 80%（コンパクト）</div>
+          </div>
+        </div>
+        <div style="border-radius:8px; overflow:hidden; border:2px solid #7c3aed;">
+          <div style="height:50px; background:linear-gradient(to right, #7c3aed, #a78bfa); position:relative;">
+            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:10px; color:rgba(255,255,255,0.8); font-family:'JetBrains Mono',monospace;">比率 100%（標準）</div>
+          </div>
+        </div>
+        <div style="border-radius:8px; overflow:hidden; border:1px solid var(--border);">
+          <div style="height:50px; background:linear-gradient(to right, #7c3aed 30%, #a78bfa 70%); position:relative;">
+            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:10px; color:rgba(255,255,255,0.8); font-family:'JetBrains Mono',monospace;">比率 150%（ゆるやか）</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#ede9fe; border-left:3px solid #7c3aed;">
+        <p style="color:#3b0764;"><strong>実践的なコツ：</strong>比率を <code>120〜150%</code> にするとグラデーションが画面端まで広がりすぎず、中央部分に色の変化が集中してバランスよく見えます。Lesson02〜05のバナーはすべて比率 <code>120%</code> を基本にしています。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 6: 透明グラデーション -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#f0fdf4;">👻</div>
+      <div>
+        <div class="section-sub" style="color:#059669;">CHAPTER 06</div>
+        <div class="section-title">透明グラデーション — 色→透明のフェード</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">透明グラデーションは<strong>色から透明に変化するグラデーション</strong>です。写真の境界をなじませたり、テキスト背景を自然に消したりするのに欠かせません。</p>
+
+      <!-- 透明グラデーションの使い道 -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--border);">
+          <div style="height:90px; background:linear-gradient(135deg, #0077c2, #00aadd); position:relative;">
+            <div style="position:absolute; inset:0; background:linear-gradient(to right, rgba(0,119,194,0) 0%, rgba(0,119,194,0.7) 100%);"></div>
+            <div style="position:absolute; top:8px; left:10px; font-size:11px; font-weight:700; color:#fff; text-shadow:0 1px 4px rgba(0,0,0,0.5);">写真（背景）</div>
+            <div style="position:absolute; top:8px; right:10px; font-size:11px; color:rgba(255,255,255,0.6);">→ フェード</div>
+          </div>
+          <div style="padding:8px 12px; font-size:11px; color:var(--text-sub);">写真の端をなじませる</div>
+        </div>
+
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--border);">
+          <div style="height:90px; background:#f5f5e8; position:relative; display:flex; align-items:center; justify-content:center;">
+            <div style="position:absolute; bottom:0; left:0; right:0; height:50%; background:linear-gradient(to bottom, transparent, #f5f5e8);"></div>
+            <div style="font-size:14px; color:#1a2e1e; font-weight:700;">長いテキスト...</div>
+          </div>
+          <div style="padding:8px 12px; font-size:11px; color:var(--text-sub);">テキストを下でフェード</div>
+        </div>
+
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--border);">
+          <div style="height:90px; background:linear-gradient(to right, #2c1f14, #6b4c2a); position:relative; overflow:hidden;">
+            <div style="position:absolute; left:0; top:0; bottom:0; width:60%; background:linear-gradient(to right, #2c1f14, transparent);"></div>
+            <div style="position:absolute; right:10px; top:50%; transform:translateY(-50%); font-size:22px; opacity:0.6;">☕</div>
+          </div>
+          <div style="padding:8px 12px; font-size:11px; color:var(--text-sub);">Lesson03カフェの写真なじみ</div>
+        </div>
+
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--border);">
+          <div style="height:90px; background:linear-gradient(135deg, #0a1628, #0d2347, #0070f3); position:relative;">
+            <div style="position:absolute; right:0; top:0; bottom:0; width:50%; background:linear-gradient(to left, rgba(10,22,40,0.8), transparent);"></div>
+          </div>
+          <div style="padding:8px 12px; font-size:11px; color:var(--text-sub);">Lesson05左側を暗くする</div>
+        </div>
+      </div>
+
+      <!-- 作り方 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px;">透明グラデーションの作り方（2種類）</div>
+
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #059669;">
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#059669; font-weight:700; margin-bottom:8px;">方法①：グラデーションエディターで透明ストップを追加</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.9;">
+            1. グラデーションエディターを開く<br>
+            2. バーの<strong>上側</strong>をクリック → 不透明度ストップを追加<br>
+            3. 「不透明度」を <code>0%</code> に設定 → そのストップが透明になる<br>
+            4. もう一方のストップは <code>100%</code> のまま<br>
+            → 色から透明へのフェードが完成
+          </div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #059669;">
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#059669; font-weight:700; margin-bottom:8px;">方法②：プリセット「描画色から透明に」を使う</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.9;">
+            グラデーションエディターを開く → プリセット一覧の<br>
+            <strong>「描画色から透明に」</strong>を選択<br>
+            → 現在の描画色から透明になるグラデーションが即座に設定される<br>
+            一番手軽な方法。描画色を事前に設定しておくこと。
+          </div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#f0fdf4; border-left:3px solid #059669;">
+        <p style="color:#14532d;"><strong>レイヤーマスクへの応用：</strong>マスクを選択してグラデーションツールで<strong>黒→白のグラデーション</strong>を描くと、写真の端が自然に消えます。これはLesson03〜05の写真なじませ技法の仕組みです。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 7: 描画モードとの組み合わせ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fef2f2;">⚗️</div>
+      <div>
+        <div class="section-sub" style="color:#dc2626;">CHAPTER 07</div>
+        <div class="section-title">描画モードとグラデーションの組み合わせ</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">グラデーションレイヤーに<strong>描画モードを適用</strong>すると、下のレイヤーとの合成方法が変わります。これを使いこなすと表現の幅が劇的に広がります。</p>
+
+      <!-- 主な描画モード -->
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px;">
+
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--border);">
+          <div style="display:flex; height:90px;">
+            <div style="flex:1; background:#4a7fb5; position:relative; overflow:hidden;">
+              <div style="position:absolute; inset:0; background:linear-gradient(135deg, #1a3a5c, #4a7fb5); mix-blend-mode:multiply; opacity:0.8;"></div>
+              <div style="position:absolute; inset:0; background:linear-gradient(to bottom, rgba(0,0,0,0.3), transparent);"></div>
+            </div>
+            <div style="width:200px; padding:12px 14px; border-left:1px solid var(--border);">
+              <div style="font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#dc2626; margin-bottom:4px;">乗算（Multiply）</div>
+              <div style="font-size:11px; color:var(--text-sub); line-height:1.7;">下のレイヤーと掛け合わせて暗くなる。写真に色をのせるとき定番。</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--border);">
+          <div style="display:flex; height:90px;">
+            <div style="flex:1; background:#2b2b2b; position:relative; overflow:hidden;">
+              <div style="position:absolute; inset:0; background:linear-gradient(135deg, #0a1628, #0070f3); mix-blend-mode:screen; opacity:0.7;"></div>
+              <div style="width:30px; height:30px; background:#555; border-radius:50%; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);"></div>
+            </div>
+            <div style="width:200px; padding:12px 14px; border-left:1px solid var(--border);">
+              <div style="font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#dc2626; margin-bottom:4px;">スクリーン（Screen）</div>
+              <div style="font-size:11px; color:var(--text-sub); line-height:1.7;">明るくなる。ネオン・グロー・光のエフェクトに使う。</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--border);">
+          <div style="display:flex; height:90px;">
+            <div style="flex:1; background:#808080; position:relative; overflow:hidden;">
+              <div style="position:absolute; inset:0; background:linear-gradient(135deg, #4338ca, #db2777); mix-blend-mode:overlay; opacity:0.9;"></div>
+            </div>
+            <div style="width:200px; padding:12px 14px; border-left:1px solid var(--border);">
+              <div style="font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#dc2626; margin-bottom:4px;">オーバーレイ（Overlay）</div>
+              <div style="font-size:11px; color:var(--text-sub); line-height:1.7;">明るい部分はより明るく、暗い部分はより暗く。ノイズレイヤーで使った方法。</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--border);">
+          <div style="display:flex; height:90px;">
+            <div style="flex:1; background:#4a7fb5; position:relative; overflow:hidden;">
+              <div style="position:absolute; inset:0; background:linear-gradient(135deg, #059669, #10b981); mix-blend-mode:soft-light; opacity:0.8;"></div>
+            </div>
+            <div style="width:200px; padding:12px 14px; border-left:1px solid var(--border);">
+              <div style="font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#dc2626; margin-bottom:4px;">ソフトライト（Soft Light）</div>
+              <div style="font-size:11px; color:var(--text-sub); line-height:1.7;">オーバーレイより柔らかい。写真に色調を加えるときに自然な仕上がりになる。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#fef2f2; border-left:3px solid #dc2626;">
+        <p style="color:#7f1d1d;"><strong>使い分けの基本：</strong><br>
+        写真を暗くしたい → <strong>乗算</strong><br>
+        光・グロー効果 → <strong>スクリーン</strong><br>
+        コントラストを強調 → <strong>オーバーレイ</strong><br>
+        自然な色味追加 → <strong>ソフトライト</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 8: 実践テクニック集 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fefce8;">⚡</div>
+      <div>
+        <div class="section-sub" style="color:#ca8a04;">CHAPTER 08</div>
+        <div class="section-title">バナー制作で使える実践テクニック集</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">Lesson02〜09で実際に使ったグラデーションテクニックを体系的にまとめます。実践で「あのテクニックどうやるんだっけ？」と思ったときの参考にしてください。</p>
+
+      <div style="display:flex; flex-direction:column; gap:14px;">
+
+        <!-- テク1: ノイズ背景 -->
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:#1a1a2e; padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-size:12px; font-weight:700; color:#fff; font-family:'JetBrains Mono',monospace;">テクニック① グラデーション＋ノイズ背景（Lesson01〜02）</div>
+            <span style="background:#ca8a04; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">★★★ 最頻出</span>
+          </div>
+          <div style="padding:14px 16px;">
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <div style="width:120px; height:80px; border-radius:8px; background:linear-gradient(135deg,#0077c2,#00aadd,#55d4f4); flex-shrink:0; position:relative; overflow:hidden;">
+                <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%2280%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22/%3E%3C/filter%3E%3Crect width=%22120%22 height=%2280%22 filter=%22url(%23n)%22 opacity=%220.25%22/%3E%3C/svg%3E');"></div>
+              </div>
+              <div style="flex:1; font-size:12px; color:var(--text-sub); line-height:1.9;">
+                1. 調整レイヤーでグラデーション背景を作る<br>
+                2. 新規レイヤー → 50%グレーで塗りつぶし<br>
+                3. フィルター → ノイズ → ノイズを加える（量：8〜25%）<br>
+                4. 描画モード：<code>オーバーレイ</code>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- テク2: 写真なじみ -->
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:#1a1a2e; padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-size:12px; font-weight:700; color:#fff; font-family:'JetBrains Mono',monospace;">テクニック② 写真の端を背景になじませる（Lesson03〜05）</div>
+            <span style="background:#ca8a04; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">★★★ 必須</span>
+          </div>
+          <div style="padding:14px 16px; font-size:12px; color:var(--text-sub); line-height:1.9;">
+            1. 写真レイヤーのマスクをクリックして選択<br>
+            2. グラデーションツール（G）で<strong>黒→透明</strong>を選択<br>
+            3. なじませたい方向にドラッグ（例：左端をなじませるなら右→左）<br>
+            4. 必要に応じて複数回ドラッグして調整
+          </div>
+        </div>
+
+        <!-- テク3: オーバーレイで暗くする -->
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:#1a1a2e; padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-size:12px; font-weight:700; color:#fff; font-family:'JetBrains Mono',monospace;">テクニック③ 写真をグラデーションで暗くする（Lesson04）</div>
+            <span style="background:#059669; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">★★ よく使う</span>
+          </div>
+          <div style="padding:14px 16px; font-size:12px; color:var(--text-sub); line-height:1.9;">
+            1. 写真の上に調整レイヤー → グラデーション を追加<br>
+            2. ダークカラー → 透明 のグラデーション（例：#1a3a5c → 透明）<br>
+            3. 描画モード：<code>乗算</code>　不透明度：<code>60〜80%</code><br>
+            → テキストが乗る部分だけ暗くなり文字が読みやすくなる
+          </div>
+        </div>
+
+        <!-- テク4: テキストグラデーション -->
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:#1a1a2e; padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-size:12px; font-weight:700; color:#fff; font-family:'JetBrains Mono',monospace;">テクニック④ テキストにグラデーションをかける</div>
+            <span style="background:#059669; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">★★ よく使う</span>
+          </div>
+          <div style="padding:14px 16px;">
+            <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:10px;">
+              <div style="background:#1a1a2e; padding:14px 20px; border-radius:8px;">
+                <div style="font-size:28px; font-weight:900; background:linear-gradient(135deg,#f59e0b,#ec4899,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">GRADIENT</div>
+              </div>
+            </div>
+            <div style="font-size:12px; color:var(--text-sub); line-height:1.9;">
+              1. テキストレイヤーをダブルクリック → レイヤースタイル<br>
+              2. <strong>グラデーションオーバーレイ</strong>にチェック<br>
+              3. グラデーションをカスタマイズ・角度を設定<br>
+              → テキストにグラデーションが適用される
+            </div>
+          </div>
+        </div>
+
+        <!-- テク5: CTAボタン -->
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:#1a1a2e; padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-size:12px; font-weight:700; color:#fff; font-family:'JetBrains Mono',monospace;">テクニック⑤ CTAボタンのグラデーション</div>
+            <span style="background:#7c3aed; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; font-family:'JetBrains Mono',monospace;">★ 応用</span>
+          </div>
+          <div style="padding:14px 16px;">
+            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
+              <div style="background:linear-gradient(135deg,#00c896,#0070f3); padding:12px 28px; border-radius:30px; font-size:14px; font-weight:700; color:#fff; box-shadow:0 4px 16px rgba(0,112,243,0.3);">詳細はこちら →</div>
+              <div style="background:linear-gradient(to right,#e85d04,#ff8533); padding:12px 28px; border-radius:6px; font-size:14px; font-weight:700; color:#fff;">3人に2人が年収アップ ▶</div>
+            </div>
+            <div style="font-size:12px; color:var(--text-sub); line-height:1.9;">
+              1. 長方形ツールで帯・ボタンのシェイプを作成<br>
+              2. レイヤースタイル → <strong>グラデーションオーバーレイ</strong><br>
+              3. 角度 <code>0°（水平）</code> または <code>135°（斜め）</code><br>
+              → 塗り一色より立体感と動きが出る
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="tip" style="background:#fefce8; border-left:3px solid #ca8a04; margin-top:16px;">
+        <p style="color:#713f12;"><strong>まとめ：グラデーションを使う場面チェックリスト</strong><br>
+        □ バナーの背景を作るとき → <strong>調整レイヤー</strong><br>
+        □ 写真の端をなじませるとき → <strong>マスクにグラデーションツール</strong><br>
+        □ 写真を暗くしてテキストを読みやすくするとき → <strong>乗算モードの調整レイヤー</strong><br>
+        □ テキストに色をのせるとき → <strong>レイヤースタイル</strong><br>
+        □ ボタン・帯をおしゃれにするとき → <strong>レイヤースタイル</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:16px; font-size:12px; color:#94a3b8;">Photoshop チュートリアル · Lesson 12 解説編｜グラデーション完全解説</div>
+
+</div>
+</body>
+</html>
