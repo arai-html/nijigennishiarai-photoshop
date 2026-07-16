@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>案件獲得から納品まで｜Photoshop Lesson 16</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --text: #1a1a2e;
+    --text-sub: #4a5568;
+    --border: #e2e8f0;
+    --navy: #1a365d;
+    --blue: #2b6cb0;
+    --gold: #d69e2e;
+    --green: #276749;
+    --red: #c53030;
+    --purple: #553c9a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 40px 20px 80px; }
+  .container { max-width: 820px; margin: 0 auto; }
+
+  /* ヒーロー */
+  .hero { background: linear-gradient(135deg, #1a202c 0%, #2d3748 50%, #4a5568 100%); border-radius: 20px; padding: 52px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::before { content: '💼'; position: absolute; right: 40px; top: 24px; font-size: 80px; opacity: 0.15; }
+  .hero-content { position: relative; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.35); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+  .hero h1 { font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 10px; line-height: 1.3; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.82); margin-bottom: 20px; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-tag { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+
+  /* フロー全体図 */
+  .flow-overview { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 24px; margin-bottom: 36px; }
+  .flow-title { font-size: 13px; font-weight: 700; color: var(--text-sub); font-family: 'JetBrains Mono', monospace; margin-bottom: 16px; letter-spacing: 0.08em; }
+  .flow-steps { display: flex; flex-wrap: wrap; gap: 0; }
+  .flow-step { display: flex; align-items: center; gap: 0; }
+  .flow-bubble { background: var(--navy); color: #fff; border-radius: 10px; padding: 8px 14px; font-size: 12px; font-weight: 700; text-align: center; min-width: 90px; line-height: 1.4; }
+  .flow-arrow { font-size: 16px; color: #cbd5e0; padding: 0 6px; flex-shrink: 0; }
+  .flow-step:last-child .flow-arrow { display: none; }
+
+  /* ステップカード */
+  .step-card { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; }
+  .step-header { padding: 20px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .step-num { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 900; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; line-height: 1.2; text-align: center; }
+  .step-title-wrap { flex: 1; }
+  .step-label { font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-bottom: 2px; }
+  .step-title { font-size: 18px; font-weight: 700; }
+  .step-time { font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
+  .step-body { padding: 24px; }
+  .desc { font-size: 14px; color: var(--text-sub); line-height: 1.85; margin-bottom: 18px; }
+
+  /* ポイントリスト */
+  .points { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+  .point { display: flex; gap: 10px; align-items: flex-start; background: #f8f9fa; border-radius: 8px; padding: 10px 14px; }
+  .point-icon { font-size: 14px; flex-shrink: 0; }
+  .point-text { font-size: 13px; color: var(--text-sub); line-height: 1.6; }
+  .point-text strong { color: var(--text); }
+
+  /* 会話吹き出し */
+  .chat { display: flex; flex-direction: column; gap: 12px; margin: 16px 0; }
+  .chat-item { display: flex; gap: 10px; align-items: flex-start; }
+  .chat-item.right { flex-direction: row-reverse; }
+  .chat-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .chat-bubble { max-width: 75%; border-radius: 14px; padding: 10px 14px; font-size: 13px; line-height: 1.7; }
+  .chat-name { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; margin-bottom: 4px; }
+  .chat-item.left .chat-bubble { background: #f1f5f9; border-top-left-radius: 4px; }
+  .chat-item.right .chat-bubble { background: #dbeafe; border-top-right-radius: 4px; }
+  .chat-item.right .chat-name { text-align: right; }
+
+  /* 注意ボックス */
+  .alert { border-radius: 10px; padding: 14px 16px; margin: 14px 0; }
+  .alert p { font-size: 13px; line-height: 1.75; }
+  .alert-title { font-size: 12px; font-weight: 700; font-family: 'JetBrains Mono', monospace; margin-bottom: 6px; }
+
+  /* テンプレートボックス */
+  .template { background: #1e1e2e; border-radius: 12px; padding: 18px 20px; margin: 14px 0; }
+  .template-title { font-size: 10px; color: #94a3b8; font-family: 'JetBrains Mono', monospace; margin-bottom: 12px; letter-spacing: 0.08em; }
+  .template-body { font-size: 13px; color: #e2e8f0; line-height: 2.1; white-space: pre-wrap; }
+
+  /* 料金表 */
+  .price-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 14px 0; }
+  .price-table th { background: var(--navy); color: #fff; padding: 10px 16px; text-align: left; }
+  .price-table td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text-sub); }
+  .price-table tr:nth-child(even) td { background: #f8f9fa; }
+  .price-highlight { font-weight: 700; color: var(--text); }
+
+  /* ヒント */
+  .tip { border-radius: 10px; padding: 12px 16px; margin-top: 12px; }
+  .tip p { font-size: 13px; line-height: 1.75; }
+
+  /* チェックリスト */
+  .checklist { display: flex; flex-direction: column; gap: 6px; margin: 14px 0; }
+  .check-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px; background: #f8f9fa; border-radius: 8px; }
+  .check-box { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border); flex-shrink: 0; margin-top: 2px; }
+  .check-text { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
+
+  /* 2カラム */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+
+  code { background: #eef2f7; color: #2d3748; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 20px; }
+    .hero h1 { font-size: 22px; }
+    .step-body { padding: 16px; }
+    .two-col { grid-template-columns: 1fr; }
+    .flow-steps { gap: 8px; }
+    .flow-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Photoshop · Lesson 16 — 実践編</div>
+      <h1>💼 案件獲得から納品まで<br>バナー制作の全工程</h1>
+      <p>架空のクライアントから依頼が来た想定で、ヒアリング・制作・納品まで<br>実際の案件と同じ流れをすべて体験しよう。</p>
+      <div class="hero-tags">
+        <span class="hero-tag">クライアント対応</span>
+        <span class="hero-tag">ヒアリング</span>
+        <span class="hero-tag">値段交渉</span>
+        <span class="hero-tag">市場調査</span>
+        <span class="hero-tag">素材収集</span>
+        <span class="hero-tag">制作・修正</span>
+        <span class="hero-tag">納品・請求</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- フロー全体図 -->
+  <div class="flow-overview">
+    <div class="flow-title">📋 案件の全体フロー（Lesson16で体験する流れ）</div>
+    <div class="flow-steps" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px;">
+      <div style="background:#1a365d; color:#fff; border-radius:10px; padding:10px 12px; font-size:11px; font-weight:700; text-align:center; line-height:1.6;">STEP 01<br>依頼受付</div>
+      <div style="background:#2b6cb0; color:#fff; border-radius:10px; padding:10px 12px; font-size:11px; font-weight:700; text-align:center; line-height:1.6;">STEP 02<br>ヒアリング</div>
+      <div style="background:#276749; color:#fff; border-radius:10px; padding:10px 12px; font-size:11px; font-weight:700; text-align:center; line-height:1.6;">STEP 03<br>見積・契約</div>
+      <div style="background:#6b46c1; color:#fff; border-radius:10px; padding:10px 12px; font-size:11px; font-weight:700; text-align:center; line-height:1.6;">STEP 04<br>素材確認</div>
+      <div style="background:#9c4221; color:#fff; border-radius:10px; padding:10px 12px; font-size:11px; font-weight:700; text-align:center; line-height:1.6;">STEP 05<br>市場調査</div>
+      <div style="background:#2c5282; color:#fff; border-radius:10px; padding:10px 12px; font-size:11px; font-weight:700; text-align:center; line-height:1.6;">STEP 06<br>構成・ラフ</div>
+      <div style="background:#285e61; color:#fff; border-radius:10px; padding:10px 12px; font-size:11px; font-weight:700; text-align:center; line-height:1.6;">STEP 07<br>制作</div>
+      <div style="background:#744210; color:#fff; border-radius:10px; padding:10px 12px; font-size:11px; font-weight:700; text-align:center; line-height:1.6;">STEP 08<br>確認・修正</div>
+      <div style="background:#702459; color:#fff; border-radius:10px; padding:10px 12px; font-size:11px; font-weight:700; text-align:center; line-height:1.6;">STEP 09<br>書き出し</div>
+      <div style="background:#1a202c; color:#fff; border-radius:10px; padding:10px 12px; font-size:11px; font-weight:700; text-align:center; line-height:1.6;">STEP 10<br>納品・請求</div>
+    </div>
+  </div>
+
+  <!-- 今回の架空クライアント -->
+  <div style="background:#fffff0; border-radius:14px; border:2px solid #d69e2e; padding:20px 24px; margin-bottom:32px;">
+    <div style="font-size:12px; font-weight:700; color:#744210; font-family:'JetBrains Mono',monospace; margin-bottom:12px;">🏢 今回の架空クライアント設定</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:13px; color:var(--text-sub);">
+      <div><strong style="color:var(--text);">会社名：</strong>株式会社グリーンカフェ</div>
+      <div><strong style="color:var(--text);">業種：</strong>カフェ・飲食店</div>
+      <div><strong style="color:var(--text);">依頼内容：</strong>夏の新メニューPRバナー</div>
+      <div><strong style="color:var(--text);">掲載場所：</strong>InstagramとWebサイトTOP</div>
+      <div><strong style="color:var(--text);">担当者：</strong>田中マーケティング部長</div>
+      <div><strong style="color:var(--text);">予算感：</strong>「あまり高くはできない」</div>
+    </div>
+  </div>
+
+  <!-- STEP 01 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#1a365d,#2b6cb0);">STEP<br>01</div>
+      <div class="step-title-wrap">
+        <div class="step-label" style="color:#2b6cb0;">案件受付</div>
+        <div class="step-title">クライアントからの依頼を受け取る</div>
+      </div>
+      <span class="step-time" style="background:#ebf8ff; color:#2b6cb0;">Day 1</span>
+    </div>
+    <div class="step-body">
+      <p class="desc">最初の接触はメール・DM・クラウドソーシングなど様々。<strong>最初の返信でプロらしさ</strong>を見せることが大切。返信が遅い・雑な文章はそれだけで信頼を失います。</p>
+
+      <!-- 依頼メール例 -->
+      <div class="template">
+        <div class="template-title">📩 クライアントからの依頼メール（例）</div>
+        <div class="template-body">件名：バナー制作のご依頼について
+
+はじめまして。株式会社グリーンカフェの田中と申します。
+この度、夏の新メニューをPRするためのバナー制作をお願いしたいと思い、
+ご連絡させていただきました。
+
+Instagramとホームページのトップページに使用したいと考えております。
+ご対応可能でしょうか？まずはお見積りをいただけますと幸いです。</div>
+      </div>
+
+      <!-- 返信例 -->
+      <div class="template">
+        <div class="template-title">✉️ あなたの返信メール（例）</div>
+        <div class="template-body">件名：Re: バナー制作のご依頼について
+
+田中様
+
+はじめまして、〇〇と申します。
+この度はバナー制作のご依頼をいただき、誠にありがとうございます。
+
+ご依頼の内容を拝見いたしました。喜んで対応させていただきます。
+より詳しいご要望をお伺いするため、
+いくつかご質問させていただけますでしょうか？
+
+【確認事項】
+・バナーのサイズ（Instagram用・Web用それぞれ）
+・ご希望のイメージや色味
+・使用したい写真・ロゴ素材のご有無
+・ご希望の納期
+・ご予算の目安
+
+ご回答いただき次第、お見積りをお送りします。
+どうぞよろしくお願いいたします。
+
+〇〇（名前）
+連絡先: xxx@xxx.com</div>
+      </div>
+
+      <div class="tip" style="background:#ebf8ff; border-left:3px solid #2b6cb0;">
+        <p style="color:#1a365d;"><strong>最初の返信で必ずやること：</strong>①お礼 ②受けられる旨を伝える ③必要事項をまとめて質問する。バラバラに質問を送ると相手に何度も返信させることになりNG。<strong>1通に質問をまとめる</strong>のがプロのマナー。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 02 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#276749,#38a169);">STEP<br>02</div>
+      <div class="step-title-wrap">
+        <div class="step-label" style="color:#276749;">ヒアリング</div>
+        <div class="step-title">クライアントの要望を深掘りする</div>
+      </div>
+      <span class="step-time" style="background:#f0fff4; color:#276749;">Day 2〜3</span>
+    </div>
+    <div class="step-body">
+      <p class="desc">ヒアリングは制作の<strong>設計図を作る最重要工程</strong>。ここが曖昧なまま進めると、完成後に「イメージと違う」「作り直してほしい」が多発します。</p>
+
+      <!-- ヒアリングシート -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px;">📋 ヒアリングで必ず確認する10項目</div>
+      <div style="display:flex; flex-direction:column; gap:0; border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:16px;">
+        <div style="display:grid; grid-template-columns:36px 1fr 1fr; background:#1a365d; padding:10px 14px; font-size:11px; font-weight:700; color:#fff; font-family:'JetBrains Mono',monospace; gap:12px;">
+          <div>#</div><div>確認項目</div><div>グリーンカフェの回答例</div>
+        </div>
+        <div style="display:grid; grid-template-columns:36px 1fr 1fr; padding:10px 14px; font-size:12px; gap:12px; border-bottom:1px solid var(--border); align-items:start;">
+          <div style="color:#94a3b8; font-family:'JetBrains Mono',monospace; font-weight:700;">1</div>
+          <div style="color:var(--text); font-weight:700;">バナーのサイズ</div>
+          <div style="color:var(--text-sub);">Instagram正方形（1080×1080px）<br>Web用横長（1200×628px）</div>
+        </div>
+        <div style="display:grid; grid-template-columns:36px 1fr 1fr; padding:10px 14px; font-size:12px; gap:12px; border-bottom:1px solid var(--border); background:#f8f9fa; align-items:start;">
+          <div style="color:#94a3b8; font-family:'JetBrains Mono',monospace; font-weight:700;">2</div>
+          <div style="color:var(--text); font-weight:700;">何を伝えたいか（目的）</div>
+          <div style="color:var(--text-sub);">夏季限定メニュー「マンゴーラテ」の新発売告知</div>
+        </div>
+        <div style="display:grid; grid-template-columns:36px 1fr 1fr; padding:10px 14px; font-size:12px; gap:12px; border-bottom:1px solid var(--border); align-items:start;">
+          <div style="color:#94a3b8; font-family:'JetBrains Mono',monospace; font-weight:700;">3</div>
+          <div style="color:var(--text); font-weight:700;">ターゲット（誰に向けて）</div>
+          <div style="color:var(--text-sub);">20〜30代女性・おしゃれなカフェ好き</div>
+        </div>
+        <div style="display:grid; grid-template-columns:36px 1fr 1fr; padding:10px 14px; font-size:12px; gap:12px; border-bottom:1px solid var(--border); background:#f8f9fa; align-items:start;">
+          <div style="color:#94a3b8; font-family:'JetBrains Mono',monospace; font-weight:700;">4</div>
+          <div style="color:var(--text); font-weight:700;">希望の色・雰囲気</div>
+          <div style="color:var(--text-sub);">夏らしい。黄色・オレンジ系。明るくポップに</div>
+        </div>
+        <div style="display:grid; grid-template-columns:36px 1fr 1fr; padding:10px 14px; font-size:12px; gap:12px; border-bottom:1px solid var(--border); align-items:start;">
+          <div style="color:#94a3b8; font-family:'JetBrains Mono',monospace; font-weight:700;">5</div>
+          <div style="color:var(--text); font-weight:700;">参考バナー・競合サイト</div>
+          <div style="color:var(--text-sub);">スターバックス・タリーズのような洗練された感じ</div>
+        </div>
+        <div style="display:grid; grid-template-columns:36px 1fr 1fr; padding:10px 14px; font-size:12px; gap:12px; border-bottom:1px solid var(--border); background:#f8f9fa; align-items:start;">
+          <div style="color:#94a3b8; font-family:'JetBrains Mono',monospace; font-weight:700;">6</div>
+          <div style="color:var(--text); font-weight:700;">掲載期間・用途</div>
+          <div style="color:var(--text-sub);">7月1日〜8月31日。Instagram投稿とWeb用</div>
+        </div>
+        <div style="display:grid; grid-template-columns:36px 1fr 1fr; padding:10px 14px; font-size:12px; gap:12px; border-bottom:1px solid var(--border); align-items:start;">
+          <div style="color:#94a3b8; font-family:'JetBrains Mono',monospace; font-weight:700;">7</div>
+          <div style="color:var(--text); font-weight:700;">使いたいキャッチコピー</div>
+          <div style="color:var(--text-sub);">「夏のご褒美、はじまる。」（考えてもらってもOK）</div>
+        </div>
+        <div style="display:grid; grid-template-columns:36px 1fr 1fr; padding:10px 14px; font-size:12px; gap:12px; border-bottom:1px solid var(--border); background:#f8f9fa; align-items:start;">
+          <div style="color:#94a3b8; font-family:'JetBrains Mono',monospace; font-weight:700;">8</div>
+          <div style="color:var(--text); font-weight:700;">ロゴ・写真の提供</div>
+          <div style="color:var(--text-sub);">ロゴあり。商品写真はプロ撮影済みで提供可能</div>
+        </div>
+        <div style="display:grid; grid-template-columns:36px 1fr 1fr; padding:10px 14px; font-size:12px; gap:12px; border-bottom:1px solid var(--border); align-items:start;">
+          <div style="color:#94a3b8; font-family:'JetBrains Mono',monospace; font-weight:700;">9</div>
+          <div style="color:var(--text); font-weight:700;">納期</div>
+          <div style="color:var(--text-sub);">6月20日まで（7月1日公開に向けて）</div>
+        </div>
+        <div style="display:grid; grid-template-columns:36px 1fr 1fr; padding:10px 14px; font-size:12px; gap:12px; align-items:start;">
+          <div style="color:#94a3b8; font-family:'JetBrains Mono',monospace; font-weight:700;">10</div>
+          <div style="color:var(--text); font-weight:700;">予算</div>
+          <div style="color:var(--text-sub);">「あまり高くは…」→ 詳しく聞くと3〜5万円程度</div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#f0fff4; border-left:3px solid #276749;">
+        <p style="color:#1a4731;"><strong>「参考バナーを見せてもらう」が最強：</strong>言葉でイメージを共有するのは難しい。「洗練された感じ」「ポップ」は人によって全然違う。<strong>「どんなバナーが好きですか？画像で送ってもらえますか？」</strong>と一言聞くだけで認識のズレが激減する。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 03 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#744210,#d69e2e);">STEP<br>03</div>
+      <div class="step-title-wrap">
+        <div class="step-label" style="color:#d69e2e;">見積・契約</div>
+        <div class="step-title">値段交渉と契約書・発注書の確認</div>
+      </div>
+      <span class="step-time" style="background:#fffff0; color:#744210;">Day 3〜4</span>
+    </div>
+    <div class="step-body">
+      <p class="desc">値段交渉は多くの初心者が苦手とする部分です。<strong>安く受けすぎると赤字</strong>になります。適正価格を知った上で交渉しましょう。</p>
+
+      <!-- 相場表 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px;">バナー制作の相場感</div>
+      <table class="price-table">
+        <thead><tr><th>依頼内容</th><th>相場（目安）</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>シンプルバナー1枚（テキストのみ）</td>
+            <td class="price-highlight">3,000〜8,000円</td>
+            <td>素材不要・工数少ない</td>
+          </tr>
+          <tr>
+            <td>写真あり・標準バナー1枚</td>
+            <td class="price-highlight">8,000〜20,000円</td>
+            <td>切り抜き・加工含む</td>
+          </tr>
+          <tr>
+            <td>複数サイズセット（2〜3種）</td>
+            <td class="price-highlight">15,000〜35,000円</td>
+            <td>今回のケース</td>
+          </tr>
+          <tr>
+            <td>素材（写真・アイコン）も自分で用意</td>
+            <td class="price-highlight">+5,000〜15,000円</td>
+            <td>素材費・リサーチ費含む</td>
+          </tr>
+          <tr>
+            <td>修正対応（3回まで込み）</td>
+            <td class="price-highlight">+3,000〜5,000円</td>
+            <td>修正工数込み</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 見積書例 -->
+      <div class="template">
+        <div class="template-title">📄 見積書（メール文）の例</div>
+        <div class="template-body">田中様
+
+ヒアリング内容をもとにお見積りをお送りします。
+
+【お見積り内訳】
+━━━━━━━━━━━━━━━━━━━━━━
+① Instagram用バナー（1080×1080px）× 1枚
+　  デザイン制作費：12,000円
+
+② Web用バナー（1200×628px）× 1枚
+　  デザイン制作費：8,000円
+
+③ 修正対応（初回納品後 2回まで含む）
+　  修正費用：込み
+
+━━━━━━━━━━━━━━━━━━━━━━
+合計：20,000円（税込 22,000円）
+━━━━━━━━━━━━━━━━━━━━━━
+
+【納期】ご発注日より7営業日
+【お支払い】納品後5営業日以内に銀行振込
+【3回目以降の修正】1回あたり3,000円（税込）
+
+ご不明な点がございましたらお気軽にご連絡ください。</div>
+      </div>
+
+      <!-- 値段交渉への対応 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:16px 0 10px;">「もう少し安くなりませんか？」と言われたら</div>
+      <div class="two-col">
+        <div class="alert" style="background:#fef2f2; border:1px solid #fca5a5;">
+          <div class="alert-title" style="color:#c53030;">❌ NG対応</div>
+          <p style="color:#7f1d1d;">「わかりました、15,000円でいいです」と即答する。<br>→ 値段を下げたのに仕事量は同じ。自分の首を絞めるだけ。</p>
+        </div>
+        <div class="alert" style="background:#f0fff4; border:1px solid #86efac;">
+          <div class="alert-title" style="color:#276749;">✅ OK対応</div>
+          <p style="color:#1a4731;">「値段を下げる代わりに内容を減らす」提案をする。<br>例：「修正回数を1回にすれば17,000円にできます」</p>
+        </div>
+      </div>
+
+      <div class="alert" style="background:#fffff0; border:1px solid #fde047; margin-top:4px;">
+        <div class="alert-title" style="color:#744210;">⚠️ 必ず確認すること</div>
+        <p style="color:#713f12;">口約束だけで進めるのはトラブルの元。<strong>メールで発注内容・金額・納期・修正回数を文書化</strong>しておく。クラウドソーシングなら契約機能を使う。個人取引なら簡単な発注書をPDFで送る。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 04 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#553c9a,#805ad5);">STEP<br>04</div>
+      <div class="step-title-wrap">
+        <div class="step-label" style="color:#805ad5;">素材確認</div>
+        <div class="step-title">素材の提供有無と著作権の確認</div>
+      </div>
+      <span class="step-time" style="background:#faf5ff; color:#553c9a;">Day 4</span>
+    </div>
+    <div class="step-body">
+      <p class="desc">素材（写真・ロゴ・フォント・アイコン）の準備は2パターンあります。それぞれで作業量・費用が大きく変わります。</p>
+
+      <div class="two-col">
+        <!-- パターンA -->
+        <div style="border-radius:12px; overflow:hidden; border:2px solid #805ad5;">
+          <div style="background:#553c9a; padding:12px 16px;">
+            <div style="font-size:12px; font-weight:700; color:#fff; margin-bottom:4px;">📦 パターンA：クライアントが素材を提供</div>
+            <div style="font-size:10px; color:rgba(255,255,255,0.7);">今回のグリーンカフェのケース</div>
+          </div>
+          <div style="padding:14px 16px; font-size:12px; color:var(--text-sub); line-height:1.9;">
+            ✅ ロゴデータ（AI / PNG）を受け取る<br>
+            ✅ 商品写真（高解像度JPG）を受け取る<br>
+            ✅ ブランドカラーコードを確認<br>
+            ✅ 使用フォントを確認（ある場合）<br>
+            <div style="margin-top:8px; font-size:11px; color:#805ad5; font-weight:700;">→ 工数が少ない・価格を抑えられる</div>
+          </div>
+        </div>
+
+        <!-- パターンB -->
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:#2d3748; padding:12px 16px;">
+            <div style="font-size:12px; font-weight:700; color:#fff; margin-bottom:4px;">🔍 パターンB：こちらが素材を用意</div>
+            <div style="font-size:10px; color:rgba(255,255,255,0.7);">素材なしの場合</div>
+          </div>
+          <div style="padding:14px 16px; font-size:12px; color:var(--text-sub); line-height:1.9;">
+            📷 フリー素材サイトで写真を探す<br>
+            　→ Unsplash / Pixabay / PAKUTASO<br>
+            🎨 アイコンを探す<br>
+            　→ Flaticon / icooon-mono<br>
+            📝 フォントを選ぶ<br>
+            　→ Google Fonts / Adobe Fonts<br>
+            <div style="margin-top:8px; font-size:11px; color:#e53e3e; font-weight:700;">→ 工数増・費用に上乗せが必要</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 著作権注意 -->
+      <div class="alert" style="background:#fef2f2; border:1px solid #fca5a5; margin-top:16px;">
+        <div class="alert-title" style="color:#c53030;">⚠️ 著作権・ライセンスの確認（絶対に守る）</div>
+        <p style="color:#7f1d1d; line-height:1.9;">
+          <strong>やってはいけないこと：</strong><br>
+          ❌ Google画像検索の写真をそのまま使う（著作権侵害）<br>
+          ❌ 商用NGのフリー素材を商用バナーに使う<br>
+          ❌ 他社バナーをそのままコピーする<br>
+          <br>
+          <strong>正しいやり方：</strong><br>
+          ✅ 商用利用OKのフリー素材を使う<br>
+          ✅ Adobe Stock等の有料素材を購入する<br>
+          ✅ クライアント提供素材の使用許諾を確認する
+        </p>
+      </div>
+
+      <!-- 受け取りチェックリスト -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:16px 0 8px;">素材受け取り時のチェックリスト</div>
+      <div class="checklist">
+        <div class="check-item"><div class="check-box"></div><div class="check-text">ロゴは<strong>ベクターデータ（AI・SVG）または高解像度PNG</strong>で受け取った</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">写真は<strong>最低でも1920px以上</strong>の解像度がある</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">素材の<strong>商用利用が許可</strong>されていることを確認した</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">ブランドカラー（カラーコード）を確認した</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 05 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#9c4221,#ed8936);">STEP<br>05</div>
+      <div class="step-title-wrap">
+        <div class="step-label" style="color:#ed8936;">市場調査</div>
+        <div class="step-title">似たバナーを探してクリックされる要因を分析する</div>
+      </div>
+      <span class="step-time" style="background:#fffaf0; color:#9c4221;">Day 5</span>
+    </div>
+    <div class="step-body">
+      <p class="desc">いきなりPhotoshopを開かないこと！まず<strong>同じジャンルで実際にクリックされているバナー</strong>を調査してから制作に入ります。</p>
+
+      <!-- バナーライブラリ -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px;">🔍 使うバナーリサーチツール</div>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #ed8936;">
+          <div style="font-size:12px; font-weight:700; color:#9c4221; margin-bottom:6px;">① Pinterest（ピンタレスト）</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">「カフェ バナー」「cafe banner design」で検索。世界中のデザインが集まっており、トレンドの把握に最適。デザインの方向性を決めるのに便利。</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #ed8936;">
+          <div style="font-size:12px; font-weight:700; color:#9c4221; margin-bottom:6px;">② Canvaのテンプレート</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">canva.comのテンプレートを検索。「Instagram food」などで業界の定番レイアウトが確認できる。直接使うのはNGだが参考にするのはOK。</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #ed8936;">
+          <div style="font-size:12px; font-weight:700; color:#9c4221; margin-bottom:6px;">③ 競合のSNS・ウェブサイト</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">スターバックス・タリーズ等の公式InstagramやWebサイトのバナーを確認。「この業界で何が効いているか」を直接見られる最高の教材。</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #ed8936;">
+          <div style="font-size:12px; font-weight:700; color:#9c4221; margin-bottom:6px;">④ Google広告（実際の広告バナー）</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">「カフェ 近く」などで検索して表示される広告バナーを確認。実際に予算をかけて運用されているバナーなので、効果が出ているデザインが多い。</div>
+        </div>
+      </div>
+
+      <!-- 分析ポイント -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px;">集めたバナーから分析するポイント</div>
+      <div class="points">
+        <div class="point"><div class="point-icon">🎨</div><div class="point-text"><strong>色：</strong>カフェ系は何色が多い？（ブラウン・クリーム・グリーン系が多い傾向）</div></div>
+        <div class="point"><div class="point-icon">📐</div><div class="point-text"><strong>レイアウト：</strong>写真の位置・テキストの配置パターンはどれが多い？</div></div>
+        <div class="point"><div class="point-icon">🔤</div><div class="point-text"><strong>フォント：</strong>どんなフォントが使われている？手書き体多め？ゴシック多め？</div></div>
+        <div class="point"><div class="point-icon">📝</div><div class="point-text"><strong>コピー：</strong>テキストは短い？長い？数字を使っている？</div></div>
+        <div class="point"><div class="point-icon">👁</div><div class="point-text"><strong>視線誘導：</strong>どこに目が行く？何が一番目立つ？</div></div>
+      </div>
+
+      <div class="tip" style="background:#fffaf0; border-left:3px solid #ed8936;">
+        <p style="color:#7c2d12;"><strong>「参考にする」と「コピーする」は違う：</strong>レイアウトの構成やカラーの傾向は参考にしてOK。ただし特定のバナーを「そのまま真似する」のは著作権侵害になります。<strong>「なぜこのデザインが効くのか」を分析して、オリジナルに落とし込む</strong>のが正しいアプローチ。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 06 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#2c5282,#4299e1);">STEP<br>06</div>
+      <div class="step-title-wrap">
+        <div class="step-label" style="color:#4299e1;">構成・ラフ</div>
+        <div class="step-title">構成案・ラフをクライアントに提出して確認する</div>
+      </div>
+      <span class="step-time" style="background:#ebf8ff; color:#2c5282;">Day 6</span>
+    </div>
+    <div class="step-body">
+      <p class="desc">いきなり完成品を作るのはリスクが高い。<strong>ラフ（大まかなイメージ図）を先に見せてOKをもらう</strong>ことで、大幅な作り直しを防げます。</p>
+
+      <!-- ラフの作り方 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px;">ラフ提出の3つの方法</div>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; display:flex; gap:14px; align-items:flex-start;">
+          <div style="background:#4299e1; color:#fff; border-radius:8px; padding:4px 10px; font-size:11px; font-weight:700; font-family:'JetBrains Mono',monospace; flex-shrink:0;">手書き</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">紙にざっくりレイアウトを描いてスマホで撮影して送る。スピードが速い。細かくなくていい。「写真は左・テキストは右」くらいの粒度でOK。</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; display:flex; gap:14px; align-items:flex-start;">
+          <div style="background:#4299e1; color:#fff; border-radius:8px; padding:4px 10px; font-size:11px; font-weight:700; font-family:'JetBrains Mono',monospace; flex-shrink:0;">Canva</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">Canvaで素早くレイアウト案を作り画像で送る。クライアントにも見てもらいやすい。色・フォントの方向性も伝えられる。</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; display:flex; gap:14px; align-items:flex-start;">
+          <div style="background:#4299e1; color:#fff; border-radius:8px; padding:4px 10px; font-size:11px; font-weight:700; font-family:'JetBrains Mono',monospace; flex-shrink:0;">Photoshop</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">Photoshopで作り込んで提出。精度が高いが時間がかかる。初回のラフには向かない。修正が発生した場合に使う。</div>
+        </div>
+      </div>
+
+      <!-- ラフ提出メール -->
+      <div class="template">
+        <div class="template-title">✉️ ラフ提出メールの例</div>
+        <div class="template-body">田中様
+
+お待たせいたしました。
+構成案（ラフ）をお送りします。
+
+【構成のポイント】
+・メインビジュアル：マンゴーラテの商品写真を中央に大きく配置
+・カラー：オレンジ・黄色系でまとめて夏らしさを表現
+・キャッチ：「夏のご褒美、はじまる。」を上部に大きく
+・情報：価格・発売日を下部に配置
+
+まずはこの方向性でよろしいでしょうか？
+ご確認いただけましたら本制作に入ります。</div>
+      </div>
+
+      <div class="tip" style="background:#ebf8ff; border-left:3px solid #4299e1;">
+        <p style="color:#1a365d;"><strong>ラフ段階での修正はタダ：</strong>ラフをスキップして完成品を作ると「やっぱりレイアウトを全部変えたい」という修正が発生しやすい。ラフ確認を挟むことで<strong>完成後の大幅修正リスクをゼロに近づけられる</strong>。これがプロの仕事の流れ。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 07 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#285e61,#38b2ac);">STEP<br>07</div>
+      <div class="step-title-wrap">
+        <div class="step-label" style="color:#38b2ac;">制作</div>
+        <div class="step-title">Photoshopで本制作する</div>
+      </div>
+      <span class="step-time" style="background:#e6fffa; color:#285e61;">Day 7〜10</span>
+    </div>
+    <div class="step-body">
+      <p class="desc">ラフのOKが出たら本制作スタート。Lesson02〜15で学んだすべての技術を使います。</p>
+
+      <!-- 制作の手順 -->
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+        <div style="background:#f8f9fa; border-radius:8px; padding:12px 14px; display:flex; gap:10px; align-items:flex-start;">
+          <div style="width:26px; height:26px; border-radius:50%; background:#38b2ac; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">1</div>
+          <div style="font-size:13px; color:var(--text-sub); line-height:1.6;"><strong>新規ドキュメント作成</strong>：Instagram用（1080×1080px・72dpi・RGBカラー）</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:12px 14px; display:flex; gap:10px; align-items:flex-start;">
+          <div style="width:26px; height:26px; border-radius:50%; background:#38b2ac; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">2</div>
+          <div style="font-size:13px; color:var(--text-sub); line-height:1.6;"><strong>背景グラデーション作成</strong>：調整レイヤー（Lesson12）</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:12px 14px; display:flex; gap:10px; align-items:flex-start;">
+          <div style="width:26px; height:26px; border-radius:50%; background:#38b2ac; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">3</div>
+          <div style="font-size:13px; color:var(--text-sub); line-height:1.6;"><strong>商品写真を配置・切り抜き</strong>：被写体を選択→マスク（Lesson03〜05）</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:12px 14px; display:flex; gap:10px; align-items:flex-start;">
+          <div style="width:26px; height:26px; border-radius:50%; background:#38b2ac; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">4</div>
+          <div style="font-size:13px; color:var(--text-sub); line-height:1.6;"><strong>テキスト配置</strong>：フォント選択・カーニング・行送り調整（Lesson10・11・13）</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:12px 14px; display:flex; gap:10px; align-items:flex-start;">
+          <div style="width:26px; height:26px; border-radius:50%; background:#38b2ac; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">5</div>
+          <div style="font-size:13px; color:var(--text-sub); line-height:1.6;"><strong>装飾パーツ追加</strong>：シェイプ・帯・バッジ（Lesson08）</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:12px 14px; display:flex; gap:10px; align-items:flex-start;">
+          <div style="width:26px; height:26px; border-radius:50%; background:#38b2ac; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">6</div>
+          <div style="font-size:13px; color:var(--text-sub); line-height:1.6;"><strong>ロゴ配置</strong>：提供されたロゴデータを配置・整列（Lesson10）</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:12px 14px; display:flex; gap:10px; align-items:flex-start;">
+          <div style="width:26px; height:26px; border-radius:50%; background:#38b2ac; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">7</div>
+          <div style="font-size:13px; color:var(--text-sub); line-height:1.6;"><strong>全体バランス確認</strong>：<code>Cmd/Ctrl+0</code>で全体を見て余白・フォントサイズを調整</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:12px 14px; display:flex; gap:10px; align-items:flex-start;">
+          <div style="width:26px; height:26px; border-radius:50%; background:#38b2ac; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">8</div>
+          <div style="font-size:13px; color:var(--text-sub); line-height:1.6;"><strong>PSD保存</strong>：<code>Cmd/Ctrl+S</code>でPSD形式で必ず保存（レイヤーを残す）</div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#e6fffa; border-left:3px solid #38b2ac;">
+        <p style="color:#1a4731;"><strong>レイヤー管理を徹底する：</strong>制作中は必ずレイヤーに名前をつけてグループ化する。「テキスト」「写真」「背景」「装飾」などのグループに整理しておくと、後から修正するときに迷わない。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 08 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#744210,#d69e2e);">STEP<br>08</div>
+      <div class="step-title-wrap">
+        <div class="step-label" style="color:#d69e2e;">確認・修正</div>
+        <div class="step-title">クライアントに確認・修正対応する</div>
+      </div>
+      <span class="step-time" style="background:#fffff0; color:#744210;">Day 11〜13</span>
+    </div>
+    <div class="step-body">
+      <p class="desc">初回納品は必ず<strong>修正が発生します</strong>。それを見越して契約時に「修正2回まで込み」などと明記しておくことが重要。</p>
+
+      <!-- 確認用ファイルの送り方 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px;">初回確認ファイルの送り方</div>
+      <div class="two-col">
+        <div class="alert" style="background:#fef2f2; border:1px solid #fca5a5;">
+          <div class="alert-title" style="color:#c53030;">❌ NG</div>
+          <p style="color:#7f1d1d;">PSDファイルをそのまま送る<br>→ クライアントがPhotoshopを持っていない場合が多い</p>
+        </div>
+        <div class="alert" style="background:#f0fff4; border:1px solid #86efac;">
+          <div class="alert-title" style="color:#276749;">✅ OK</div>
+          <p style="color:#1a4731;">JPGまたはPNG（低解像度）で送る<br>→ 誰でもすぐ確認できる。透かし（ウォーターマーク）を入れると安心</p>
+        </div>
+      </div>
+
+      <!-- 修正依頼への対応 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:16px 0 10px;">よくある修正依頼と対応方法</div>
+      <div style="display:flex; flex-direction:column; gap:0; border:1px solid var(--border); border-radius:12px; overflow:hidden;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; background:#2d3748; padding:10px 14px; font-size:11px; font-weight:700; color:#fff; font-family:'JetBrains Mono',monospace; gap:12px;">
+          <div>修正依頼の内容</div><div>対応・注意点</div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; padding:10px 14px; font-size:12px; gap:12px; border-bottom:1px solid var(--border); align-items:start;">
+          <div style="color:var(--text);">「フォントを変えてほしい」</div>
+          <div style="color:var(--text-sub);">軽微な修正。すぐ対応。修正回数1回分として記録。</div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; padding:10px 14px; font-size:12px; gap:12px; border-bottom:1px solid var(--border); background:#f8f9fa; align-items:start;">
+          <div style="color:var(--text);">「色を全部変えてほしい」</div>
+          <div style="color:var(--text-sub);">大幅な変更。修正回数1回分 or 追加料金の相談が必要。</div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; padding:10px 14px; font-size:12px; gap:12px; border-bottom:1px solid var(--border); align-items:start;">
+          <div style="color:var(--text);">「レイアウトを全然変えて」</div>
+          <div style="color:var(--text-sub);">ラフ確認時と違う場合は<strong>追加費用を請求できる</strong>。事前に契約書に明記しておくことが重要。</div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; padding:10px 14px; font-size:12px; gap:12px; align-items:start;">
+          <div style="color:var(--text);">「3回目以降の修正」</div>
+          <div style="color:var(--text-sub);">契約通り追加料金を請求する。感情的にならず丁寧に説明する。</div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#fffff0; border-left:3px solid #d69e2e;">
+        <p style="color:#744210;"><strong>修正は「何を・どこを」具体的に聞く：</strong>「なんかイメージと違う」という曖昧なフィードバックには「具体的にどの部分をどう変えたいですか？」と確認する。感覚的な言葉だと無限に修正が続く。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 09 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#702459,#d53f8c);">STEP<br>09</div>
+      <div class="step-title-wrap">
+        <div class="step-label" style="color:#d53f8c;">書き出し</div>
+        <div class="step-title">納品形式の確認と書き出し</div>
+      </div>
+      <span class="step-time" style="background:#fff5f7; color:#702459;">Day 14</span>
+    </div>
+    <div class="step-body">
+      <p class="desc">納品前に<strong>どの形式で欲しいか</strong>を必ず確認します。形式によって書き出し方法が異なります。</p>
+
+      <!-- 納品形式の比較 -->
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #d53f8c;">
+          <div style="font-size:12px; font-weight:700; color:#702459; margin-bottom:6px;">PNG（推奨・最頻出）</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">透明背景が使える。Web・SNS用に最適。書き出し方法：<code>ファイル → 書き出し → 書き出し形式（PNG選択）</code>。解像度は72dpiでOK。</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #d53f8c;">
+          <div style="font-size:12px; font-weight:700; color:#702459; margin-bottom:6px;">JPG（写真・軽量化が必要な場合）</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">透明背景は使えないがファイルサイズが小さい。Web表示速度を重視する場合に選ぶ。品質は80〜90%が推奨。</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #d53f8c;">
+          <div style="font-size:12px; font-weight:700; color:#702459; margin-bottom:6px;">PSD（レイヤー付きデータ）</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">クライアント側でも編集できる生データ。「将来自分で修正したい」という場合に要求されることがある。追加料金を設定するのが一般的。</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #d53f8c;">
+          <div style="font-size:12px; font-weight:700; color:#702459; margin-bottom:6px;">PDF（印刷・提出用）</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">印刷物に使う場合。解像度は300dpiで書き出す。CMYKカラーモードで作成することを事前に確認。</div>
+        </div>
+      </div>
+
+      <!-- 書き出し手順 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px;">PNG書き出しの手順（Web・SNS用）</div>
+      <div style="background:#1e1e2e; border-radius:12px; padding:16px 18px; margin-bottom:14px;">
+        <div style="font-size:10px; color:#f9a8d4; font-family:'JetBrains Mono',monospace; margin-bottom:12px; letter-spacing:0.08em;">書き出し手順</div>
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:12px; color:#e2e8f0; line-height:1.8;">
+          <div>① <code style="background:#333; color:#f9a8d4; padding:1px 6px; border-radius:3px;">ファイル</code> → <code style="background:#333; color:#f9a8d4; padding:1px 6px; border-radius:3px;">書き出し</code> → <code style="background:#333; color:#f9a8d4; padding:1px 6px; border-radius:3px;">書き出し形式…</code></div>
+          <div>② 形式：<code style="background:#333; color:#86efac; padding:1px 6px; border-radius:3px;">PNG</code> を選択</div>
+          <div>③ 画像サイズ：幅 <code style="background:#333; color:#86efac; padding:1px 6px; border-radius:3px;">1080px</code>（元のサイズのまま）</div>
+          <div>④ 解像度：<code style="background:#333; color:#86efac; padding:1px 6px; border-radius:3px;">72</code> dpi（SNS・Web用）</div>
+          <div>⑤ ファイル名：<code style="background:#333; color:#86efac; padding:1px 6px; border-radius:3px;">greencafe_summer_instagram.png</code>（わかりやすい名前）</div>
+          <div>⑥ <code style="background:#333; color:#f9a8d4; padding:1px 6px; border-radius:3px;">書き出し</code> ボタンをクリック</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 10 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#1a202c,#4a5568);">STEP<br>10</div>
+      <div class="step-title-wrap">
+        <div class="step-label" style="color:#718096;">納品・請求</div>
+        <div class="step-title">ファイル納品・請求書送付・入金確認</div>
+      </div>
+      <span class="step-time" style="background:#f7fafc; color:#4a5568;">Day 14〜15</span>
+    </div>
+    <div class="step-body">
+      <p class="desc">最後の工程。<strong>納品と請求を同時に行う</strong>のが基本。入金確認まで完了して初めて案件終了です。</p>
+
+      <!-- 納品メール -->
+      <div class="template">
+        <div class="template-title">✉️ 納品メールの例</div>
+        <div class="template-body">件名：【納品】バナーデータをお送りします（グリーンカフェ様）
+
+田中様
+
+お待たせいたしました。
+バナーデータが完成しましたのでお送りします。
+
+【納品ファイル】
+・greencafe_summer_instagram.png（1080×1080px）
+・greencafe_summer_web.png（1200×628px）
+
+【ご確認のお願い】
+データに問題がないかご確認いただき、
+問題なければお知らせください。
+
+別途、請求書をお送りいたします。
+お支払い期限は【〇月〇日】です。
+お振込先は請求書をご確認ください。
+
+今後ともどうぞよろしくお願いいたします。
+
+〇〇（名前）</div>
+      </div>
+
+      <!-- 請求書ポイント -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:16px 0 10px;">請求書に必ず書く6項目</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
+        <div style="background:#f8f9fa; border-radius:8px; padding:10px 14px; font-size:12px; color:var(--text-sub);"><strong style="color:var(--text);">① 発行日と請求書番号</strong><br>管理のため番号をつける</div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:10px 14px; font-size:12px; color:var(--text-sub);"><strong style="color:var(--text);">② 請求先（クライアント名）</strong><br>正式な会社名・担当者名</div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:10px 14px; font-size:12px; color:var(--text-sub);"><strong style="color:var(--text);">③ 作業内容と金額</strong><br>何の費用かわかるように</div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:10px 14px; font-size:12px; color:var(--text-sub);"><strong style="color:var(--text);">④ 合計金額（税込）</strong><br>消費税を明記する</div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:10px 14px; font-size:12px; color:var(--text-sub);"><strong style="color:var(--text);">⑤ 支払期限</strong><br>納品日から2週間〜1ヶ月</div>
+        <div style="background:#f8f9fa; border-radius:8px; padding:10px 14px; font-size:12px; color:var(--text-sub);"><strong style="color:var(--text);">⑥ 振込先口座</strong><br>銀行名・支店名・口座番号</div>
+      </div>
+
+      <div class="tip" style="background:#f7fafc; border-left:3px solid #4a5568;">
+        <p style="color:#2d3748;"><strong>入金確認まで案件は終わっていない：</strong>納品したら「ありがとうございました！入金をお待ちしております」とメッセージを送る。支払期限を過ぎても入金がない場合は丁寧にリマインドする。これが最後の大事な仕事。</p>
+      </div>
+
+      <!-- 全体振り返り -->
+      <div style="background:#1e1b4b; border-radius:14px; padding:20px 22px; margin-top:20px;">
+        <div style="font-size:12px; font-weight:700; color:#a78bfa; font-family:'JetBrains Mono',monospace; margin-bottom:14px; letter-spacing:0.08em;">🎉 案件完了チェックリスト</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; gap:10px; align-items:center;"><div style="width:16px; height:16px; border-radius:4px; border:2px solid #553c9a; flex-shrink:0;"></div><div style="font-size:12px; color:#e2e8f0;">ヒアリングシートを埋めた</div></div>
+          <div style="display:flex; gap:10px; align-items:center;"><div style="width:16px; height:16px; border-radius:4px; border:2px solid #553c9a; flex-shrink:0;"></div><div style="font-size:12px; color:#e2e8f0;">見積・発注内容をメール等で文書化した</div></div>
+          <div style="display:flex; gap:10px; align-items:center;"><div style="width:16px; height:16px; border-radius:4px; border:2px solid #553c9a; flex-shrink:0;"></div><div style="font-size:12px; color:#e2e8f0;">素材の著作権・ライセンスを確認した</div></div>
+          <div style="display:flex; gap:10px; align-items:center;"><div style="width:16px; height:16px; border-radius:4px; border:2px solid #553c9a; flex-shrink:0;"></div><div style="font-size:12px; color:#e2e8f0;">ラフを提出してOKをもらった</div></div>
+          <div style="display:flex; gap:10px; align-items:center;"><div style="width:16px; height:16px; border-radius:4px; border:2px solid #553c9a; flex-shrink:0;"></div><div style="font-size:12px; color:#e2e8f0;">PSDデータを保存している（レイヤー管理済み）</div></div>
+          <div style="display:flex; gap:10px; align-items:center;"><div style="width:16px; height:16px; border-radius:4px; border:2px solid #553c9a; flex-shrink:0;"></div><div style="font-size:12px; color:#e2e8f0;">正しいサイズ・形式で書き出した</div></div>
+          <div style="display:flex; gap:10px; align-items:center;"><div style="width:16px; height:16px; border-radius:4px; border:2px solid #553c9a; flex-shrink:0;"></div><div style="font-size:12px; color:#e2e8f0;">納品メールを送った</div></div>
+          <div style="display:flex; gap:10px; align-items:center;"><div style="width:16px; height:16px; border-radius:4px; border:2px solid #553c9a; flex-shrink:0;"></div><div style="font-size:12px; color:#e2e8f0;">請求書を送った</div></div>
+          <div style="display:flex; gap:10px; align-items:center;"><div style="width:16px; height:16px; border-radius:4px; border:2px solid #553c9a; flex-shrink:0;"></div><div style="font-size:12px; color:#e2e8f0;">入金を確認した</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:16px; font-size:12px; color:#94a3b8;">Photoshop チュートリアル · Lesson 16｜案件獲得から納品まで 完全ガイド</div>
+
+</div>
+</body>
+</html>
