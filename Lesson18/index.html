@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>案件獲得から納品まで 完全版｜Photoshop Lesson 16</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --text: #1a1a2e;
+    --text-sub: #4a5568;
+    --border: #e2e8f0;
+    --navy: #1a365d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 40px 20px 80px; }
+  .container { max-width: 820px; margin: 0 auto; }
+
+  .hero { background: linear-gradient(135deg, #1a202c 0%, #2d3748 60%, #4a5568 100%); border-radius: 20px; padding: 52px 40px; margin-bottom: 36px; position: relative; overflow: hidden; }
+  .hero::before { content: '💼'; position: absolute; right: 40px; top: 24px; font-size: 80px; opacity: 0.12; }
+  .hero-content { position: relative; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.35); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
+  .hero h1 { font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 10px; line-height: 1.3; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.82); margin-bottom: 18px; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-tag { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+
+  /* フロー全体図 */
+  .flow-map { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 22px; margin-bottom: 32px; }
+  .flow-map-title { font-size: 12px; font-weight: 700; color: var(--text-sub); font-family: 'JetBrains Mono', monospace; margin-bottom: 14px; letter-spacing: 0.08em; }
+  .flow-bubbles { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); gap: 8px; }
+  .flow-bubble { border-radius: 10px; padding: 10px 12px; text-align: center; font-size: 11px; font-weight: 700; color: #fff; line-height: 1.5; }
+
+  /* ステップカード */
+  .step-card { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; }
+  .step-header { padding: 18px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .step-num { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; text-align: center; line-height: 1.3; }
+  .step-label { font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-bottom: 2px; }
+  .step-title { font-size: 17px; font-weight: 700; }
+  .step-time { font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+  .step-body { padding: 24px; }
+  .desc { font-size: 14px; color: var(--text-sub); line-height: 1.85; margin-bottom: 18px; }
+
+  /* メール */
+  .mail { border-radius: 14px; overflow: hidden; border: 1px solid var(--border); margin: 14px 0; }
+  .mail-header { padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
+  .mail-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .mail-from { font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .mail-subject { font-size: 10px; color: var(--text-sub); }
+  .mail-body { padding: 14px 16px; font-size: 13px; color: var(--text-sub); line-height: 2.1; white-space: pre-wrap; border-top: 1px solid var(--border); }
+  .mail-body strong { color: var(--text); }
+
+  /* ポイントリスト */
+  .points { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+  .point { display: flex; gap: 10px; align-items: flex-start; background: #f8f9fa; border-radius: 8px; padding: 10px 14px; }
+  .point-icon { font-size: 14px; flex-shrink: 0; }
+  .point-text { font-size: 13px; color: var(--text-sub); line-height: 1.6; }
+  .point-text strong { color: var(--text); }
+
+  /* 吹き出し */
+  .chat { display: flex; flex-direction: column; gap: 10px; margin: 14px 0; }
+  .chat-row { display: flex; gap: 10px; align-items: flex-start; }
+  .chat-row.right { flex-direction: row-reverse; }
+  .chat-av { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .chat-bubble { max-width: 78%; padding: 10px 14px; font-size: 13px; line-height: 1.7; border-radius: 14px; }
+  .chat-name { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; margin-bottom: 3px; }
+  .chat-row.left .chat-bubble { background: #f1f5f9; border-top-left-radius: 4px; }
+  .chat-row.right .chat-bubble { background: #dbeafe; border-top-right-radius: 4px; }
+  .chat-row.right .chat-name { text-align: right; }
+
+  /* 注意・ヒント */
+  .tip { border-radius: 10px; padding: 12px 16px; margin-top: 12px; }
+  .tip p { font-size: 13px; line-height: 1.75; }
+  .alert { border-radius: 10px; padding: 12px 16px; margin: 10px 0; }
+  .alert-title { font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; margin-bottom: 5px; }
+  .alert p { font-size: 13px; line-height: 1.75; }
+
+  /* テーブル */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 14px 0; }
+  .data-table th { background: var(--navy); color: #fff; padding: 10px 14px; text-align: left; }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text-sub); vertical-align: top; line-height: 1.7; }
+  .data-table tr:nth-child(even) td { background: #f8f9fa; }
+
+  /* 遷移先ダイアグラム */
+  .destination-card { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 12px; }
+  .dest-header { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .dest-name { font-size: 13px; font-weight: 700; }
+  .dest-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; font-family: 'JetBrains Mono', monospace; }
+  .dest-body { padding: 12px 16px; font-size: 12px; color: var(--text-sub); line-height: 1.8; border-top: 1px solid var(--border); background: #f8f9fa; }
+
+  /* ステップ */
+  .steps { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+  .step-item { display: flex; gap: 10px; align-items: flex-start; background: #f8f9fa; border-radius: 8px; padding: 10px 14px; }
+  .step-circle { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .step-item-text { font-size: 13px; color: var(--text-sub); line-height: 1.6; padding-top: 2px; }
+
+  /* チェックリスト */
+  .checklist { display: flex; flex-direction: column; gap: 6px; margin: 14px 0; }
+  .check-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px; background: #f8f9fa; border-radius: 8px; }
+  .check-box { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border); flex-shrink: 0; margin-top: 2px; }
+  .check-text { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
+
+  code { background: #e0f2fe; color: #0c4a6e; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  /* 2カラム */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 20px; }
+    .hero h1 { font-size: 22px; }
+    .step-body { padding: 16px; }
+    .two-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Photoshop · Lesson 16 完全版</div>
+      <h1>💼 案件獲得から納品まで<br>完全ガイド</h1>
+      <p>メールのやり取り・素材の問題・修正対応・バナーの遷移先・競合調査まで、実際の案件と同じ流れをすべて体験する。</p>
+      <div class="hero-tags">
+        <span class="hero-tag">メールやり取り全文</span>
+        <span class="hero-tag">素材トラブル対応</span>
+        <span class="hero-tag">修正体験</span>
+        <span class="hero-tag">バナー遷移先</span>
+        <span class="hero-tag">競合調査</span>
+        <span class="hero-tag">納品・請求</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- フロー全体図 -->
+  <div class="flow-map">
+    <div class="flow-map-title">📋 全体フロー（Lesson16で体験する工程）</div>
+    <div class="flow-bubbles">
+      <div class="flow-bubble" style="background:#1a365d;">STEP01<br>依頼受付</div>
+      <div class="flow-bubble" style="background:#2b6cb0;">STEP02<br>ヒアリング</div>
+      <div class="flow-bubble" style="background:#276749;">STEP03<br>ペルソナ設定</div>
+      <div class="flow-bubble" style="background:#744210;">STEP04<br>見積・契約</div>
+      <div class="flow-bubble" style="background:#553c9a;">STEP05<br>素材確認</div>
+      <div class="flow-bubble" style="background:#9c4221;">STEP06<br>競合調査</div>
+      <div class="flow-bubble" style="background:#2c5282;">STEP07<br>遷移先確認</div>
+      <div class="flow-bubble" style="background:#285e61;">STEP08<br>構成・ラフ</div>
+      <div class="flow-bubble" style="background:#276749;">STEP09<br>制作</div>
+      <div class="flow-bubble" style="background:#744210;">STEP10<br>確認・修正</div>
+      <div class="flow-bubble" style="background:#702459;">STEP11<br>書き出し</div>
+      <div class="flow-bubble" style="background:#1a202c;">STEP12<br>納品・請求</div>
+    </div>
+  </div>
+
+  <!-- 架空クライアント設定 -->
+  <div style="background:#fffff0; border-radius:14px; border:2px solid #d69e2e; padding:20px 24px; margin-bottom:32px;">
+    <div style="font-size:12px; font-weight:700; color:#744210; font-family:'JetBrains Mono',monospace; margin-bottom:12px;">🏢 今回の架空クライアント</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px; color:var(--text-sub);">
+      <div><strong style="color:var(--text);">会社名：</strong>株式会社グリーンカフェ</div>
+      <div><strong style="color:var(--text);">担当者：</strong>田中マーケティング部長</div>
+      <div><strong style="color:var(--text);">依頼：</strong>夏の新メニュー「マンゴーラテ」PRバナー</div>
+      <div><strong style="color:var(--text);">媒体：</strong>Instagram + Webサイト</div>
+      <div><strong style="color:var(--text);">納期：</strong>6月20日（7月1日公開）</div>
+      <div><strong style="color:var(--text);">予算：</strong>「あまり高くはできない」</div>
+    </div>
+  </div>
+
+  <!-- STEP 01: 依頼受付 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#1a365d,#2b6cb0);">STEP<br>01</div>
+      <div style="flex:1;">
+        <div class="step-label" style="color:#2b6cb0;">依頼受付</div>
+        <div class="step-title">クライアントからの最初のメール</div>
+      </div>
+      <span class="step-time" style="background:#ebf8ff; color:#2b6cb0;">Day 1</span>
+    </div>
+    <div class="step-body">
+      <p class="desc">最初の接触は多くの場合メールです。返信は<strong>当日中〜翌朝まで</strong>に。遅い返信はそれだけで信頼を失います。</p>
+
+      <div class="mail">
+        <div class="mail-header" style="background:#f1f5f9;">
+          <div class="mail-avatar" style="background:#e2e8f0;">🏢</div>
+          <div>
+            <div class="mail-from" style="color:#1e40af;">田中様（グリーンカフェ） → あなた</div>
+            <div class="mail-subject">件名：バナー制作のご依頼について</div>
+          </div>
+        </div>
+        <div class="mail-body">はじめまして。株式会社グリーンカフェ マーケティング部の田中と申します。
+
+この度、夏の新メニュー「マンゴーラテ」のPRバナーの制作をお願いしたく
+ご連絡させていただきました。
+
+Instagramとホームページのトップページへの掲載を予定しています。
+ご対応いただけますでしょうか？</div>
+      </div>
+
+      <div class="mail" style="margin-top:8px;">
+        <div class="mail-header" style="background:#eff6ff;">
+          <div class="mail-avatar" style="background:#dbeafe;">👤</div>
+          <div>
+            <div class="mail-from" style="color:#1e40af;">あなた → 田中様</div>
+            <div class="mail-subject">件名：Re: バナー制作のご依頼について</div>
+          </div>
+        </div>
+        <div class="mail-body">田中様
+
+はじめまして。〇〇（自分の名前）と申します。
+この度はバナー制作のご依頼をいただき、誠にありがとうございます。
+
+喜んで対応させていただきます。
+よりよいバナーをお作りするため、いくつかご確認させてください。
+
+【確認事項】
+1. ご希望のバナーサイズ（Instagram用・Web用それぞれ）
+2. ご希望の雰囲気・参考になるバナーや競合サイト
+3. ロゴ・商品写真などの素材のご有無
+4. キャッチコピーのご希望（ある場合）
+5. ご希望の納期
+6. ご予算の目安
+
+ご回答いただき次第、お見積りをお送りします。
+どうぞよろしくお願いいたします。
+
+〇〇（名前）/ xxx@xxx.com</div>
+      </div>
+
+      <div class="tip" style="background:#ebf8ff; border-left:3px solid #2b6cb0;">
+        <p style="color:#1a365d;"><strong>ポイント：</strong>質問は1通にまとめる。バラバラに送ると相手に何度も返信させてしまい、印象が悪くなる。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 02: ヒアリング -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#276749,#38a169);">STEP<br>02</div>
+      <div style="flex:1;">
+        <div class="step-label" style="color:#276749;">ヒアリング</div>
+        <div class="step-title">クライアントの回答と深掘り質問</div>
+      </div>
+      <span class="step-time" style="background:#f0fff4; color:#276749;">Day 2〜3</span>
+    </div>
+    <div class="step-body">
+
+      <div class="mail">
+        <div class="mail-header" style="background:#f1f5f9;">
+          <div class="mail-avatar" style="background:#e2e8f0;">🏢</div>
+          <div>
+            <div class="mail-from" style="color:#276749;">田中様 → あなた（ヒアリング回答）</div>
+            <div class="mail-subject">件名：Re: バナー制作のご依頼について</div>
+          </div>
+        </div>
+        <div class="mail-body">〇〇様
+
+ご確認ありがとうございます。以下に回答いたします。
+
+1. サイズ：Instagram（1080×1080px）とWebサイトトップ（728×90px）
+2. 雰囲気：夏らしく明るく、スターバックスのような洗練された感じが好みです
+3. 素材：ロゴはあります。商品写真は…実は社内で撮影したものしかなく、
+   クオリティに自信がありません。お任せできますか？
+4. コピー：「夏のご褒美、はじまる。」を使いたいです
+5. 納期：6月20日までにお願いできますか
+6. 予算：あまり高くはできないのですが…3〜5万円程度でしょうか
+
+よろしくお願いいたします。</div>
+      </div>
+
+      <div style="background:#fef2f2; border-radius:10px; padding:14px 16px; border-left:4px solid #e53e3e; margin:14px 0;">
+        <div style="font-size:11px; font-weight:700; color:#c53030; font-family:'JetBrains Mono',monospace; margin-bottom:8px;">⚠️ ここで問題発生！素材トラブル</div>
+        <p style="font-size:13px; color:#7f1d1d; line-height:1.8;">「商品写真は社内撮影でクオリティに自信がない。お任せできますか？」<br>→ これはよくある素材トラブルです。<strong>写真の質がバナーのクオリティに直結</strong>するため、慎重に対応する必要があります。</p>
+      </div>
+
+      <div class="mail" style="margin-top:8px;">
+        <div class="mail-header" style="background:#eff6ff;">
+          <div class="mail-avatar" style="background:#dbeafe;">👤</div>
+          <div>
+            <div class="mail-from" style="color:#276749;">あなた → 田中様（素材確認の返信）</div>
+            <div class="mail-subject">件名：Re: 素材について確認のお願い</div>
+          </div>
+        </div>
+        <div class="mail-body">田中様
+
+ご回答ありがとうございます。
+商品写真の件について、まずは一度お送りいただけますでしょうか？
+
+確認させていただいた上で、以下のいずれかをご提案します。
+
+【対応パターン】
+A）写真そのままでPhotoshop加工で使える場合
+　→ 追加費用なしで対応可能です
+
+B）写真のクオリティが難しい場合
+　→ フリー素材（Unsplash等）から近い写真を選定します
+　→ 素材選定費：＋3,000円〜5,000円を別途いただきます
+
+C）プロのカメラマンへの依頼が必要な場合
+　→ 別途ご紹介も可能です（費用は別途お見積り）
+
+まず写真を拝見してから判断いたします。
+よろしくお願いいたします。</div>
+      </div>
+
+      <div class="mail" style="margin-top:8px;">
+        <div class="mail-header" style="background:#f1f5f9;">
+          <div class="mail-avatar" style="background:#e2e8f0;">🏢</div>
+          <div>
+            <div class="mail-from" style="color:#276749;">田中様 → あなた（写真送付）</div>
+            <div class="mail-subject">件名：Re: 商品写真を送ります</div>
+          </div>
+        </div>
+        <div class="mail-body">〇〇様
+
+写真を添付いたします。
+スマートフォンで撮影したものです。
+もし難しいようであれば、パターンBでお願いできますか？
+
+（添付）mango_latte.jpg　※ 640×480px・スマホ撮影</div>
+      </div>
+
+      <div style="background:#fef2f2; border-radius:10px; padding:14px 16px; border-left:4px solid #e53e3e; margin:14px 0;">
+        <div style="font-size:11px; font-weight:700; color:#c53030; font-family:'JetBrains Mono',monospace; margin-bottom:8px;">⚠️ 写真の解像度が低すぎる！</div>
+        <p style="font-size:13px; color:#7f1d1d; line-height:1.8;">640×480pxのスマホ撮影写真では1080×1080pxのバナーに使えません。<strong>フリー素材（パターンB）で対応</strong>することを丁寧に説明します。</p>
+      </div>
+
+      <div class="mail" style="margin-top:8px;">
+        <div class="mail-header" style="background:#eff6ff;">
+          <div class="mail-avatar" style="background:#dbeafe;">👤</div>
+          <div>
+            <div class="mail-from" style="color:#276749;">あなた → 田中様（素材問題の説明）</div>
+            <div class="mail-subject">件名：Re: 写真について</div>
+          </div>
+        </div>
+        <div class="mail-body">田中様
+
+写真を確認させていただきました。ありがとうございます。
+残念ながら今回の写真は解像度が640×480pxと小さく、
+1080×1080pxのバナーに引き伸ばすと画質が劣化してしまいます。
+
+つきまして、パターンBにてフリー素材サイト（Unsplash）から
+「マンゴーラテ・カフェドリンク」の高品質写真を選定させていただきます。
+
+【追加費用】
+素材選定・加工費：3,000円（税込3,300円）
+
+なお選定した写真はご確認いただいてから使用します。
+ご了承いただけますでしょうか？</div>
+      </div>
+
+      <div class="tip" style="background:#f0fff4; border-left:3px solid #276749; margin-top:10px;">
+        <p style="color:#14532d;"><strong>素材トラブルのまとめ：</strong>受け取った素材は必ず解像度・ライセンス・品質を確認してから制作を開始する。問題がある場合は<strong>必ず代替案と追加費用を明示</strong>して合意を取ること。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 03: ペルソナ設定 -->
+  <div class="step-card" style="border:2px solid #d69e2e;">
+    <div class="step-header" style="background:#fffff0;">
+      <div class="step-num" style="background:linear-gradient(135deg,#92400e,#d69e2e);">👤<br>ペルソナ</div>
+      <div style="flex:1;">
+        <div class="step-label" style="color:#d69e2e;">ターゲット設定</div>
+        <div class="step-title">ペルソナを設定してデザインに落とし込む</div>
+      </div>
+      <span class="step-time" style="background:#fffff0; color:#744210;">Day 3</span>
+    </div>
+    <div class="step-body">
+      <p class="desc">「20〜30代女性」という曖昧なターゲットを<strong>1人の具体的な人物</strong>に落とし込みます。</p>
+
+      <div style="border-radius:14px; overflow:hidden; border:2px solid #d69e2e; margin-bottom:16px;">
+        <div style="background:linear-gradient(135deg,#78350f,#d97706); padding:18px 22px; display:flex; align-items:center; gap:16px;">
+          <div style="width:56px; height:56px; border-radius:50%; background:rgba(255,255,255,0.2); border:3px solid rgba(255,255,255,0.5); display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0;">👩</div>
+          <div>
+            <div style="font-size:17px; font-weight:900; color:#fff; margin-bottom:2px;">佐藤 さくら（27歳）</div>
+            <div style="font-size:12px; color:rgba(255,255,255,0.8);">都内IT企業勤務 / 一人暮らし / Instagramヘビーユーザー</div>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0;">
+          <div style="padding:14px 16px; border-bottom:1px solid #fde68a; border-right:1px solid #fde68a;">
+            <div style="font-size:10px; color:#92400e; font-family:'JetBrains Mono',monospace; font-weight:700; margin-bottom:6px;">📱 情報収集</div>
+            <div style="font-size:12px; color:var(--text-sub); line-height:1.9;">Instagramで毎日カフェ情報をチェック。写真のきれいさで来店を決める。</div>
+          </div>
+          <div style="padding:14px 16px; border-bottom:1px solid #fde68a;">
+            <div style="font-size:10px; color:#92400e; font-family:'JetBrains Mono',monospace; font-weight:700; margin-bottom:6px;">☕ カフェ利用</div>
+            <div style="font-size:12px; color:var(--text-sub); line-height:1.9;">週2〜3回。仕事帰りや休日に「自分へのご褒美」として利用。</div>
+          </div>
+          <div style="padding:14px 16px; border-right:1px solid #fde68a; grid-column:1/-1;">
+            <div style="font-size:10px; color:#92400e; font-family:'JetBrains Mono',monospace; font-weight:700; margin-bottom:8px;">💭 インサイト（本音）→ バナーへの反映</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:12px;">
+              <div style="background:#fffff0; border:1px solid #fde68a; border-radius:8px; padding:8px 12px; color:#713f12; line-height:1.6;">「夏の限定ドリンクが出ると試したくなる」<br>→ <strong>「夏季限定」を目立たせる</strong></div>
+              <div style="background:#fffff0; border:1px solid #fde68a; border-radius:8px; padding:8px 12px; color:#713f12; line-height:1.6;">「シンプルで上品なデザインが好み」<br>→ <strong>色は2〜3色・明朝体を使う</strong></div>
+              <div style="background:#fffff0; border:1px solid #fde68a; border-radius:8px; padding:8px 12px; color:#713f12; line-height:1.6;">「写真がきれいな店に行きたい」<br>→ <strong>商品写真を大きくメインに</strong></div>
+              <div style="background:#fffff0; border:1px solid #fde68a; border-radius:8px; padding:8px 12px; color:#713f12; line-height:1.6;">「自分へのご褒美を大切にする」<br>→ <strong>コピー「夏のご褒美」がドンピシャ</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 04: 見積・契約 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#744210,#d69e2e);">STEP<br>04</div>
+      <div style="flex:1;">
+        <div class="step-label" style="color:#d69e2e;">見積・契約</div>
+        <div class="step-title">見積書の送付と値段交渉</div>
+      </div>
+      <span class="step-time" style="background:#fffff0; color:#744210;">Day 4</span>
+    </div>
+    <div class="step-body">
+
+      <div class="mail">
+        <div class="mail-header" style="background:#eff6ff;">
+          <div class="mail-avatar" style="background:#dbeafe;">👤</div>
+          <div>
+            <div class="mail-from" style="color:#d69e2e;">あなた → 田中様（見積書）</div>
+            <div class="mail-subject">件名：【お見積り】バナー制作費用について</div>
+          </div>
+        </div>
+        <div class="mail-body">田中様
+
+ヒアリング内容をもとにお見積りをお送りします。
+
+━━━━━━━━━━━━━━━━━━━━━━
+① Instagram用バナー（1080×1080px）　12,000円
+② Web用バナー（728×90px）　　　　　 8,000円
+③ フリー素材選定・加工費　　　　　　 3,000円
+④ 修正対応（2回まで込み）　　　　　　  込み
+━━━━━━━━━━━━━━━━━━━━━━
+合計：23,000円（税込 25,300円）
+━━━━━━━━━━━━━━━━━━━━━━
+
+納期：ご発注より7営業日
+お支払い：納品後5営業日以内（銀行振込）
+3回目以降の修正：1回 3,300円（税込）
+
+ご不明な点はお気軽にご相談ください。</div>
+      </div>
+
+      <div class="mail" style="margin-top:8px;">
+        <div class="mail-header" style="background:#f1f5f9;">
+          <div class="mail-avatar" style="background:#e2e8f0;">🏢</div>
+          <div>
+            <div class="mail-from" style="color:#d69e2e;">田中様 → あなた（値段交渉）</div>
+            <div class="mail-subject">件名：Re: お見積りについて</div>
+          </div>
+        </div>
+        <div class="mail-body">〇〇様
+
+ご提案ありがとうございます。
+大変恐縮ですが、予算が少し厳しく、
+20,000円（税込）程度でご対応いただけますでしょうか？</div>
+      </div>
+
+      <div class="mail" style="margin-top:8px;">
+        <div class="mail-header" style="background:#eff6ff;">
+          <div class="mail-avatar" style="background:#dbeafe;">👤</div>
+          <div>
+            <div class="mail-from" style="color:#d69e2e;">あなた → 田中様（交渉対応）</div>
+            <div class="mail-subject">件名：Re: ご予算についてご提案</div>
+          </div>
+        </div>
+        <div class="mail-body">田中様
+
+ご事情をお聞かせいただきありがとうございます。
+
+ご予算20,000円（税込）に合わせるため、
+以下のご提案はいかがでしょうか？
+
+【修正版お見積り】
+① Instagram用バナー（1080×1080px）　12,000円
+② Web用バナー（728×90px）　　　　　 5,000円
+③ フリー素材選定・加工費　　　　　　 1,800円
+修正対応（<strong>1回まで</strong>込み）
+━━━━━━━━━━━━━━━━━━━━━━
+合計：18,800円（税込 20,680円）
+
+※修正回数を2回→1回に変更しています
+※2回目以降の修正は1回 3,300円となります
+
+いかがでしょうか？ご検討よろしくお願いいたします。</div>
+      </div>
+
+      <div class="mail" style="margin-top:8px;">
+        <div class="mail-header" style="background:#f1f5f9;">
+          <div class="mail-avatar" style="background:#e2e8f0;">🏢</div>
+          <div>
+            <div class="mail-from" style="color:#d69e2e;">田中様 → あなた（発注確定）</div>
+          </div>
+        </div>
+        <div class="mail-body">〇〇様
+
+ご配慮ありがとうございます。
+ご提案の内容でぜひお願いします！
+どうぞよろしくお願いいたします。</div>
+      </div>
+
+      <div class="tip" style="background:#fffff0; border-left:3px solid #d69e2e;">
+        <p style="color:#713f12;"><strong>値段を下げるときのコツ：</strong>「ただ安くする」のではなく<strong>「何かを減らす代わりに安くする」</strong>。今回は修正回数を2回→1回に減らした。内容を変えずに値段だけ下げると自分が損をするだけ。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 05: 競合調査 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#9c4221,#ed8936);">STEP<br>05</div>
+      <div style="flex:1;">
+        <div class="step-label" style="color:#ed8936;">競合調査</div>
+        <div class="step-title">競合・市場調査の方法と分析ポイント</div>
+      </div>
+      <span class="step-time" style="background:#fffaf0; color:#9c4221;">Day 5</span>
+    </div>
+    <div class="step-body">
+      <p class="desc">いきなりPhotoshopを開かない。まず<strong>競合や同ジャンルのバナーを10〜20枚集めて分析</strong>してから制作に入ります。</p>
+
+      <!-- 調査ツール -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px;">🔍 使う調査ツール4選</div>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #ed8936;">
+          <div style="font-size:12px; font-weight:700; color:#9c4221; margin-bottom:6px;">① Pinterest（ピンタレスト）— デザイン収集に最強</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">検索キーワード：「cafe banner design」「カフェ バナー」「summer drink poster」<br>→ 世界中のデザインが集まる。トレンドカラー・レイアウトの把握に最適。</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #ed8936;">
+          <div style="font-size:12px; font-weight:700; color:#9c4221; margin-bottom:6px;">② 競合のInstagram — 実際に使われているバナーを見る</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">スターバックス・タリーズ・ドトール等の公式アカウントの投稿・ストーリーズを確認。<br>→ 実際に予算をかけているブランドのデザインはそのまま教科書になる。</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #ed8936;">
+          <div style="font-size:12px; font-weight:700; color:#9c4221; margin-bottom:6px;">③ Googleで広告を確認 — 実際に効果が出ているバナーを見る</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">「カフェ 夏メニュー」「ラテ 新発売」等で検索し、表示された広告バナーを確認。<br>→ 実際にお金をかけて出稿されている広告なのでクリック率を意識したデザインが多い。</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 16px; border-left:4px solid #ed8936;">
+          <div style="font-size:12px; font-weight:700; color:#9c4221; margin-bottom:6px;">④ Canvaのテンプレート — レイアウトの参考に</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">canva.comで「Instagram food summer」等で検索。<br>→ テンプレートを直接使うのはNGだが、構成・配色の参考として使う。</div>
+        </div>
+      </div>
+
+      <!-- 分析ポイント -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px;">📊 集めたバナーから何を分析するか</div>
+      <table class="data-table">
+        <thead><tr><th>分析項目</th><th>グリーンカフェの場合に注目すること</th></tr></thead>
+        <tbody>
+          <tr><td><strong>🎨 カラー</strong></td><td>カフェ系は何色が多い？夏限定なら何色が使われる？（オレンジ・黄・グリーン系が多い傾向）</td></tr>
+          <tr><td><strong>📐 レイアウト</strong></td><td>写真は左？右？中央？テキストはどこに配置されている？</td></tr>
+          <tr><td><strong>🔤 フォント</strong></td><td>高級カフェ系は明朝体・カジュアル系はゴシック体が多い。手書き体はいつ使われている？</td></tr>
+          <tr><td><strong>📝 コピー</strong></td><td>テキストは少ない？多い？数字（価格・期間）を使っている？</td></tr>
+          <tr><td><strong>👁 視線誘導</strong></td><td>どこに目が行く？何が一番目立つ？読む順番は？</td></tr>
+          <tr><td><strong>📣 CTA</strong></td><td>「詳しくはこちら」「今すぐチェック」など行動を促す言葉が使われているか？</td></tr>
+        </tbody>
+      </table>
+
+      <div class="alert" style="background:#fef2f2; border:1px solid #fca5a5;">
+        <div class="alert-title" style="color:#c53030;">⚠️ 「参考にする」と「コピーする」は違う</div>
+        <p style="color:#7f1d1d; font-size:13px; line-height:1.8;">特定のバナーを<strong>そのままコピーするのは著作権侵害</strong>。分析していいのは「なぜこのデザインが効くのか」という構造・理由の部分。色・フォント・レイアウトの傾向を学び、<strong>オリジナルに落とし込む</strong>のが正解。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 06: 遷移先確認 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#2c5282,#4299e1);">STEP<br>06</div>
+      <div style="flex:1;">
+        <div class="step-label" style="color:#4299e1;">遷移先確認</div>
+        <div class="step-title">バナーをクリックしたらどこに飛ぶ？</div>
+      </div>
+      <span class="step-time" style="background:#ebf8ff; color:#2c5282;">Day 5</span>
+    </div>
+    <div class="step-body">
+      <p class="desc">バナーは<strong>「クリックしてもらうこと」が目的</strong>ですが、クリック後に何をさせたいかによってデザインが変わります。遷移先（リンク先）を必ずヒアリングしましょう。</p>
+
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px;">バナーの主な遷移先パターン</div>
+
+      <!-- LP -->
+      <div class="destination-card">
+        <div class="dest-header" style="background:#eff6ff;">
+          <div class="dest-name" style="color:#1e40af;">① ランディングページ（LP）— 最も多い</div>
+          <span class="dest-tag" style="background:#dbeafe; color:#1e40af;">★★★ 最頻出</span>
+        </div>
+        <div class="dest-body">
+          <div style="display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap;">
+            <div style="flex:1; min-width:180px;">
+              バナーをクリック → <strong>商品・サービス専用の説明ページ</strong>に飛ぶ。<br>そのページで「購入」「申し込み」「予約」などのアクションを促す。<br>バナーのデザインとLPの世界観を<strong>統一させることが重要</strong>。
+            </div>
+            <!-- LP図解 -->
+            <div style="background:#f8f9fa; border-radius:8px; padding:10px; border:1px solid var(--border); width:160px; flex-shrink:0;">
+              <div style="background:#1e40af; border-radius:4px; padding:4px 8px; font-size:9px; color:#fff; font-weight:700; margin-bottom:6px; text-align:center;">バナー</div>
+              <div style="text-align:center; font-size:14px; margin-bottom:4px;">↓ クリック</div>
+              <div style="background:#fff; border:1px solid #bfdbfe; border-radius:4px; padding:6px 8px;">
+                <div style="font-size:9px; color:#94a3b8; margin-bottom:3px;">LP（専用ページ）</div>
+                <div style="background:#dbeafe; border-radius:3px; height:30px; margin-bottom:4px;"></div>
+                <div style="background:#e2e8f0; border-radius:3px; height:8px; margin-bottom:3px;"></div>
+                <div style="background:#e2e8f0; border-radius:3px; height:8px; margin-bottom:6px;"></div>
+                <div style="background:#1e40af; border-radius:3px; height:14px; display:flex; align-items:center; justify-content:center;">
+                  <div style="font-size:8px; color:#fff; font-weight:700;">予約する</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:10px; font-size:11px; color:#1e40af; font-weight:700;">グリーンカフェの場合：マンゴーラテ専用ページ → 「近くの店舗を探す」ボタンへ</div>
+        </div>
+      </div>
+
+      <!-- 商品ページ -->
+      <div class="destination-card">
+        <div class="dest-header" style="background:#f0fff4;">
+          <div class="dest-name" style="color:#15803d;">② 商品・メニューページ（EC・通販）</div>
+          <span class="dest-tag" style="background:#dcfce7; color:#15803d;">★★ EC系に多い</span>
+        </div>
+        <div class="dest-body">
+          バナーをクリック → <strong>その商品の購入ページ・詳細ページ</strong>に直接飛ぶ。ECサイト・通販系に多い。<br>
+          バナーに「今すぐ購入」「カートに追加」などのCTAを入れることが多い。<br>
+          <div style="margin-top:8px; font-size:11px; color:#15803d; font-weight:700;">例：Amazon・楽天の商品バナー → 商品購入ページへ</div>
+        </div>
+      </div>
+
+      <!-- SNSアカウント -->
+      <div class="destination-card">
+        <div class="dest-header" style="background:#fdf4ff;">
+          <div class="dest-name" style="color:#6d28d9;">③ SNSアカウント・フォロー誘導</div>
+          <span class="dest-tag" style="background:#f3e8ff; color:#6d28d9;">★ SNS運用系</span>
+        </div>
+        <div class="dest-body">
+          バナーをクリック → <strong>InstagramやLINE公式アカウントのフォローページ</strong>へ。<br>
+          「フォローして最新情報をゲット」などのコピーが多い。<br>
+          <div style="margin-top:8px; font-size:11px; color:#6d28d9; font-weight:700;">グリーンカフェの場合：Instagram広告 → 「プロフィールを見る」→ フォローしてもらう</div>
+        </div>
+      </div>
+
+      <!-- 予約フォーム -->
+      <div class="destination-card">
+        <div class="dest-header" style="background:#fff7ed;">
+          <div class="dest-name" style="color:#c2410c;">④ 予約フォーム・問い合わせページ</div>
+          <span class="dest-tag" style="background:#ffedd5; color:#c2410c;">★ サービス業系</span>
+        </div>
+        <div class="dest-body">
+          バナーをクリック → <strong>予約フォーム・問い合わせフォーム</strong>に直接飛ぶ。<br>
+          美容室・エステ・レストラン・不動産などのサービス業に多い。<br>
+          「今すぐ予約」「無料相談はこちら」などのCTAが効果的。<br>
+          <div style="margin-top:8px; font-size:11px; color:#c2410c; font-weight:700;">グリーンカフェの場合：「テイクアウト予約はこちら」→ 予約フォームへ</div>
+        </div>
+      </div>
+
+      <!-- クーポン -->
+      <div class="destination-card">
+        <div class="dest-header" style="background:#fefce8;">
+          <div class="dest-name" style="color:#854d0e;">⑤ クーポン・特典配布ページ</div>
+          <span class="dest-tag" style="background:#fef9c3; color:#854d0e;">★ キャンペーン系</span>
+        </div>
+        <div class="dest-body">
+          バナーをクリック → <strong>クーポン・割引コード・特典ページ</strong>へ。<br>
+          「クリックしたら得する」という動機付けになるため、クリック率が高い。<br>
+          <div style="margin-top:8px; font-size:11px; color:#854d0e; font-weight:700;">例：「バナーを見た方限定！10%OFFクーポン」→ クーポン配布ページへ</div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#ebf8ff; border-left:3px solid #4299e1; margin-top:10px;">
+        <p style="color:#1a365d;"><strong>遷移先を確認する理由：</strong>バナーのデザインは遷移先のページと<strong>世界観・色・コピーを統一</strong>する必要があります。バナーはおしゃれなのに遷移先が古いデザインのページだと離脱率が高くなります。制作前に「クリック後のページを見せてください」と必ず確認しましょう。</p>
+      </div>
+
+      <div class="mail" style="margin-top:14px;">
+        <div class="mail-header" style="background:#eff6ff;">
+          <div class="mail-avatar" style="background:#dbeafe;">👤</div>
+          <div>
+            <div class="mail-from" style="color:#4299e1;">あなた → 田中様（遷移先確認）</div>
+            <div class="mail-subject">件名：バナーのリンク先ページについて確認</div>
+          </div>
+        </div>
+        <div class="mail-body">田中様
+
+制作にあたり、バナーのリンク先についてご確認させてください。
+
+・Instagram広告バナー → クリック後はどのページに飛びますか？
+  （例：Instagramプロフィール・ホームページのマンゴーラテページ・予約ページ等）
+
+・Web用バナー（728×90px） → クリック後のリンク先URLを教えてください。
+
+リンク先のページデザインに合わせてバナーの雰囲気を統一します。
+よろしくお願いいたします。</div>
+      </div>
+
+      <div class="mail" style="margin-top:8px;">
+        <div class="mail-header" style="background:#f1f5f9;">
+          <div class="mail-avatar" style="background:#e2e8f0;">🏢</div>
+          <div>
+            <div class="mail-from" style="color:#4299e1;">田中様 → あなた（遷移先回答）</div>
+          </div>
+        </div>
+        <div class="mail-body">〇〇様
+
+ご確認ありがとうございます。
+
+・Instagram広告 → ホームページのマンゴーラテ紹介ページ（LP）
+　URL: https://greencafe.example.com/summer/mango-latte
+
+・Web用バナー → 同じLPページです
+
+ページのURLをお送りします。ご確認ください。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 07: ラフ提出 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#285e61,#38b2ac);">STEP<br>07</div>
+      <div style="flex:1;">
+        <div class="step-label" style="color:#38b2ac;">構成・ラフ</div>
+        <div class="step-title">ラフ提出とフィードバック</div>
+      </div>
+      <span class="step-time" style="background:#e6fffa; color:#285e61;">Day 6〜7</span>
+    </div>
+    <div class="step-body">
+
+      <div class="mail">
+        <div class="mail-header" style="background:#eff6ff;">
+          <div class="mail-avatar" style="background:#dbeafe;">👤</div>
+          <div>
+            <div class="mail-from" style="color:#38b2ac;">あなた → 田中様（ラフ提出）</div>
+            <div class="mail-subject">件名：【ご確認】ラフ案をお送りします</div>
+          </div>
+        </div>
+        <div class="mail-body">田中様
+
+お待たせしました。ラフ案をお送りします。
+
+【構成のポイント】
+・背景：夏らしいオレンジ〜ゴールドのグラデーション
+・メイン写真：マンゴーラテのフリー素材（Unsplash）を中央に大きく配置
+・タイトル：「夏のご褒美、はじまる。」を上部に大きく
+・サブ：「マンゴーラテ 夏季限定」「7月1日〜8月31日」を下部に
+・ロゴ：右下に配置
+
+方向性をご確認いただき、OKであれば本制作に入ります。
+変更したい点があればこの段階でお知らせください。
+
+（添付）rough_greencafe_v1.jpg</div>
+      </div>
+
+      <div class="mail" style="margin-top:8px;">
+        <div class="mail-header" style="background:#f1f5f9;">
+          <div class="mail-avatar" style="background:#e2e8f0;">🏢</div>
+          <div>
+            <div class="mail-from" style="color:#38b2ac;">田中様 → あなた（ラフ確認）</div>
+          </div>
+        </div>
+        <div class="mail-body">〇〇様
+
+ラフありがとうございます！
+イメージに近くてとても良いと思います。
+
+1点だけ、「マンゴーラテ」のテキストをもう少し大きくできますか？
+商品名をはっきり伝えたいので。
+
+それ以外はOKです！よろしくお願いします。</div>
+      </div>
+
+      <div class="mail" style="margin-top:8px;">
+        <div class="mail-header" style="background:#eff6ff;">
+          <div class="mail-avatar" style="background:#dbeafe;">👤</div>
+          <div>
+            <div class="mail-from" style="color:#38b2ac;">あなた → 田中様</div>
+          </div>
+        </div>
+        <div class="mail-body">田中様
+
+ありがとうございます。
+「マンゴーラテ」のテキストを大きくした案に修正します。
+修正版ラフを改めてお送りするか、そのまま本制作に入るかどちらがよいですか？</div>
+      </div>
+
+      <div class="tip" style="background:#e6fffa; border-left:3px solid #38b2ac;">
+        <p style="color:#1a4731;"><strong>ラフ段階での修正は修正回数に含めない：</strong>ラフはあくまでも「方向性の確認」なので、この時点の変更は修正回数にカウントしない。本制作後の変更から修正回数をカウントする。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 08: 修正体験 -->
+  <div class="step-card" style="border:2px solid #e53e3e;">
+    <div class="step-header" style="background:#fff5f5;">
+      <div class="step-num" style="background:linear-gradient(135deg,#7f1d1d,#e53e3e);">STEP<br>08</div>
+      <div style="flex:1;">
+        <div class="step-label" style="color:#e53e3e;">修正体験</div>
+        <div class="step-title">初回納品 → 修正依頼 → 再納品</div>
+      </div>
+      <span class="step-time" style="background:#fff5f5; color:#c53030;">Day 10〜13</span>
+    </div>
+    <div class="step-body">
+      <p class="desc">初回納品後に修正依頼が来るのは当たり前。<strong>感情的にならず・回数を管理しながら</strong>対応します。</p>
+
+      <div class="mail">
+        <div class="mail-header" style="background:#eff6ff;">
+          <div class="mail-avatar" style="background:#dbeafe;">👤</div>
+          <div>
+            <div class="mail-from" style="color:#e53e3e;">あなた → 田中様（初回納品）</div>
+            <div class="mail-subject">件名：【初回確認用】バナーデータをお送りします</div>
+          </div>
+        </div>
+        <div class="mail-body">田中様
+
+バナーの初回データをお送りします。
+※こちらは確認用の低解像度版です。最終版は承認後にお送りします。
+
+ご確認いただき、修正点がございましたらお知らせください。
+（修正回数：残り1回）
+
+（添付）greencafe_instagram_check_v1.jpg
+（添付）greencafe_web_check_v1.jpg</div>
+      </div>
+
+      <div class="mail" style="margin-top:8px;">
+        <div class="mail-header" style="background:#f1f5f9;">
+          <div class="mail-avatar" style="background:#e2e8f0;">🏢</div>
+          <div>
+            <div class="mail-from" style="color:#e53e3e;">田中様 → あなた（修正依頼①）</div>
+          </div>
+        </div>
+        <div class="mail-body">〇〇様
+
+ありがとうございます！
+全体的にとても素敵です。
+
+以下2点を修正していただけますか？
+
+1. 背景の色をもう少し明るいオレンジにしてほしい
+   （今は少し暗い印象です）
+
+2. ロゴをもう少し大きくしてほしい
+   （現在より1.5倍くらい）
+
+よろしくお願いします。</div>
+      </div>
+
+      <div class="mail" style="margin-top:8px;">
+        <div class="mail-header" style="background:#eff6ff;">
+          <div class="mail-avatar" style="background:#dbeafe;">👤</div>
+          <div>
+            <div class="mail-from" style="color:#e53e3e;">あなた → 田中様（修正対応）</div>
+          </div>
+        </div>
+        <div class="mail-body">田中様
+
+ご確認ありがとうございます。
+2点承りました。
+
+1. 背景を明るいオレンジに変更
+2. ロゴを1.5倍に拡大
+
+修正版をお送りします。
+<strong>今回で修正回数1回を消費しました。次回以降の修正は1回3,300円となります。</strong>
+
+ご了承ください。
+
+（添付）greencafe_instagram_check_v2.jpg
+（添付）greencafe_web_check_v2.jpg</div>
+      </div>
+
+      <div class="mail" style="margin-top:8px;">
+        <div class="mail-header" style="background:#f1f5f9;">
+          <div class="mail-avatar" style="background:#e2e8f0;">🏢</div>
+          <div>
+            <div class="mail-from" style="color:#e53e3e;">田中様 → あなた（追加修正依頼）</div>
+          </div>
+        </div>
+        <div class="mail-body">〇〇様
+
+ありがとうございます！だいぶ良くなりました。
+あと1点だけ…キャッチコピーのフォントを変えてもらえますか？
+もう少し手書き風の方が雰囲気が出ると思って。</div>
+      </div>
+
+      <div style="background:#fef2f2; border-radius:10px; padding:14px 16px; border-left:4px solid #e53e3e; margin:10px 0;">
+        <div style="font-size:11px; font-weight:700; color:#c53030; font-family:'JetBrains Mono',monospace; margin-bottom:6px;">⚠️ 修正回数を超えた依頼が来た！</div>
+        <p style="font-size:13px; color:#7f1d1d; line-height:1.8;">無料修正回数はすでに使い切っています。ここで追加費用を丁寧に伝えましょう。感情的にならず、事前の契約通りであることを説明します。</p>
+      </div>
+
+      <div class="mail" style="margin-top:8px;">
+        <div class="mail-header" style="background:#eff6ff;">
+          <div class="mail-avatar" style="background:#dbeafe;">👤</div>
+          <div>
+            <div class="mail-from" style="color:#e53e3e;">あなた → 田中様（追加費用の説明）</div>
+          </div>
+        </div>
+        <div class="mail-body">田中様
+
+ご連絡ありがとうございます。
+フォント変更のご要望、承りました。
+
+ご確認いただきたいのですが、
+今回のご契約では修正回数が「1回まで」となっており、
+前回の修正にてすでに1回分をご使用いただいています。
+
+つきまして、追加修正費として
+<strong>3,300円（税込）</strong>を頂戴することになります。
+
+ご了承いただけますでしょうか？
+ご確認次第、すぐに対応いたします。</div>
+      </div>
+
+      <div class="mail" style="margin-top:8px;">
+        <div class="mail-header" style="background:#f1f5f9;">
+          <div class="mail-avatar" style="background:#e2e8f0;">🏢</div>
+          <div>
+            <div class="mail-from" style="color:#e53e3e;">田中様 → あなた</div>
+          </div>
+        </div>
+        <div class="mail-body">〇〇様
+
+ご説明ありがとうございます。
+承知しました。追加費用でお願いします。
+フォントの修正をよろしくお願いします。</div>
+      </div>
+
+      <div class="tip" style="background:#fff5f5; border-left:3px solid #e53e3e;">
+        <p style="color:#7f1d1d;"><strong>修正回数管理のコツ：</strong>メールに「修正残り○回」と毎回明記することで、クライアントも意識してくれる。追加費用を請求するときは感情的にならず、<strong>事前の契約通りであることを丁寧に伝える</strong>のがプロの対応。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 09: 書き出し・納品 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:linear-gradient(135deg,#702459,#d53f8c);">STEP<br>09</div>
+      <div style="flex:1;">
+        <div class="step-label" style="color:#d53f8c;">書き出し・納品</div>
+        <div class="step-title">最終データの書き出しと納品・請求</div>
+      </div>
+      <span class="step-time" style="background:#fff5f7; color:#702459;">Day 14</span>
+    </div>
+    <div class="step-body">
+
+      <!-- 書き出し仕様 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px;">今回の書き出し仕様</div>
+      <table class="data-table">
+        <thead><tr><th>ファイル</th><th>形式</th><th>解像度</th><th>サイズ</th><th>ファイル名</th></tr></thead>
+        <tbody>
+          <tr><td>Instagram用</td><td><strong>PNG</strong></td><td>72dpi</td><td>1080×1080px</td><td><code>greencafe_instagram_final.png</code></td></tr>
+          <tr><td>Web用</td><td><strong>PNG</strong></td><td>72dpi</td><td>728×90px</td><td><code>greencafe_web_final.png</code></td></tr>
+          <tr><td>PSD（別途）</td><td>PSD</td><td>—</td><td>—</td><td>今回は含まない（別料金）</td></tr>
+        </tbody>
+      </table>
+
+      <div class="mail" style="margin-top:14px;">
+        <div class="mail-header" style="background:#eff6ff;">
+          <div class="mail-avatar" style="background:#dbeafe;">👤</div>
+          <div>
+            <div class="mail-from" style="color:#d53f8c;">あなた → 田中様（最終納品）</div>
+            <div class="mail-subject">件名：【最終納品】バナーデータをお送りします</div>
+          </div>
+        </div>
+        <div class="mail-body">田中様
+
+大変お待たせいたしました。
+最終版バナーデータをお送りします。
+
+【納品ファイル】
+・greencafe_instagram_final.png（1080×1080px・PNG）
+・greencafe_web_final.png（728×90px・PNG）
+
+データに問題がないかご確認いただき、
+問題なければお知らせください。
+
+別途、請求書をお送りします。
+お支払い期限：〇月〇日（納品日から2週間）
+
+今回はありがとうございました。
+またお役に立てる機会があればいつでもご連絡ください。
+
+〇〇</div>
+      </div>
+
+      <!-- 請求書内訳 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin:16px 0 10px;">請求書内訳（最終）</div>
+      <div style="background:#1e1e2e; border-radius:12px; padding:18px 20px; margin-bottom:14px; font-family:'JetBrains Mono',monospace; font-size:12px; color:#e2e8f0; line-height:2.2;">
+        ① Instagram用バナー（1080×1080px）　　12,000円<br>
+        ② Web用バナー（728×90px）　　　　　　 5,000円<br>
+        ③ フリー素材選定・加工費　　　　　　　 1,800円<br>
+        ④ 追加修正費（フォント変更）　　　　　 3,000円<br>
+        <div style="border-top:1px solid #334155; margin-top:8px; padding-top:8px;">小計：21,800円<br>消費税（10%）：2,180円<br><strong style="color:#34d399;">合計：23,980円（税込）</strong></div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:6px; font-family:'JetBrains Mono',monospace;">✅ 案件完了チェックリスト</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">ヒアリング内容をメールで文書化した</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">素材の問題を事前に確認・合意を取った</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">見積・修正回数をメールで明記した</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">遷移先ページを確認してバナーと統一した</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">競合調査をしてから制作に入った</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">ラフでOKをもらってから本制作した</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">修正回数を毎回メールで明記した</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">追加修正費を事前に説明して合意を取った</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">正しいサイズ・形式で書き出した</div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-text">請求書を送った・入金を確認した</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:16px; font-size:12px; color:#94a3b8;">Photoshop · Lesson 16 完全版｜案件獲得から納品まで</div>
+
+</div>
+</body>
+</html>
