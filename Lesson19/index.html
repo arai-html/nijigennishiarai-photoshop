@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ターゲット・ペルソナ設定 完全解説＋ワークシート｜Photoshop Lesson 19</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --text: #1a1a2e;
+    --text-sub: #4a5568;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 40px 20px 80px; }
+  .container { max-width: 820px; margin: 0 auto; }
+
+  /* ヒーロー */
+  .hero { background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 60%, #818cf8 100%); border-radius: 20px; padding: 52px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::before { content: '👤'; position: absolute; right: 40px; top: 20px; font-size: 80px; opacity: 0.15; }
+  .hero-content { position: relative; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+  .hero h1 { font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 10px; line-height: 1.3; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.85); margin-bottom: 20px; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-tag { background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.28); color: #fff; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+
+  /* セクション */
+  .section { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; }
+  .section-header { padding: 20px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 14px; }
+  .section-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-num { font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-bottom: 2px; }
+  .section-title { font-size: 18px; font-weight: 700; }
+  .section-body { padding: 24px; }
+  .desc { font-size: 14px; color: var(--text-sub); line-height: 1.85; margin-bottom: 20px; }
+
+  code { background: #e0e7ff; color: #3730a3; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  /* ターゲット vs ペルソナ比較 */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+  .compare-box { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+  .compare-header { padding: 12px 16px; font-size: 14px; font-weight: 700; }
+  .compare-body { padding: 14px 16px; font-size: 13px; color: var(--text-sub); line-height: 1.9; }
+
+  /* ペルソナカード（完成例） -->
+  .persona-card { border-radius: 16px; overflow: hidden; border: 2px solid; margin: 16px 0; }
+  .persona-header { padding: 18px 22px; display: flex; align-items: center; gap: 16px; }
+  .persona-avatar { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; border: 3px solid rgba(255,255,255,0.5); }
+  .persona-name { font-size: 17px; font-weight: 900; color: #fff; margin-bottom: 2px; }
+  .persona-sub { font-size: 12px; color: rgba(255,255,255,0.8); }
+  .persona-grid { display: grid; grid-template-columns: 1fr 1fr; }
+  .persona-cell { padding: 12px 16px; border-bottom: 1px solid; border-right: 1px solid; }
+  .persona-cell:nth-child(even) { border-right: none; }
+  .persona-cell:nth-last-child(-n+2) { border-bottom: none; }
+  .persona-cell.full { grid-column: 1/-1; border-right: none; }
+  .cell-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; margin-bottom: 6px; }
+  .cell-body { font-size: 12px; color: var(--text-sub); line-height: 1.9; }
+  .insight-box { border-radius: 8px; padding: 8px 12px; font-size: 12px; line-height: 1.7; }
+
+  /* ヒント */
+  .tip { border-radius: 10px; padding: 12px 16px; margin-top: 14px; }
+  .tip p { font-size: 13px; line-height: 1.75; }
+
+  /* ステップ */
+  .steps { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+  .step { display: flex; gap: 12px; align-items: flex-start; background: #f8f9fa; border-radius: 8px; padding: 10px 14px; }
+  .step-num { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .step-text { font-size: 13px; color: var(--text-sub); line-height: 1.6; padding-top: 3px; }
+
+  /* ワークシート */
+  .work-card { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; }
+  .work-header { padding: 20px 24px; display: flex; align-items: center; gap: 16px; border-bottom: 2px solid var(--border); flex-wrap: wrap; }
+  .work-num { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; color: #fff; font-family: 'JetBrains Mono', monospace; }
+  .work-body { padding: 24px; }
+
+  /* 記入欄 */
+  .fill-section { margin: 16px 0; }
+  .fill-title { font-size: 12px; font-weight: 700; color: var(--text-sub); font-family: 'JetBrains Mono', monospace; margin-bottom: 10px; letter-spacing: 0.06em; }
+  .fill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .fill-item { background: #f8f9fa; border-radius: 8px; padding: 10px 14px; border: 1px solid var(--border); }
+  .fill-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; margin-bottom: 6px; }
+  .fill-line { border-bottom: 1px dashed #cbd5e0; padding-bottom: 4px; margin-bottom: 4px; font-size: 12px; color: #94a3b8; }
+  .fill-line:last-child { border-bottom: none; margin-bottom: 0; }
+  .fill-box-full { background: #f8f9fa; border-radius: 8px; padding: 10px 14px; border: 1px solid var(--border); margin-bottom: 8px; }
+  .insight-fill { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
+  .insight-fill-box { background: #f8f9fa; border-radius: 8px; padding: 10px 14px; border: 1px dashed var(--border); min-height: 70px; }
+  .insight-fill-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; margin-bottom: 6px; color: var(--text-sub); }
+
+  /* バナー落とし込み表 */
+  .banner-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 14px 0; }
+  .banner-table th { padding: 9px 12px; text-align: left; font-weight: 700; }
+  .banner-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--text-sub); }
+  .banner-table tr:nth-child(even) td { background: #f8f9fa; }
+  .fill-td { border-bottom: 1px dashed #cbd5e0 !important; color: #94a3b8 !important; background: transparent !important; }
+
+  /* チェックリスト */
+  .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; }
+  .check-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px; background: #f8f9fa; border-radius: 8px; }
+  .check-box { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border); flex-shrink: 0; margin-top: 2px; }
+  .check-text { font-size: 13px; color: var(--text-sub); }
+
+  .task-box { border-radius: 12px; padding: 14px 16px; margin-bottom: 18px; }
+  .task-label { font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .task-text { font-size: 14px; font-weight: 500; line-height: 1.7; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 20px; }
+    .hero h1 { font-size: 22px; }
+    .section-body, .work-body { padding: 16px; }
+    .compare { grid-template-columns: 1fr; }
+    .persona-grid { grid-template-columns: 1fr; }
+    .fill-grid { grid-template-columns: 1fr; }
+    .insight-fill { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Photoshop · Lesson 19</div>
+      <h1>👤 ターゲット・ペルソナ<br>設定 完全解説＋ワークシート</h1>
+      <p>「誰に向けたバナーか」を明確にするターゲット設定とペルソナ作成を3業種で練習。デザインの迷いをゼロにする。</p>
+      <div class="hero-tags">
+        <span class="hero-tag">ターゲットとペルソナの違い</span>
+        <span class="hero-tag">ペルソナの作り方</span>
+        <span class="hero-tag">カフェ業種</span>
+        <span class="hero-tag">転職業種</span>
+        <span class="hero-tag">美容業種</span>
+        <span class="hero-tag">バナーへの落とし込み</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 1: ターゲットとペルソナの違い -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#eef2ff;">🎯</div>
+      <div>
+        <div class="section-num" style="color:#4338ca;">CHAPTER 01</div>
+        <div class="section-title">ターゲットとペルソナの違い</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">「ターゲット」と「ペルソナ」は似ているようで<strong>まったく違います</strong>。両方を理解してから使い分けましょう。</p>
+
+      <div class="compare">
+        <div class="compare-box">
+          <div class="compare-header" style="background:#e0e7ff; color:#3730a3;">🎯 ターゲット（大枠）</div>
+          <div class="compare-body">
+            <strong style="color:var(--text);">広い集団を示す属性情報。</strong><br>
+            「20〜30代の女性」<br>
+            「首都圏在住の転職希望者」<br>
+            「美容に関心のある社会人」<br><br>
+            → 大まかな方向性は決まるが<br>
+            <strong>「どんなデザインにするか」には使いにくい</strong>
+          </div>
+        </div>
+        <div class="compare-box">
+          <div class="compare-header" style="background:#dcfce7; color:#15803d;">👤 ペルソナ（具体的な1人）</div>
+          <div class="compare-body">
+            <strong style="color:var(--text);">1人の実在しそうな人物像。</strong><br>
+            「27歳・都内OL・週3カフェ」<br>
+            「32歳・エンジニア・年収UP希望」<br>
+            「25歳・美容部員・肌荒れ悩み」<br><br>
+            → その人に語りかけるように<br>
+            <strong>デザインの判断が具体的になる</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- NGとOKの例 -->
+      <div style="display:flex; flex-direction:column; gap:10px; margin:16px 0;">
+        <div style="background:#fef2f2; border-radius:10px; padding:14px 16px; border-left:4px solid #e53e3e;">
+          <div style="font-size:11px; font-weight:700; color:#c53030; font-family:'JetBrains Mono',monospace; margin-bottom:6px;">❌ ターゲットだけでバナーを作った場合</div>
+          <div style="font-size:13px; color:var(--text-sub); line-height:1.8;">
+            「20〜30代女性向けカフェバナーを作ってください」<br>
+            → フォントは？色は？コピーは？何も決められない。<br>
+            → 結果：「なんとなくおしゃれっぽい」バナーが完成するが誰にも刺さらない
+          </div>
+        </div>
+        <div style="background:#f0fff4; border-radius:10px; padding:14px 16px; border-left:4px solid #38a169;">
+          <div style="font-size:11px; font-weight:700; color:#276749; font-family:'JetBrains Mono',monospace; margin-bottom:6px;">✅ ペルソナを作ってからバナーを作った場合</div>
+          <div style="font-size:13px; color:var(--text-sub); line-height:1.8;">
+            「27歳・Instagramで毎日カフェ情報収集・シンプルで上品なデザインが好き」<br>
+            → 明朝体 + 余白多め + 淡いグリーン + 「自分へのご褒美」コピーに決まる。<br>
+            → 結果：その人にピッタリ刺さるバナーが完成する
+          </div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#eef2ff; border-left:3px solid #4338ca;">
+        <p style="color:#1e1b4b;"><strong>結論：</strong>ターゲットは「絞り込みの第一歩」、ペルソナは「デザインの設計図」。バナー制作では<strong>必ずペルソナまで落とし込む</strong>ことが重要です。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 2: ペルソナの作り方 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#f0fdf4;">📝</div>
+      <div>
+        <div class="section-num" style="color:#15803d;">CHAPTER 02</div>
+        <div class="section-title">ペルソナの作り方 ― 7つの項目</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">ペルソナを作るときに必ず埋める<strong>7つの項目</strong>を覚えましょう。この7つを埋めると「その人が何を考えているか」が見えてきます。</p>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;">
+        <div style="background:#f8f9fa; border-radius:10px; padding:12px 14px; border-left:4px solid #4338ca;">
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#4338ca; margin-bottom:4px;">① 基本属性</div>
+          <div style="font-size:12px; color:var(--text-sub);">年齢・性別・職業・年収・居住地・家族構成</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:12px 14px; border-left:4px solid #0891b2;">
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#0891b2; margin-bottom:4px;">② 情報収集方法</div>
+          <div style="font-size:12px; color:var(--text-sub);">SNS・検索・口コミ・雑誌のどれで情報を得るか</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:12px 14px; border-left:4px solid #059669;">
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#059669; margin-bottom:4px;">③ 趣味・ライフスタイル</div>
+          <div style="font-size:12px; color:var(--text-sub);">休日の過ごし方・好きなもの・大切にしている価値観</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:12px 14px; border-left:4px solid #d69e2e;">
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#d69e2e; margin-bottom:4px;">④ 悩み・課題</div>
+          <div style="font-size:12px; color:var(--text-sub);">今どんな問題を抱えているか。何に不満を感じているか</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:12px 14px; border-left:4px solid #dc2626;">
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#dc2626; margin-bottom:4px;">⑤ 欲求・願望</div>
+          <div style="font-size:12px; color:var(--text-sub);">どうなりたいか。何を手に入れたいか</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:12px 14px; border-left:4px solid #7c3aed;">
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#7c3aed; margin-bottom:4px;">⑥ インサイト（本音）</div>
+          <div style="font-size:12px; color:var(--text-sub);">表には出さないが心の中で思っていること（最重要）</div>
+        </div>
+        <div style="background:#f8f9fa; border-radius:10px; padding:12px 14px; border-left:4px solid #db2777; grid-column:1/-1;">
+          <div style="font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#db2777; margin-bottom:4px;">⑦ バナーへの落とし込み</div>
+          <div style="font-size:12px; color:var(--text-sub);">上記を踏まえて、どんな色・フォント・コピー・レイアウトにするかを決める</div>
+        </div>
+      </div>
+
+      <!-- 作り方の手順 -->
+      <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px;">ペルソナを作る手順</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num" style="background:#4338ca;">1</div>
+          <div class="step-text"><strong>クライアントからヒアリング</strong>した情報を整理する（Lesson16参照）</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#4338ca;">2</div>
+          <div class="step-text">競合・SNS・Googleで<strong>実際のユーザーの声やコメント</strong>を調査する</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#4338ca;">3</div>
+          <div class="step-text"><strong>7つの項目を埋めながら</strong>、実在しそうな1人の人物として具体的に書く</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#4338ca;">4</div>
+          <div class="step-text">ペルソナを見ながら<strong>「この人なら何に反応するか？」</strong>でデザインを決める</div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#f0fdf4; border-left:3px solid #15803d;">
+        <p style="color:#14532d;"><strong>インサイトが最重要：</strong>「悩み」と「インサイト」は違います。悩み＝「太っている」、インサイト＝「本当は痩せたいけど続けられるか不安で一歩踏み出せていない」。インサイトを突いたコピーは<strong>読んだ瞬間に「これ私のことだ！」</strong>と感じさせます。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 3: 完成例（カフェ） -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#ccfbf1;">☕</div>
+      <div>
+        <div class="section-num" style="color:#0f766e;">CHAPTER 03</div>
+        <div class="section-title">完成例①：カフェ業種のペルソナ</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p class="desc">グリーンカフェ（Lesson16・Lesson19の架空クライアント）の完成ペルソナを見てみましょう。</p>
+
+      <div class="persona-card" style="border-color:#0f766e;">
+        <div class="persona-header" style="background:linear-gradient(135deg,#134e4a,#0f766e);">
+          <div class="persona-avatar" style="background:rgba(255,255,255,0.18);">👩</div>
+          <div>
+            <div class="persona-name">佐藤 さくら（27歳）</div>
+            <div class="persona-sub">都内ITエンジニア / 一人暮らし / 渋谷区</div>
+          </div>
+        </div>
+        <div class="persona-grid">
+          <div class="persona-cell" style="border-color:#99f6e4;">
+            <div class="cell-label" style="color:#0f766e;">① 基本属性</div>
+            <div class="cell-body">27歳・女性・ITエンジニア<br>年収450万・渋谷区一人暮らし</div>
+          </div>
+          <div class="persona-cell" style="border-color:#99f6e4;">
+            <div class="cell-label" style="color:#0f766e;">② 情報収集</div>
+            <div class="cell-body">Instagram毎日チェック<br>Googleマップで近隣カフェ検索<br>写真の質で来店を決める</div>
+          </div>
+          <div class="persona-cell" style="border-color:#99f6e4;">
+            <div class="cell-label" style="color:#0f766e;">③ ライフスタイル</div>
+            <div class="cell-body">週2〜3カフェ利用<br>仕事帰り・休日のリフレッシュに<br>予算800〜1,500円/回</div>
+          </div>
+          <div class="persona-cell" style="border-color:#99f6e4;">
+            <div class="cell-label" style="color:#0f766e;">④ 悩み</div>
+            <div class="cell-body">仕事が忙しくて自分の時間が少ない<br>新しいカフェを発掘したい</div>
+          </div>
+          <div class="persona-cell" style="border-color:#99f6e4;">
+            <div class="cell-label" style="color:#0f766e;">⑤ 欲求</div>
+            <div class="cell-body">おしゃれで映えるカフェに行きたい<br>季節限定メニューを試したい</div>
+          </div>
+          <div class="persona-cell" style="border-color:#99f6e4;">
+            <div class="cell-label" style="color:#0f766e;">⑥ インサイト（本音）</div>
+            <div class="cell-body">「頑張っている自分へのご褒美として<br>少し贅沢なカフェに行きたい」</div>
+          </div>
+          <div class="persona-cell full" style="border-color:#99f6e4;">
+            <div class="cell-label" style="color:#0f766e;">⑦ バナーへの落とし込み</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:4px;">
+              <div class="insight-box" style="background:#ccfbf1; color:#134e4a;">🎨 <strong>色：</strong>グリーン＋ゴールド（上品・高級感）</div>
+              <div class="insight-box" style="background:#ccfbf1; color:#134e4a;">🔤 <strong>フォント：</strong>明朝体＋筆記体（シンプルで上品）</div>
+              <div class="insight-box" style="background:#ccfbf1; color:#134e4a;">📝 <strong>コピー：</strong>「夏のご褒美、はじまる。」</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ワークシートセクション -->
+  <div style="background:linear-gradient(135deg,#1e1b4b,#4338ca); border-radius:20px; padding:28px 24px; margin-bottom:24px; text-align:center;">
+    <div style="font-size:11px; color:#a5b4fc; font-family:'JetBrains Mono',monospace; margin-bottom:8px; letter-spacing:0.1em;">WORKSHEET</div>
+    <div style="font-size:22px; font-weight:700; color:#fff; margin-bottom:6px;">✏️ ワークシート（3業種）</div>
+    <div style="font-size:13px; color:rgba(255,255,255,0.75);">カフェ・転職・美容の3業種でペルソナを実際に作ってみよう</div>
+  </div>
+
+  <!-- WORK 1: カフェ -->
+  <div class="work-card">
+    <div class="work-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#134e4a,#0f766e);">☕<br>W1</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#0f766e; margin-bottom:2px;">業種①：カフェ</div>
+        <div style="font-size:17px; font-weight:700;">カフェのペルソナを作ろう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:#ccfbf1; color:#0f766e;">⏱ 20分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#ccfbf1; border:1px solid #5eead4;">
+        <div class="task-label" style="color:#0f766e;">📋 課題設定</div>
+        <div class="task-text">「新しくオープンしたスペシャルティコーヒー専門店」がInstagramバナーを作りたい。このお店のペルソナを作ってください。</div>
+      </div>
+
+      <!-- ターゲット記入 -->
+      <div class="fill-section">
+        <div class="fill-title" style="color:#0f766e;">STEP 1：まずターゲットを書く（大枠）</div>
+        <div class="fill-grid">
+          <div class="fill-item">
+            <div class="fill-label" style="color:#0f766e;">年齢層</div>
+            <div class="fill-line">（例：20〜35歳）</div>
+          </div>
+          <div class="fill-item">
+            <div class="fill-label" style="color:#0f766e;">性別</div>
+            <div class="fill-line">（例：男女どちらも）</div>
+          </div>
+          <div class="fill-item">
+            <div class="fill-label" style="color:#0f766e;">居住・活動エリア</div>
+            <div class="fill-line">（例：都市部在住）</div>
+          </div>
+          <div class="fill-item">
+            <div class="fill-label" style="color:#0f766e;">共通の特徴</div>
+            <div class="fill-line">（例：コーヒーが好き）</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ペルソナ記入 -->
+      <div class="fill-section">
+        <div class="fill-title" style="color:#0f766e;">STEP 2：ペルソナを1人作る（具体的な人物）</div>
+        <div class="fill-grid">
+          <div class="fill-item">
+            <div class="fill-label" style="color:#0f766e;">① 名前・年齢</div>
+            <div class="fill-line">名前：</div>
+            <div class="fill-line">年齢：　　　歳</div>
+          </div>
+          <div class="fill-item">
+            <div class="fill-label" style="color:#0f766e;">① 基本属性</div>
+            <div class="fill-line">職業：</div>
+            <div class="fill-line">年収：</div>
+            <div class="fill-line">居住地：</div>
+          </div>
+          <div class="fill-item">
+            <div class="fill-label" style="color:#0f766e;">② 情報収集方法</div>
+            <div class="fill-line">よく使うSNS：</div>
+            <div class="fill-line">検索するキーワード：</div>
+          </div>
+          <div class="fill-item">
+            <div class="fill-label" style="color:#0f766e;">③ ライフスタイル</div>
+            <div class="fill-line">休日の過ごし方：</div>
+            <div class="fill-line">カフェ利用頻度：</div>
+          </div>
+          <div class="fill-item">
+            <div class="fill-label" style="color:#0f766e;">④ 悩み・課題</div>
+            <div class="fill-line"></div>
+            <div class="fill-line"></div>
+          </div>
+          <div class="fill-item">
+            <div class="fill-label" style="color:#0f766e;">⑤ 欲求・願望</div>
+            <div class="fill-line"></div>
+            <div class="fill-line"></div>
+          </div>
+        </div>
+        <div class="fill-box-full">
+          <div class="fill-label" style="color:#0f766e;">⑥ インサイト（本音）— 一番重要！</div>
+          <div style="font-size:12px; color:#94a3b8; border-bottom:1px dashed #cbd5e0; padding-bottom:8px; margin-bottom:4px;">「　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　」</div>
+          <div style="font-size:11px; color:#94a3b8;">ヒント：表に出さない心の声。「本当は〜したい」「〜だから〜できない」という形で書くと深くなる</div>
+        </div>
+      </div>
+
+      <!-- バナーへの落とし込み -->
+      <div class="fill-section">
+        <div class="fill-title" style="color:#0f766e;">STEP 3：ペルソナからバナーに落とし込む</div>
+        <table class="banner-table">
+          <thead><tr style="background:#0f766e; color:#fff;"><th>ペルソナの特徴</th><th>バナーへの反映</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--text-sub);">（ペルソナの特徴を書く）</td><td class="fill-td">→ （バナーに反映することを書く）</td></tr>
+            <tr><td style="color:var(--text-sub);"></td><td class="fill-td">→</td></tr>
+            <tr><td style="color:var(--text-sub);"></td><td class="fill-td">→</td></tr>
+            <tr><td style="color:var(--text-sub);"></td><td class="fill-td">→</td></tr>
+          </tbody>
+        </table>
+        <div class="fill-grid" style="margin-top:10px;">
+          <div class="fill-item">
+            <div class="fill-label" style="color:#0f766e;">決めたカラー</div>
+            <div class="fill-line">メインカラー：</div>
+            <div class="fill-line">サブカラー：</div>
+          </div>
+          <div class="fill-item">
+            <div class="fill-label" style="color:#0f766e;">決めたフォント</div>
+            <div class="fill-line">メイン：</div>
+            <div class="fill-line">サブ：</div>
+          </div>
+          <div class="fill-item" style="grid-column:1/-1;">
+            <div class="fill-label" style="color:#0f766e;">決めたキャッチコピー</div>
+            <div class="fill-line">「　　　　　　　　　　　　　　　　　　　　　」</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#0f766e;"></div><div class="check-text">ターゲットとペルソナ両方を書けた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#0f766e;"></div><div class="check-text">インサイト（本音）を書けた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#0f766e;"></div><div class="check-text">ペルソナからバナーの方向性（色・フォント・コピー）を決めた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORK 2: 転職 -->
+  <div class="work-card">
+    <div class="work-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#1e3a5f,#2b6cb0);">💼<br>W2</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#2b6cb0; margin-bottom:2px;">業種②：転職</div>
+        <div style="font-size:17px; font-weight:700;">転職サービスのペルソナを作ろう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:#dbeafe; color:#1e40af;">⏱ 20分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#dbeafe; border:1px solid #93c5fd;">
+        <div class="task-label" style="color:#1e40af;">📋 課題設定</div>
+        <div class="task-text">「ITエンジニア特化の転職エージェント」がWeb用バナー（728×90px）を作りたい。このサービスのペルソナを作ってください。</div>
+      </div>
+
+      <!-- 転職ヒント -->
+      <div style="background:#eff6ff; border-radius:10px; padding:12px 16px; border:1px solid #bfdbfe; margin-bottom:16px;">
+        <div style="font-size:11px; font-weight:700; color:#1e40af; font-family:'JetBrains Mono',monospace; margin-bottom:8px;">💡 転職ペルソナを作るヒント</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12px; color:var(--text-sub);">
+          <div>• 現職に何らかの不満がある</div>
+          <div>• 年収・環境・成長などの動機がある</div>
+          <div>• 転職を考えているが踏み出せていない？</div>
+          <div>• 情報収集はどうしている？（Indeed・LinkedIn等）</div>
+          <div>• 転職のリスクを恐れている？</div>
+          <div>• 将来のキャリアに不安がある？</div>
+        </div>
+      </div>
+
+      <div class="fill-section">
+        <div class="fill-title" style="color:#1e40af;">STEP 1：ターゲット（大枠）</div>
+        <div class="fill-grid">
+          <div class="fill-item"><div class="fill-label" style="color:#1e40af;">職種・スキル</div><div class="fill-line">（例：エンジニア・プログラマー）</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#1e40af;">経験年数</div><div class="fill-line">（例：2〜5年目）</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#1e40af;">転職理由の傾向</div><div class="fill-line">（例：年収UP・リモートワーク希望）</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#1e40af;">活動状況</div><div class="fill-line">（例：転職活動中・検討中）</div></div>
+        </div>
+      </div>
+
+      <div class="fill-section">
+        <div class="fill-title" style="color:#1e40af;">STEP 2：ペルソナ（1人の具体的な人物）</div>
+        <div class="fill-grid">
+          <div class="fill-item"><div class="fill-label" style="color:#1e40af;">① 名前・年齢</div><div class="fill-line">名前：</div><div class="fill-line">年齢：　　　歳</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#1e40af;">① 基本属性</div><div class="fill-line">職業・スキル：</div><div class="fill-line">現在の年収：</div><div class="fill-line">勤務年数：</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#1e40af;">② 情報収集</div><div class="fill-line">転職情報源：</div><div class="fill-line">よく見るサイト：</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#1e40af;">③ 現在の状況</div><div class="fill-line">今の職場の状況：</div><div class="fill-line">転職への意欲：</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#1e40af;">④ 悩み・課題</div><div class="fill-line"></div><div class="fill-line"></div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#1e40af;">⑤ 欲求・願望</div><div class="fill-line"></div><div class="fill-line"></div></div>
+        </div>
+        <div class="fill-box-full">
+          <div class="fill-label" style="color:#1e40af;">⑥ インサイト（本音）</div>
+          <div style="font-size:12px; color:#94a3b8; border-bottom:1px dashed #cbd5e0; padding-bottom:8px; margin-bottom:4px;">「　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　」</div>
+          <div style="font-size:11px; color:#94a3b8;">ヒント：転職に踏み出せない本当の理由は？失敗への恐れ？家族の反対？スキルへの自信のなさ？</div>
+        </div>
+      </div>
+
+      <div class="fill-section">
+        <div class="fill-title" style="color:#1e40af;">STEP 3：バナーへの落とし込み</div>
+        <table class="banner-table">
+          <thead><tr style="background:#1e40af; color:#fff;"><th>ペルソナの特徴</th><th>バナーへの反映</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--text-sub);"></td><td class="fill-td">→</td></tr>
+            <tr><td style="color:var(--text-sub);"></td><td class="fill-td">→</td></tr>
+            <tr><td style="color:var(--text-sub);"></td><td class="fill-td">→</td></tr>
+            <tr><td style="color:var(--text-sub);"></td><td class="fill-td">→</td></tr>
+          </tbody>
+        </table>
+        <div class="fill-grid" style="margin-top:10px;">
+          <div class="fill-item"><div class="fill-label" style="color:#1e40af;">決めたカラー</div><div class="fill-line">メイン：</div><div class="fill-line">サブ：</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#1e40af;">決めたフォント</div><div class="fill-line">メイン：</div><div class="fill-line">サブ：</div></div>
+          <div class="fill-item" style="grid-column:1/-1;"><div class="fill-label" style="color:#1e40af;">決めたキャッチコピー</div><div class="fill-line">「　　　　　　　　　　　　　　　　　　　　　」</div></div>
+        </div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#1e40af;"></div><div class="check-text">転職希望者ならではのインサイトを書けた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#1e40af;"></div><div class="check-text">ネイビー・ブルー系など「信頼感のある色」を選べた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#1e40af;"></div><div class="check-text">具体的な数字（年収・求人数等）をコピーに入れた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORK 3: 美容 -->
+  <div class="work-card">
+    <div class="work-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#831843,#db2777);">💄<br>W3</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#db2777; margin-bottom:2px;">業種③：美容</div>
+        <div style="font-size:17px; font-weight:700;">美容サロンのペルソナを作ろう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:#fce7f3; color:#9d174d;">⏱ 20分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#fce7f3; border:1px solid #f9a8d4;">
+        <div class="task-label" style="color:#9d174d;">📋 課題設定</div>
+        <div class="task-text">「20〜30代女性向けの肌ケア専門エステサロン」がInstagram広告バナーを作りたい。このサロンのペルソナを作ってください。</div>
+      </div>
+
+      <!-- 美容ヒント -->
+      <div style="background:#fdf2f8; border-radius:10px; padding:12px 16px; border:1px solid #f9a8d4; margin-bottom:16px;">
+        <div style="font-size:11px; font-weight:700; color:#9d174d; font-family:'JetBrains Mono',monospace; margin-bottom:8px;">💡 美容ペルソナを作るヒント</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12px; color:var(--text-sub);">
+          <div>• 肌の悩みは何か（ニキビ・乾燥・毛穴・くすみ）</div>
+          <div>• 美容に使える時間・予算はどのくらい？</div>
+          <div>• セルフケアとサロンの使い分けは？</div>
+          <div>• 美容情報はどこから得ている？（YouTube・Instagram）</div>
+          <div>• 「効果がなかったらどうしよう」という不安はある？</div>
+          <div>• 仕事・恋愛・結婚などで外見を意識するきっかけは？</div>
+        </div>
+      </div>
+
+      <div class="fill-section">
+        <div class="fill-title" style="color:#9d174d;">STEP 1：ターゲット（大枠）</div>
+        <div class="fill-grid">
+          <div class="fill-item"><div class="fill-label" style="color:#9d174d;">年齢・性別</div><div class="fill-line">（例：25〜35歳・女性）</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#9d174d;">主な肌の悩み</div><div class="fill-line">（例：ニキビ跡・毛穴・乾燥）</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#9d174d;">美容への関心度</div><div class="fill-line">（例：美容に月1〜3万投資できる）</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#9d174d;">サロン利用状況</div><div class="fill-line">（例：初めて・リピーター）</div></div>
+        </div>
+      </div>
+
+      <div class="fill-section">
+        <div class="fill-title" style="color:#9d174d;">STEP 2：ペルソナ（1人の具体的な人物）</div>
+        <div class="fill-grid">
+          <div class="fill-item"><div class="fill-label" style="color:#9d174d;">① 名前・年齢</div><div class="fill-line">名前：</div><div class="fill-line">年齢：　　　歳</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#9d174d;">① 基本属性</div><div class="fill-line">職業：</div><div class="fill-line">居住地：</div><div class="fill-line">家族構成：</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#9d174d;">② 情報収集</div><div class="fill-line">よく見るSNS：</div><div class="fill-line">参考にするもの：</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#9d174d;">③ 美容習慣</div><div class="fill-line">スキンケア頻度：</div><div class="fill-line">美容予算/月：</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#9d174d;">④ 肌の悩み</div><div class="fill-line">メインの悩み：</div><div class="fill-line">今まで試したこと：</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#9d174d;">⑤ 欲求・願望</div><div class="fill-line">どんな肌になりたいか：</div><div class="fill-line">なりたい理由：</div></div>
+        </div>
+        <div class="fill-box-full">
+          <div class="fill-label" style="color:#9d174d;">⑥ インサイト（本音）</div>
+          <div style="font-size:12px; color:#94a3b8; border-bottom:1px dashed #cbd5e0; padding-bottom:8px; margin-bottom:4px;">「　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　」</div>
+          <div style="font-size:11px; color:#94a3b8;">ヒント：「効果あるのかな…」「高いお金払って後悔したくない」「本当はすっぴんに自信を持ちたい」など</div>
+        </div>
+      </div>
+
+      <div class="fill-section">
+        <div class="fill-title" style="color:#9d174d;">STEP 3：バナーへの落とし込み</div>
+        <table class="banner-table">
+          <thead><tr style="background:#9d174d; color:#fff;"><th>ペルソナの特徴</th><th>バナーへの反映</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--text-sub);"></td><td class="fill-td">→</td></tr>
+            <tr><td style="color:var(--text-sub);"></td><td class="fill-td">→</td></tr>
+            <tr><td style="color:var(--text-sub);"></td><td class="fill-td">→</td></tr>
+            <tr><td style="color:var(--text-sub);"></td><td class="fill-td">→</td></tr>
+          </tbody>
+        </table>
+        <div class="fill-grid" style="margin-top:10px;">
+          <div class="fill-item"><div class="fill-label" style="color:#9d174d;">決めたカラー</div><div class="fill-line">メイン：</div><div class="fill-line">サブ：</div></div>
+          <div class="fill-item"><div class="fill-label" style="color:#9d174d;">決めたフォント</div><div class="fill-line">メイン：</div><div class="fill-line">サブ：</div></div>
+          <div class="fill-item" style="grid-column:1/-1;"><div class="fill-label" style="color:#9d174d;">決めたキャッチコピー</div><div class="fill-line">「　　　　　　　　　　　　　　　　　　　　　」</div></div>
+        </div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ できたらチェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#db2777;"></div><div class="check-text">肌悩みに寄り添うインサイトを書けた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#db2777;"></div><div class="check-text">ピンク・ベージュ系など「美容らしい色」を選べた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#db2777;"></div><div class="check-text">悩みを解決するような共感系コピーを書けた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- まとめ -->
+  <div style="background:#1e1b4b; border-radius:16px; padding:24px; margin-top:8px;">
+    <div style="font-size:13px; font-weight:700; color:#a5b4fc; font-family:'JetBrains Mono',monospace; margin-bottom:14px; letter-spacing:0.08em;">📚 Lesson19 まとめ</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:12px;">
+        <div style="font-size:10px; color:#a5b4fc; font-family:'JetBrains Mono',monospace; margin-bottom:6px;">ターゲット</div>
+        <div style="font-size:12px; color:#e2e8f0; line-height:1.7;">広い集団の属性情報。方向性を決める第一歩。デザインには使いにくい。</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:12px;">
+        <div style="font-size:10px; color:#a5b4fc; font-family:'JetBrains Mono',monospace; margin-bottom:6px;">ペルソナ</div>
+        <div style="font-size:12px; color:#e2e8f0; line-height:1.7;">1人の具体的な人物像。デザインの設計図になる。必ずインサイトまで掘り下げる。</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:12px;">
+        <div style="font-size:10px; color:#a5b4fc; font-family:'JetBrains Mono',monospace; margin-bottom:6px;">インサイト</div>
+        <div style="font-size:12px; color:#e2e8f0; line-height:1.7;">表に出さない本音。ここを突いたコピーが「これ私のことだ！」を生む。</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:12px;">
+        <div style="font-size:10px; color:#a5b4fc; font-family:'JetBrains Mono',monospace; margin-bottom:6px;">落とし込み</div>
+        <div style="font-size:12px; color:#e2e8f0; line-height:1.7;">ペルソナ→色・フォント・コピーに変換する。これがペルソナを作る最終目的。</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:24px; font-size:12px; color:#94a3b8;">Photoshop · Lesson 19｜ターゲット・ペルソナ設定 完全解説＋ワークシート</div>
+
+</div>
+</body>
+</html>
