@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ペルソナワークシート 回答例｜Photoshop Lesson 20</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --text: #1a1a2e;
+    --text-sub: #4a5568;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 40px 20px 80px; }
+  .container { max-width: 820px; margin: 0 auto; }
+
+  .hero { background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 60%, #818cf8 100%); border-radius: 20px; padding: 48px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::before { content: '✅'; position: absolute; right: 36px; top: 20px; font-size: 80px; opacity: 0.13; }
+  .hero-content { position: relative; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
+  .hero h1 { font-size: 26px; font-weight: 900; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.85); }
+
+  /* 回答カード */
+  .ans-card { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 36px; }
+  .ans-header { padding: 20px 24px; display: flex; align-items: center; gap: 16px; border-bottom: 2px solid var(--border); flex-wrap: wrap; }
+  .ans-num { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .ans-body { padding: 24px; }
+
+  /* ターゲット回答 */
+  .target-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0; }
+  .target-item { background: #f8f9fa; border-radius: 8px; padding: 10px 14px; border: 1px solid var(--border); }
+  .t-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; margin-bottom: 4px; }
+  .t-val { font-size: 13px; color: var(--text); font-weight: 700; }
+
+  /* ペルソナカード */
+  .persona-card { border-radius: 14px; overflow: hidden; margin: 16px 0; }
+  .persona-head { padding: 16px 20px; display: flex; align-items: center; gap: 14px; }
+  .p-avatar { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; border: 3px solid rgba(255,255,255,0.5); background: rgba(255,255,255,0.18); }
+  .p-name { font-size: 17px; font-weight: 900; color: #fff; }
+  .p-sub { font-size: 12px; color: rgba(255,255,255,0.8); }
+  .p-grid { display: grid; grid-template-columns: 1fr 1fr; }
+  .p-cell { padding: 12px 16px; border-bottom: 1px solid; border-right: 1px solid; }
+  .p-cell:nth-child(even) { border-right: none; }
+  .p-cell.full { grid-column: 1/-1; border-right: none; border-bottom: none; }
+  .p-cell:nth-last-child(2):not(.full), .p-cell:last-child:not(.full) { border-bottom: none; }
+  .p-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; margin-bottom: 5px; }
+  .p-val { font-size: 12px; color: var(--text-sub); line-height: 1.85; }
+
+  /* インサイト */
+  .insight-box { border-radius: 10px; padding: 12px 16px; margin: 0 16px 16px; }
+  .insight-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; margin-bottom: 6px; }
+  .insight-text { font-size: 13px; line-height: 1.8; font-style: italic; }
+
+  /* 落とし込み表 */
+  .mapping-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 14px 0; }
+  .mapping-table th { padding: 9px 14px; text-align: left; font-size: 11px; font-family: 'JetBrains Mono', monospace; }
+  .mapping-table td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text-sub); line-height: 1.7; vertical-align: top; }
+  .mapping-table tr:last-child td { border-bottom: none; }
+  .mapping-table tr:nth-child(even) td { background: #f8f9fa; }
+
+  /* デザイン方針 */
+  .design-tags { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+  .design-tag { border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 700; }
+
+  .copy-box { border-radius: 10px; padding: 14px 18px; margin: 12px 0; text-align: center; }
+  .copy-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; margin-bottom: 6px; }
+  .copy-text { font-size: 18px; font-weight: 700; line-height: 1.5; }
+  .copy-sub { font-size: 12px; margin-top: 4px; }
+
+  .tip { border-radius: 10px; padding: 12px 16px; margin-top: 14px; }
+  .tip p { font-size: 13px; line-height: 1.75; }
+
+  .section-title { font-size: 13px; font-weight: 700; color: var(--text); margin: 18px 0 10px; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 20px; }
+    .hero h1 { font-size: 22px; }
+    .ans-body { padding: 16px; }
+    .target-grid, .p-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Lesson 20 ワークシート 回答例</div>
+      <h1>✅ ペルソナワークシート<br>回答例（3業種）</h1>
+      <p>カフェ・転職・美容の3業種の回答例です。自分の回答と比べてみましょう。「正解」は1つではなく、インサイトとバナーへの落とし込みが一致していれば◎です。</p>
+    </div>
+  </div>
+
+  <!-- 注意書き -->
+  <div style="background:#fffff0; border-radius:12px; border:2px solid #d69e2e; padding:16px 20px; margin-bottom:32px;">
+    <div style="font-size:12px; font-weight:700; color:#744210; font-family:'JetBrains Mono',monospace; margin-bottom:8px;">⚠️ 回答例を見る前に</div>
+    <div style="font-size:13px; color:var(--text-sub); line-height:1.8;">ペルソナに「正解」は1つではありません。<strong>インサイト（本音）が具体的に書けているか</strong>・<strong>ペルソナからバナーの方向性が論理的に導けているか</strong>の2点が重要です。回答例と違っても、この2点が満たされていれば正解です。</div>
+  </div>
+
+  <!-- W1: カフェ回答 -->
+  <div class="ans-card">
+    <div class="ans-header">
+      <div class="ans-num" style="background:linear-gradient(135deg,#134e4a,#0f766e);">☕</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#0f766e; margin-bottom:2px;">W1 回答例 — 業種①：カフェ</div>
+        <div style="font-size:17px; font-weight:700;">スペシャルティコーヒー専門店のペルソナ</div>
+      </div>
+    </div>
+    <div class="ans-body">
+
+      <!-- ターゲット回答 -->
+      <div class="section-title">STEP 1：ターゲット（大枠）</div>
+      <div class="target-grid">
+        <div class="target-item">
+          <div class="t-label" style="color:#0f766e;">年齢層</div>
+          <div class="t-val">25〜38歳</div>
+        </div>
+        <div class="target-item">
+          <div class="t-label" style="color:#0f766e;">性別</div>
+          <div class="t-val">男女どちらも（やや女性多め）</div>
+        </div>
+        <div class="target-item">
+          <div class="t-label" style="color:#0f766e;">居住・活動エリア</div>
+          <div class="t-val">都市部在住・駅近に行動圏</div>
+        </div>
+        <div class="target-item">
+          <div class="t-label" style="color:#0f766e;">共通の特徴</div>
+          <div class="t-val">コーヒーへのこだわりがある・新しいカフェを探すのが好き</div>
+        </div>
+      </div>
+
+      <!-- ペルソナ -->
+      <div class="section-title">STEP 2：ペルソナ（具体的な1人）</div>
+      <div class="persona-card" style="border:2px solid #0f766e;">
+        <div class="persona-head" style="background:linear-gradient(135deg,#134e4a,#0f766e);">
+          <div class="p-avatar">👩</div>
+          <div>
+            <div class="p-name">田村 あおい（29歳）</div>
+            <div class="p-sub">広告代理店勤務 / 中目黒在住 / コーヒーオタク</div>
+          </div>
+        </div>
+        <div class="p-grid">
+          <div class="p-cell" style="border-color:#99f6e4;">
+            <div class="p-label" style="color:#0f766e;">① 基本属性</div>
+            <div class="p-val">29歳・女性・広告代理店のコピーライター<br>年収500万・中目黒一人暮らし</div>
+          </div>
+          <div class="p-cell" style="border-color:#99f6e4;">
+            <div class="p-label" style="color:#0f766e;">② 情報収集</div>
+            <div class="p-val">Instagram・コーヒー専門メディア（COFFEE LOVER等）<br>友人のおすすめ口コミ・Googleマップのレビュー</div>
+          </div>
+          <div class="p-cell" style="border-color:#99f6e4;">
+            <div class="p-label" style="color:#0f766e;">③ ライフスタイル</div>
+            <div class="p-val">週4〜5日カフェ利用。仕事前・昼休み・休日<br>自宅でもドリップコーヒーを楽しむ</div>
+          </div>
+          <div class="p-cell" style="border-color:#99f6e4;">
+            <div class="p-label" style="color:#0f766e;">④ 悩み・課題</div>
+            <div class="p-val">「いつも同じカフェになりがち」<br>「新しい豆・産地に出会う機会が少ない」</div>
+          </div>
+          <div class="p-cell" style="border-color:#99f6e4;">
+            <div class="p-label" style="color:#0f766e;">⑤ 欲求・願望</div>
+            <div class="p-val">「本格的なスペシャルティコーヒーをゆっくり味わいたい」<br>「バリスタに豆の話を聞きながら飲みたい」</div>
+          </div>
+          <div class="p-cell" style="border-color:#99f6e4;">
+            <div class="p-label" style="color:#0f766e;">⑥ インサイト（本音）</div>
+            <div class="p-val">「チェーン店のコーヒーで妥協したくない。<br>少し高くても、本物のコーヒーを飲んでいる自分でいたい」</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight-box" style="background:#ccfbf1; border:1px solid #5eead4;">
+        <div class="insight-label" style="color:#0f766e;">💡 インサイト解説</div>
+        <div class="insight-text" style="color:#134e4a;">「妥協したくない」「本物の自分でいたい」というプライドと自己表現の欲求。価格よりも<strong>「自分のライフスタイルへのこだわり」</strong>が購買動機になっている。このインサイトを突くと「コーヒー好きな自分」を肯定されるような気持ちになる。</div>
+      </div>
+
+      <!-- バナー落とし込み -->
+      <div class="section-title">STEP 3：バナーへの落とし込み</div>
+      <table class="mapping-table">
+        <thead><tr style="background:#0f766e; color:#fff;"><th>ペルソナの特徴</th><th>バナーへの反映</th></tr></thead>
+        <tbody>
+          <tr><td>コーヒーへの強いこだわりがある</td><td>→ 「スペシャルティ」「シングルオリジン」などの専門用語をコピーに使う</td></tr>
+          <tr><td>Instagramで情報収集する</td><td>→ 1080×1080px正方形バナーを最優先で制作</td></tr>
+          <tr><td>上質・本物志向</td><td>→ ダークグリーン＋ゴールド・明朝体でリッチな雰囲気を出す</td></tr>
+          <tr><td>「妥協したくない」インサイト</td><td>→ 「本物のコーヒーに出会う場所」「妥協しない一杯」というコピー方向</td></tr>
+        </tbody>
+      </table>
+
+      <div class="design-tags">
+        <span class="design-tag" style="background:#134e4a; color:#fff;">🎨 ダークグリーン × ゴールド × クリーム</span>
+        <span class="design-tag" style="background:#ccfbf1; color:#134e4a;">🔤 明朝体（游明朝・Noto Serif）</span>
+        <span class="design-tag" style="background:#ccfbf1; color:#134e4a;">📐 余白多め・写真大きく</span>
+      </div>
+
+      <div class="copy-box" style="background:#134e4a; border:1px solid #0f766e;">
+        <div class="copy-label" style="color:#99f6e4;">✏️ キャッチコピー案</div>
+        <div class="copy-text" style="color:#fff;">本物のコーヒーに、出会う場所。</div>
+        <div class="copy-sub" style="color:rgba(255,255,255,0.7);">サブ：「産地にこだわる、一杯のスペシャルティコーヒー」</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W2: 転職回答 -->
+  <div class="ans-card">
+    <div class="ans-header">
+      <div class="ans-num" style="background:linear-gradient(135deg,#1e3a5f,#2b6cb0);">💼</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#2b6cb0; margin-bottom:2px;">W2 回答例 — 業種②：転職</div>
+        <div style="font-size:17px; font-weight:700;">ITエンジニア特化転職エージェントのペルソナ</div>
+      </div>
+    </div>
+    <div class="ans-body">
+
+      <div class="section-title">STEP 1：ターゲット（大枠）</div>
+      <div class="target-grid">
+        <div class="target-item">
+          <div class="t-label" style="color:#2b6cb0;">職種・スキル</div>
+          <div class="t-val">エンジニア・プログラマー・SE</div>
+        </div>
+        <div class="target-item">
+          <div class="t-label" style="color:#2b6cb0;">経験年数</div>
+          <div class="t-val">2〜7年目（中堅層）</div>
+        </div>
+        <div class="target-item">
+          <div class="t-label" style="color:#2b6cb0;">転職理由の傾向</div>
+          <div class="t-val">年収UP・リモートワーク・技術力向上</div>
+        </div>
+        <div class="target-item">
+          <div class="t-label" style="color:#2b6cb0;">活動状況</div>
+          <div class="t-val">転職を検討中〜活動中（潜在層含む）</div>
+        </div>
+      </div>
+
+      <div class="section-title">STEP 2：ペルソナ（具体的な1人）</div>
+      <div class="persona-card" style="border:2px solid #2b6cb0;">
+        <div class="persona-head" style="background:linear-gradient(135deg,#1e3a5f,#2b6cb0);">
+          <div class="p-avatar">👨‍💻</div>
+          <div>
+            <div class="p-name">中村 たかし（31歳）</div>
+            <div class="p-sub">Web系SIer勤務バックエンドエンジニア / 埼玉在住 / 転職検討中</div>
+          </div>
+        </div>
+        <div class="p-grid">
+          <div class="p-cell" style="border-color:#bfdbfe;">
+            <div class="p-label" style="color:#2b6cb0;">① 基本属性</div>
+            <div class="p-val">31歳・男性・バックエンドエンジニア（Java）<br>現在年収430万・勤続5年・埼玉県在住</div>
+          </div>
+          <div class="p-cell" style="border-color:#bfdbfe;">
+            <div class="p-label" style="color:#2b6cb0;">② 情報収集</div>
+            <div class="p-val">Qiita・Zenn・Twitter（X）のエンジニアアカウント<br>転職ドラフト・LinkedIn・Indeed</div>
+          </div>
+          <div class="p-cell" style="border-color:#bfdbfe;">
+            <div class="p-label" style="color:#2b6cb0;">③ 現在の状況</div>
+            <div class="p-val">SIerで5年。同じ技術スタックのまま停滞感。<br>給料の伸びが鈍く将来が不安。転職を頭では考えているが行動できていない。</div>
+          </div>
+          <div class="p-cell" style="border-color:#bfdbfe;">
+            <div class="p-label" style="color:#2b6cb0;">④ 悩み・課題</div>
+            <div class="p-val">「技術が古くなってきている」「年収がなかなか上がらない」<br>「転職活動の方法がわからない」</div>
+          </div>
+          <div class="p-cell" style="border-color:#bfdbfe;">
+            <div class="p-label" style="color:#2b6cb0;">⑤ 欲求・願望</div>
+            <div class="p-val">「年収600万以上にしたい」「モダンな技術を使える環境に行きたい」<br>「リモートワークで通勤をなくしたい」</div>
+          </div>
+          <div class="p-cell" style="border-color:#bfdbfe;">
+            <div class="p-label" style="color:#2b6cb0;">⑥ インサイト（本音）</div>
+            <div class="p-val">「転職したいけど、失敗したら今より悪くなるのが怖い。<br>自分のスキルで本当に転職できるか自信がない」</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight-box" style="background:#dbeafe; border:1px solid #93c5fd;">
+        <div class="insight-label" style="color:#1e40af;">💡 インサイト解説</div>
+        <div class="insight-text" style="color:#1e3a5f;">「失敗への恐れ」と「自己効力感の低さ」が行動を止めている。転職への意欲はあるが<strong>「リスクの不安」と「自分への自信のなさ」</strong>がブレーキになっている。このインサイトを突くには「安心感」と「あなたのスキルなら大丈夫」という<strong>背中を押すメッセージ</strong>が有効。</div>
+      </div>
+
+      <div class="section-title">STEP 3：バナーへの落とし込み</div>
+      <table class="mapping-table">
+        <thead><tr style="background:#1e40af; color:#fff;"><th>ペルソナの特徴</th><th>バナーへの反映</th></tr></thead>
+        <tbody>
+          <tr><td>失敗への恐れが強い</td><td>→ 「完全無料・内定まで徹底サポート」で安心感を訴求</td></tr>
+          <tr><td>自分のスキルへの自信のなさ</td><td>→ 「エンジニア経験2年以上で登録OK」「あなたのスキルが武器になる」</td></tr>
+          <tr><td>年収UPが最大の動機</td><td>→ 「平均年収UP額153万円」などの具体的数字をバナーに入れる</td></tr>
+          <tr><td>Webエンジニア系SNSで情報収集</td><td>→ シンプル・テック感のあるデザイン（ネイビー＋グリーン系）</td></tr>
+        </tbody>
+      </table>
+
+      <div class="design-tags">
+        <span class="design-tag" style="background:#1e3a5f; color:#fff;">🎨 ネイビー × アクアグリーン × ホワイト</span>
+        <span class="design-tag" style="background:#dbeafe; color:#1e40af;">🔤 ゴシック体（太め・力強く）</span>
+        <span class="design-tag" style="background:#dbeafe; color:#1e40af;">🔢 具体的な数字を入れる</span>
+      </div>
+
+      <div class="copy-box" style="background:#1e3a5f; border:1px solid #2b6cb0;">
+        <div class="copy-label" style="color:#93c5fd;">✏️ キャッチコピー案</div>
+        <div class="copy-text" style="color:#fff;">あなたのスキル、もっと高く売れます。</div>
+        <div class="copy-sub" style="color:rgba(255,255,255,0.7);">サブ：「エンジニア特化 転職エージェント｜平均年収UP +153万円」</div>
+      </div>
+
+      <div class="tip" style="background:#eff6ff; border-left:3px solid #2b6cb0; margin-top:12px;">
+        <p style="color:#1e3a5f;"><strong>転職バナーのポイント：</strong>転職系は感情（不安・焦り）と理性（具体的数字・実績）の両方に訴えることが重要。「あなたのことをわかっている」という共感＋「具体的な結果（数字）」の組み合わせが最も効果的です。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- W3: 美容回答 -->
+  <div class="ans-card">
+    <div class="ans-header">
+      <div class="ans-num" style="background:linear-gradient(135deg,#831843,#db2777);">💄</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#db2777; margin-bottom:2px;">W3 回答例 — 業種③：美容</div>
+        <div style="font-size:17px; font-weight:700;">肌ケア専門エステサロンのペルソナ</div>
+      </div>
+    </div>
+    <div class="ans-body">
+
+      <div class="section-title">STEP 1：ターゲット（大枠）</div>
+      <div class="target-grid">
+        <div class="target-item">
+          <div class="t-label" style="color:#9d174d;">年齢・性別</div>
+          <div class="t-val">23〜35歳・女性</div>
+        </div>
+        <div class="target-item">
+          <div class="t-label" style="color:#9d174d;">主な肌の悩み</div>
+          <div class="t-val">ニキビ跡・毛穴・くすみ・乾燥</div>
+        </div>
+        <div class="target-item">
+          <div class="t-label" style="color:#9d174d;">美容への関心度</div>
+          <div class="t-val">美容に月1〜3万円投資できる層</div>
+        </div>
+        <div class="target-item">
+          <div class="t-label" style="color:#9d174d;">サロン利用状況</div>
+          <div class="t-val">初めて〜数回利用経験あり</div>
+        </div>
+      </div>
+
+      <div class="section-title">STEP 2：ペルソナ（具体的な1人）</div>
+      <div class="persona-card" style="border:2px solid #db2777;">
+        <div class="persona-head" style="background:linear-gradient(135deg,#831843,#db2777);">
+          <div class="p-avatar">👩‍🦱</div>
+          <div>
+            <div class="p-name">林 ゆうか（26歳）</div>
+            <div class="p-sub">百貨店の販売員 / 神奈川県横浜市在住 / 肌荒れが長年の悩み</div>
+          </div>
+        </div>
+        <div class="p-grid">
+          <div class="p-cell" style="border-color:#fbcfe8;">
+            <div class="p-label" style="color:#9d174d;">① 基本属性</div>
+            <div class="p-val">26歳・女性・百貨店コスメ販売員<br>年収320万・横浜市在住・彼氏あり</div>
+          </div>
+          <div class="p-cell" style="border-color:#fbcfe8;">
+            <div class="p-label" style="color:#9d174d;">② 情報収集</div>
+            <div class="p-val">YouTube（美容系YouTuber）・Instagram<br>@cosme・プチプラコスメ・美容系まとめブログ</div>
+          </div>
+          <div class="p-cell" style="border-color:#fbcfe8;">
+            <div class="p-label" style="color:#9d174d;">③ 美容習慣</div>
+            <div class="p-val">毎日スキンケアは丁寧にやっている<br>美容費：月1.5万円（コスメ・スキンケア）<br>サロンは初めて検討中</div>
+          </div>
+          <div class="p-cell" style="border-color:#fbcfe8;">
+            <div class="p-label" style="color:#9d174d;">④ 肌の悩み</div>
+            <div class="p-val">学生時代からのニキビ跡・毛穴の開き<br>コスメで試し続けているが改善しない</div>
+          </div>
+          <div class="p-cell" style="border-color:#fbcfe8;">
+            <div class="p-label" style="color:#9d174d;">⑤ 欲求・願望</div>
+            <div class="p-val">「すっぴんでも自信を持てる肌になりたい」<br>「彼氏の前でも肌を隠さずにいたい」</div>
+          </div>
+          <div class="p-cell" style="border-color:#fbcfe8;">
+            <div class="p-label" style="color:#9d174d;">⑥ インサイト（本音）</div>
+            <div class="p-val">「今まで色々試したのに変わらなかった。<br>エステも高いお金を払って効果がなかったらどうしよう…という不安がある」</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight-box" style="background:#fce7f3; border:1px solid #f9a8d4;">
+        <div class="insight-label" style="color:#9d174d;">💡 インサイト解説</div>
+        <div class="insight-text" style="color:#831843;">「失敗への不安」と「今まで変わらなかった自分への諦め」が混在している。<strong>「効果があるかどうかの不安」</strong>を解消するメッセージと、<strong>「あなたの悩みに寄り添っている」</strong>という共感が響く。ビフォーアフターの実績訴求も有効。</div>
+      </div>
+
+      <div class="section-title">STEP 3：バナーへの落とし込み</div>
+      <table class="mapping-table">
+        <thead><tr style="background:#9d174d; color:#fff;"><th>ペルソナの特徴</th><th>バナーへの反映</th></tr></thead>
+        <tbody>
+          <tr><td>「効果がなかったらどうしよう」という不安</td><td>→ 「初回体験3,300円」「効果を実感できなければ返金」などリスクを下げる訴求</td></tr>
+          <tr><td>長年悩んできた・試し続けてきた</td><td>→ 「自己ケアだけでは届かない悩みに」「プロの技術で変わる肌」</td></tr>
+          <tr><td>「すっぴんに自信を持ちたい」</td><td>→ コピーに「すっぴん」ワードを使う。ビフォーアフター写真が有効</td></tr>
+          <tr><td>YouTube・Instagram で情報収集</td><td>→ SNS広告（Instagram）に注力。縦型動画広告も検討</td></tr>
+        </tbody>
+      </table>
+
+      <div class="design-tags">
+        <span class="design-tag" style="background:#831843; color:#fff;">🎨 ローズピンク × ベージュ × ゴールド</span>
+        <span class="design-tag" style="background:#fce7f3; color:#9d174d;">🔤 明朝体（上品・やわらかく）</span>
+        <span class="design-tag" style="background:#fce7f3; color:#9d174d;">💬 共感ワード重視</span>
+      </div>
+
+      <div class="copy-box" style="background:#831843; border:1px solid #db2777;">
+        <div class="copy-label" style="color:#fbcfe8;">✏️ キャッチコピー案</div>
+        <div class="copy-text" style="color:#fff;">すっぴんが、いちばんきれいな自分へ。</div>
+        <div class="copy-sub" style="color:rgba(255,255,255,0.75);">サブ：「頑張ってきた肌に、プロの力を。初回体験 3,300円」</div>
+      </div>
+
+      <div class="tip" style="background:#fdf2f8; border-left:3px solid #db2777; margin-top:12px;">
+        <p style="color:#831843;"><strong>美容バナーのポイント：</strong>「きれいになりたい」という欲求より「コンプレックスを解消したい」という切実な悩みに寄り添う方が反応率が高い。共感ベースのコピー＋リスクを下げる施策（初回体験・返金保証）の組み合わせが美容サロン広告の定番パターンです。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3業種の比較まとめ -->
+  <div style="background:#1e1b4b; border-radius:16px; padding:24px; margin-top:8px;">
+    <div style="font-size:13px; font-weight:700; color:#a5b4fc; font-family:'JetBrains Mono',monospace; margin-bottom:16px; letter-spacing:0.08em;">📊 3業種のペルソナ・コピー比較まとめ</div>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <div style="display:grid; grid-template-columns:80px 1fr 1fr; gap:10px; background:rgba(255,255,255,0.06); border-radius:10px; padding:12px 14px; align-items:start;">
+        <div style="font-size:20px; text-align:center;">☕</div>
+        <div>
+          <div style="font-size:10px; color:#99f6e4; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">カフェ・インサイト</div>
+          <div style="font-size:12px; color:#e2e8f0; line-height:1.7;">「本物のコーヒーを飲んでいる自分でいたい」<br>→ プライドと自己表現への訴求</div>
+        </div>
+        <div>
+          <div style="font-size:10px; color:#99f6e4; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">コピー方向</div>
+          <div style="font-size:12px; color:#e2e8f0; line-height:1.7;">「本物のコーヒーに、出会う場所。」<br>上品・こだわり感を演出</div>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:80px 1fr 1fr; gap:10px; background:rgba(255,255,255,0.06); border-radius:10px; padding:12px 14px; align-items:start;">
+        <div style="font-size:20px; text-align:center;">💼</div>
+        <div>
+          <div style="font-size:10px; color:#93c5fd; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">転職・インサイト</div>
+          <div style="font-size:12px; color:#e2e8f0; line-height:1.7;">「失敗が怖い・自分のスキルへの自信のなさ」<br>→ 安心感と背中を押す訴求</div>
+        </div>
+        <div>
+          <div style="font-size:10px; color:#93c5fd; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">コピー方向</div>
+          <div style="font-size:12px; color:#e2e8f0; line-height:1.7;">「あなたのスキル、もっと高く売れます。」<br>具体的数字＋共感で信頼を得る</div>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:80px 1fr 1fr; gap:10px; background:rgba(255,255,255,0.06); border-radius:10px; padding:12px 14px; align-items:start;">
+        <div style="font-size:20px; text-align:center;">💄</div>
+        <div>
+          <div style="font-size:10px; color:#fbcfe8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">美容・インサイト</div>
+          <div style="font-size:12px; color:#e2e8f0; line-height:1.7;">「また効果がなかったらどうしよう」<br>→ 失敗への不安を取り除く訴求</div>
+        </div>
+        <div>
+          <div style="font-size:10px; color:#fbcfe8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">コピー方向</div>
+          <div style="font-size:12px; color:#e2e8f0; line-height:1.7;">「すっぴんが、いちばんきれいな自分へ。」<br>共感＋リスク軽減（初回体験）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:24px; font-size:12px; color:#94a3b8;">Photoshop · Lesson 20｜ペルソナワークシート 回答例（3業種）</div>
+
+</div>
+</body>
+</html>
