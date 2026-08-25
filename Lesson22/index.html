@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ブラシツール完全解説｜Photoshop Lesson 22</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --text: #0f172a;
+    --text-sub: #475569;
+    --border: #e2e8f0;
+    --blue: #2563eb;
+    --blue-light: #dbeafe;
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+    --green: #059669;
+    --green-light: #d1fae5;
+    --orange: #ea580c;
+    --orange-light: #ffedd5;
+    --gold: #d97706;
+    --gold-light: #fef3c7;
+    --pink: #db2777;
+    --pink-light: #fce7f3;
+    --ink: #0f172a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; padding: 40px 20px 100px; }
+  .container { max-width: 820px; margin: 0 auto; }
+
+  /* ヒーロー */
+  .hero { background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #2563eb 100%); border-radius: 16px; padding: 52px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::before { content: '🖌'; position: absolute; right: 36px; top: 20px; font-size: 80px; opacity: 0.13; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
+  .hero h1 { font-family: 'Noto Serif JP', serif; font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.4; }
+  .hero h1 em { color: #60a5fa; font-style: normal; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.82); margin-bottom: 20px; line-height: 1.85; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-tag { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+
+  /* チャプター */
+  .chapter { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .ch-bar { height: 4px; }
+  .ch-head { padding: 20px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 14px; }
+  .ch-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .ch-eye { font-size: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; margin-bottom: 3px; }
+  .ch-title { font-size: 18px; font-weight: 700; }
+  .ch-body { padding: 24px; }
+  .desc { font-size: 14px; color: var(--text-sub); line-height: 1.9; margin-bottom: 18px; }
+
+  code { background: #eff6ff; color: #1e40af; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  /* ポイントリスト */
+  .points { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+  .point { display: flex; gap: 10px; align-items: flex-start; background: #f8fafc; border-radius: 8px; padding: 10px 14px; }
+  .point-icon { font-size: 14px; flex-shrink: 0; }
+  .point-text { font-size: 13px; color: var(--text-sub); line-height: 1.7; }
+  .point-text strong { color: var(--text); }
+
+  /* パラメータカード */
+  .param-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .param-card { border-radius: 10px; padding: 14px 16px; border: 1px solid var(--border); }
+  .param-name { font-size: 13px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .param-shortcut { font-size: 10px; font-family: 'JetBrains Mono', monospace; padding: 2px 8px; border-radius: 10px; font-weight: 700; }
+  .param-desc { font-size: 12px; color: var(--text-sub); line-height: 1.7; margin-bottom: 8px; }
+  .param-tips { font-size: 11px; color: var(--text-sub); line-height: 1.6; }
+
+  /* SVGデモ */
+  .demo-wrap { background: #f0f4f8; border-radius: 10px; border: 1px solid var(--border); padding: 16px; margin: 14px 0; }
+  .demo-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-sub); margin-bottom: 10px; letter-spacing: 0.08em; }
+
+  /* ステップ */
+  .steps { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+  .step { display: flex; gap: 10px; align-items: flex-start; background: #f8fafc; border-radius: 8px; padding: 10px 14px; }
+  .step-n { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .step-text { font-size: 13px; color: var(--text-sub); line-height: 1.7; padding-top: 3px; }
+  .step-text strong { color: var(--text); }
+
+  /* ヒント */
+  .tip { border-radius: 10px; padding: 12px 16px; margin: 12px 0; border-left: 4px solid; }
+  .tip p { font-size: 13px; line-height: 1.8; }
+
+  /* 描画モード表 */
+  .tbl { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  .tbl th { background: var(--ink); color: #fff; padding: 9px 14px; text-align: left; font-size: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.06em; }
+  .tbl td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text-sub); vertical-align: top; line-height: 1.7; }
+  .tbl tr:nth-child(even) td { background: #f8fafc; }
+
+  /* 比較 */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .cmp-box { border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .cmp-head { padding: 8px 14px; font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+  .cmp-body { padding: 12px 14px; font-size: 13px; color: var(--text-sub); line-height: 1.8; background: #f8fafc; }
+
+  /* セクションタイトル */
+  .sec-title { font-size: 13px; font-weight: 700; color: var(--text); margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--border); }
+
+  /* ワークシート */
+  .ws-header { background: linear-gradient(135deg, #0f172a, #1e3a5f); border-radius: 14px; padding: 26px 28px; margin-bottom: 24px; position: relative; overflow: hidden; }
+  .ws-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #2563eb, #7c3aed, #059669); }
+  .ws-eye { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #60a5fa; letter-spacing: 0.15em; margin-bottom: 8px; }
+  .ws-title { font-family: 'Noto Serif JP', serif; font-size: 22px; font-weight: 700; color: #fff; }
+
+  .work-card { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 24px; }
+  .work-head { padding: 18px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .work-num { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .work-body { padding: 24px; }
+
+  .task-box { border-radius: 10px; padding: 14px 16px; margin-bottom: 18px; border-left: 4px solid; }
+  .task-label { font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; margin-bottom: 6px; }
+  .task-text { font-size: 14px; line-height: 1.75; }
+
+  .fill { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin: 8px 0; }
+  .fill-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-sub); margin-bottom: 7px; }
+  .fill-line { border-bottom: 1px dashed #d1d5db; padding-bottom: 6px; margin-bottom: 6px; font-size: 13px; color: #94a3b8; min-height: 26px; }
+  .fill-line:last-child { border-bottom: none; margin-bottom: 0; }
+  .fill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0; }
+
+  .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; }
+  .check-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; }
+  .check-box { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border); flex-shrink: 0; margin-top: 2px; }
+  .check-text { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 20px; }
+    .hero h1 { font-size: 22px; }
+    .ch-body, .work-body { padding: 16px; }
+    .param-grid { grid-template-columns: 1fr; }
+    .compare { grid-template-columns: 1fr; }
+    .fill-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-badge">Photoshop · Lesson 22</div>
+    <h1>🖌 ブラシツール<em>完全解説</em><br>基礎から応用まで</h1>
+    <p>初心者でも安心。ブラシツールの基本操作から、カスタムブラシの作り方、描画モードを使った光・影・テクスチャ表現まで体系的に学ぼう。</p>
+    <div class="hero-tags">
+      <span class="hero-tag">基本操作</span>
+      <span class="hero-tag">サイズ・硬さ</span>
+      <span class="hero-tag">不透明度・流量</span>
+      <span class="hero-tag">カスタムブラシ</span>
+      <span class="hero-tag">描画モード</span>
+      <span class="hero-tag">光・影の表現</span>
+      <span class="hero-tag">バナーへの応用</span>
+    </div>
+  </div>
+
+  <!-- CHAPTER 1: ブラシツールとは -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#2563eb,#60a5fa);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#dbeafe;">🖌️</div>
+      <div>
+        <div class="ch-eye" style="color:#2563eb;">CHAPTER 01</div>
+        <div class="ch-title">ブラシツールとは・使う場面</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">ブラシツール（ショートカット：<code>B</code>）は<strong>「色を塗る・光や影を加える・テクスチャを表現する」</strong>ための万能ツールです。単純な「塗るだけ」ではなく、バナー制作・写真加工・イラストまで幅広く使います。</p>
+
+      <div class="sec-title">ブラシツールを使う主な場面</div>
+      <div class="points">
+        <div class="point">
+          <div class="point-icon">🎨</div>
+          <div class="point-text"><strong>バナー背景への光・グロー効果：</strong>暗い背景の一部を明るくブラシで塗って光が当たっているような演出をする。Lesson21のような幻想的バナーに必須。</div>
+        </div>
+        <div class="point">
+          <div class="point-icon">🎨</div>
+          <div class="point-text"><strong>写真レタッチ（肌・影の調整）：</strong>人物写真の肌を明るくしたり、影を加えたりする。「覆い焼き/焼き込みツール」の代わりにブラシ＋描画モードで使う。</div>
+        </div>
+        <div class="point">
+          <div class="point-icon">🎨</div>
+          <div class="point-text"><strong>マスクの修正：</strong>レイヤーマスクを選択した状態でブラシを使うと、切り抜きの境界を修正できる。白で塗ると表示・黒で塗ると隠れる。</div>
+        </div>
+        <div class="point">
+          <div class="point-icon">🎨</div>
+          <div class="point-text"><strong>テクスチャ・素材の作成：</strong>カスタムブラシを使って花びら・砂・雪・煙などのテクスチャを手描きで作る。</div>
+        </div>
+        <div class="point">
+          <div class="point-icon">🎨</div>
+          <div class="point-text"><strong>イラスト・デジタル絵：</strong>ペンタブレットと組み合わせると筆圧に応じた表現ができる。</div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#dbeafe; border-color:#2563eb;">
+        <p style="color:#1e3a8a;"><strong>ブラシは「新規レイヤーに描く」のが基本：</strong>背景レイヤーや写真レイヤーに直接ブラシを使うと元に戻せなくなる。必ず<strong>新しいレイヤーを作ってから塗る</strong>習慣をつけること（非破壊編集）。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 2: 基本操作 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#7c3aed,#a78bfa);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#ede9fe;">⚙️</div>
+      <div>
+        <div class="ch-eye" style="color:#7c3aed;">CHAPTER 02</div>
+        <div class="ch-title">ブラシツールの基本操作と4つのパラメータ</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">ブラシツールを使いこなすには<strong>4つのパラメータ</strong>を理解することが最重要です。この4つを自由に操れれば、ほとんどの表現ができます。</p>
+
+      <!-- SVGデモ：各パラメータの視覚化 -->
+      <div class="demo-wrap">
+        <div class="demo-label">🖌 4つのパラメータの視覚化</div>
+        <svg width="100%" viewBox="0 0 660 320" xmlns="http://www.w3.org/2000/svg">
+          <rect width="660" height="320" fill="#1e293b" rx="10"/>
+
+          <!-- サイズの違い -->
+          <text x="20" y="28" fill="#94a3b8" font-size="11" font-family="JetBrains Mono">サイズ（大→小）</text>
+          <circle cx="60" cy="70" r="40" fill="#60a5fa" opacity="0.7"/>
+          <circle cx="140" cy="70" r="25" fill="#60a5fa" opacity="0.7"/>
+          <circle cx="200" cy="70" r="14" fill="#60a5fa" opacity="0.7"/>
+          <circle cx="240" cy="70" r="7" fill="#60a5fa" opacity="0.7"/>
+          <circle cx="268" cy="70" r="3" fill="#60a5fa" opacity="0.7"/>
+
+          <!-- 硬さの違い -->
+          <text x="20" y="130" fill="#94a3b8" font-size="11" font-family="JetBrains Mono">硬さ（100%→0%）</text>
+          <circle cx="60" cy="168" r="30" fill="#a78bfa"/>
+          <circle cx="140" cy="168" r="30" fill="rgba(167,139,250,0.6)"/>
+          <radialGradient id="soft1" cx="50%" cy="50%" r="50%">
+            <stop offset="40%" style="stop-color:#a78bfa;stop-opacity:0.9"/>
+            <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:0"/>
+          </radialGradient>
+          <circle cx="220" cy="168" r="30" fill="url(#soft1)"/>
+          <radialGradient id="soft2" cx="50%" cy="50%" r="50%">
+            <stop offset="10%" style="stop-color:#a78bfa;stop-opacity:0.5"/>
+            <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:0"/>
+          </radialGradient>
+          <circle cx="300" cy="168" r="30" fill="url(#soft2)"/>
+          <text x="44" y="212" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="middle">100%</text>
+          <text x="140" y="212" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="middle">70%</text>
+          <text x="220" y="212" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="middle">30%</text>
+          <text x="300" y="212" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="middle">0%</text>
+
+          <!-- 不透明度の違い -->
+          <text x="360" y="28" fill="#94a3b8" font-size="11" font-family="JetBrains Mono">不透明度（100%→20%）</text>
+          <circle cx="400" cy="70" r="28" fill="#34d399"/>
+          <circle cx="460" cy="70" r="28" fill="rgba(52,211,153,0.7)"/>
+          <circle cx="520" cy="70" r="28" fill="rgba(52,211,153,0.4)"/>
+          <circle cx="580" cy="70" r="28" fill="rgba(52,211,153,0.2)"/>
+          <text x="400" y="112" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="middle">100%</text>
+          <text x="460" y="112" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="middle">70%</text>
+          <text x="520" y="112" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="middle">40%</text>
+          <text x="580" y="112" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="middle">20%</text>
+
+          <!-- 流量の違い（重ね塗り） -->
+          <text x="360" y="130" fill="#94a3b8" font-size="11" font-family="JetBrains Mono">流量（重ね塗りの違い）</text>
+          <!-- 流量100% -->
+          <circle cx="400" cy="185" r="22" fill="rgba(251,146,60,0.9)"/>
+          <circle cx="420" cy="185" r="22" fill="rgba(251,146,60,0.9)"/>
+          <!-- 流量30% -->
+          <circle cx="500" cy="185" r="22" fill="rgba(251,146,60,0.3)"/>
+          <circle cx="520" cy="185" r="22" fill="rgba(251,146,60,0.3)"/>
+          <circle cx="510" cy="185" r="22" fill="rgba(251,146,60,0.3)"/>
+          <text x="410" y="222" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="middle">流量100%</text>
+          <text x="510" y="222" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="middle">流量30%（重ね塗りで濃くなる）</text>
+
+          <!-- 区切り線 -->
+          <line x1="340" y1="10" x2="340" y2="310" stroke="#334155" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="10" y1="120" x2="330" y2="120" stroke="#334155" stroke-width="1" stroke-dasharray="4,4"/>
+        </svg>
+      </div>
+
+      <!-- 4パラメータ詳細 -->
+      <div class="param-grid">
+        <div class="param-card" style="background:#eff6ff; border-color:#bfdbfe;">
+          <div class="param-name" style="color:#1e40af;">📏 サイズ
+            <span class="param-shortcut" style="background:#dbeafe; color:#1e40af;">[  ] キー</span>
+          </div>
+          <div class="param-desc">ブラシの大きさ（直径）。<code>[</code>で小さく・<code>]</code>で大きくなる。</div>
+          <div class="param-tips">
+            <strong>よく使うサイズ：</strong><br>
+            光の効果：200〜400px以上（超大きく）<br>
+            細かい修正：5〜20px（小さく）<br>
+            マスク修正：用途に合わせて
+          </div>
+        </div>
+        <div class="param-card" style="background:#f3e8ff; border-color:#d8b4fe;">
+          <div class="param-name" style="color:#5b21b6;">💧 硬さ（エッジ）
+            <span class="param-shortcut" style="background:#ede9fe; color:#5b21b6;">Shift+[ ]</span>
+          </div>
+          <div class="param-desc">ブラシの縁のシャープさ。100%で境界線がくっきり・0%でふんわりぼかし。</div>
+          <div class="param-tips">
+            <strong>用途別の硬さ：</strong><br>
+            光・グロー効果：<strong>0%</strong>（ふんわり）<br>
+            マスク修正：<strong>80〜100%</strong>（くっきり）<br>
+            肌の修正：<strong>10〜30%</strong>（なめらか）
+          </div>
+        </div>
+        <div class="param-card" style="background:#f0fdf4; border-color:#86efac;">
+          <div class="param-name" style="color:#14532d;">🌫 不透明度
+            <span class="param-shortcut" style="background:#dcfce7; color:#14532d;">数字キー</span>
+          </div>
+          <div class="param-desc">1回のストロークで塗れる最大の濃さ。<code>1</code>キーで10%・<code>5</code>で50%・<code>0</code>で100%。</div>
+          <div class="param-tips">
+            <strong>使い分け：</strong><br>
+            光の効果：<strong>10〜30%</strong>で重ね塗り<br>
+            マスク修正：<strong>100%</strong>で確実に<br>
+            影の表現：<strong>20〜40%</strong>で重ね塗り
+          </div>
+        </div>
+        <div class="param-card" style="background:#fff7ed; border-color:#fed7aa;">
+          <div class="param-name" style="color:#9a3412;">💦 流量
+            <span class="param-shortcut" style="background:#ffedd5; color:#9a3412;">Shift+数字</span>
+          </div>
+          <div class="param-desc">一筆ごとに塗られるインクの量。不透明度と似ているが、<strong>重ね塗りで濃くなる</strong>点が違う。</div>
+          <div class="param-tips">
+            <strong>使い分け：</strong><br>
+            絵を描く・塗る：<strong>流量100%</strong><br>
+            ゆっくり重ねて塗る：<strong>流量30〜50%</strong><br>
+            エアブラシ感：<strong>流量10〜20%</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#dbeafe; border-color:#2563eb;">
+        <p style="color:#1e3a8a;"><strong>不透明度と流量の違い：</strong>不透明度は「1回のストロークの最大濃さ」の上限。流量は「ペンを動かす速さで濃さが変わる」感覚。初心者は<strong>流量100%・不透明度を調整する</strong>のが一番わかりやすい。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 3: ブラシの種類 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#059669,#34d399);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#d1fae5;">🖌</div>
+      <div>
+        <div class="ch-eye" style="color:#059669;">CHAPTER 03</div>
+        <div class="ch-title">ブラシの種類とブラシプリセット</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">Photoshopにはあらかじめ多数のブラシが用意されています。また自分でオリジナルブラシを作ることもできます。</p>
+
+      <div class="sec-title">ブラシプリセットパネルの開き方</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-n" style="background:#059669;">1</div>
+          <div class="step-text">ブラシツール（<code>B</code>）を選択した状態で、<strong>オプションバーのブラシサムネをクリック</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#059669;">2</div>
+          <div class="step-text">ブラシプリセットパネルが開く。<strong>歯車アイコン → ブラシを追加</strong>で追加のブラシグループが選べる</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#059669;">3</div>
+          <div class="step-text">ウィンドウ → ブラシ設定 でより詳細な設定パネルを開ける（形状のダイナミクス・散布など）</div>
+        </div>
+      </div>
+
+      <div class="sec-title">覚えておきたい主要ブラシグループ</div>
+      <table class="tbl">
+        <thead><tr><th>ブラシグループ</th><th>特徴</th><th>主な用途</th></tr></thead>
+        <tbody>
+          <tr><td><strong>一般ブラシ</strong></td><td>円形・柔らかい・基本のブラシ</td><td>光の効果・影の追加・マスク修正</td></tr>
+          <tr><td><strong>ドライメディア</strong></td><td>鉛筆・木炭のようなザラザラ感</td><td>テクスチャ表現・ラフスケッチ風</td></tr>
+          <tr><td><strong>ウェットメディア</strong></td><td>水彩・油絵のにじみ感</td><td>絵画風の表現・背景のテクスチャ</td></tr>
+          <tr><td><strong>特殊効果</strong></td><td>星・葉っぱ・雪など特殊な形</td><td>装飾・テクスチャ素材の作成</td></tr>
+          <tr><td><strong>カスタムブラシ</strong></td><td>自分で作成・登録したブラシ</td><td>花びら・ロゴ・繰り返し素材</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sec-title">カスタムブラシの作り方</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-n" style="background:#059669;">1</div>
+          <div class="step-text"><strong>ブラシにしたい画像を準備：</strong>白背景に黒い形（例：花びら・星・ドット）を描くか、PNGを開く。<strong>色は黒だけ</strong>でOK（色はブラシ使用時に決まる）</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#059669;">2</div>
+          <div class="step-text"><strong>ブラシ化する範囲を選択：</strong>すべて選択（<code>Cmd/Ctrl+A</code>）または長方形選択ツールで選択</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#059669;">3</div>
+          <div class="step-text"><strong>ブラシとして定義：</strong><code>編集 → ブラシを定義</code> → 名前をつけて「OK」→ ブラシプリセットに追加される</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#059669;">4</div>
+          <div class="step-text"><strong>ブラシ設定で散布・サイズをランダムに：</strong>ウィンドウ → ブラシ設定 → 「散布」「形状のダイナミクス」で自然にランダム配置できる</div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#d1fae5; border-color:#059669;">
+        <p style="color:#064e3b;"><strong>カスタムブラシの活用例：</strong>Lesson21の花びら装飾は「桜の花びらをカスタムブラシに登録 → 散布をオンにして散らす」方法でも作れる。一度登録すれば何度でも使い回せて便利。Lesson17のパターン（Lesson17参照）と組み合わせるとさらに多彩な表現が可能。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 4: 描画モードとの組み合わせ -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#d97706,#fbbf24);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#fef3c7;">✨</div>
+      <div>
+        <div class="ch-eye" style="color:#d97706;">CHAPTER 04</div>
+        <div class="ch-title">描画モードを使った光・影・テクスチャ表現</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">ブラシを<strong>描画モードと組み合わせる</strong>と、背景を壊さずに光や影を追加できます。これがバナー制作で最もよく使うブラシテクニックです。</p>
+
+      <!-- 視覚デモ -->
+      <div class="demo-wrap">
+        <div class="demo-label">✨ 描画モード別の見た目の違い（白ブラシを暗い背景に）</div>
+        <svg width="100%" viewBox="0 0 660 180" xmlns="http://www.w3.org/2000/svg">
+          <rect width="660" height="180" fill="#1e293b" rx="8"/>
+          <defs>
+            <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" style="stop-color:white;stop-opacity:0.9"/>
+              <stop offset="100%" style="stop-color:white;stop-opacity:0"/>
+            </radialGradient>
+            <radialGradient id="glow2" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:0.8"/>
+              <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:0"/>
+            </radialGradient>
+            <radialGradient id="glow3" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:0.7"/>
+              <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:0"/>
+            </radialGradient>
+          </defs>
+
+          <!-- 通常モード -->
+          <rect x="10" y="10" width="140" height="160" rx="6" fill="#0f172a"/>
+          <circle cx="80" cy="90" r="50" fill="url(#glow1)"/>
+          <text x="80" y="158" text-anchor="middle" fill="#64748b" font-size="10" font-family="JetBrains Mono">通常</text>
+
+          <!-- スクリーン -->
+          <rect x="165" y="10" width="140" height="160" rx="6" fill="#0f172a"/>
+          <circle cx="235" cy="90" r="50" fill="url(#glow1)" style="mix-blend-mode:screen"/>
+          <circle cx="235" cy="90" r="50" fill="url(#glow1)" opacity="0.5"/>
+          <text x="235" y="158" text-anchor="middle" fill="#64748b" font-size="10" font-family="JetBrains Mono">スクリーン（光が強く）</text>
+
+          <!-- 覆い焼き -->
+          <rect x="320" y="10" width="140" height="160" rx="6" fill="#1e3a5f"/>
+          <circle cx="390" cy="90" r="50" fill="url(#glow2)" opacity="0.9"/>
+          <text x="390" y="158" text-anchor="middle" fill="#64748b" font-size="10" font-family="JetBrains Mono">覆い焼きカラー（鮮やか）</text>
+
+          <!-- 乗算 -->
+          <rect x="475" y="10" width="140" height="160" rx="6" fill="#dbeafe"/>
+          <circle cx="545" cy="90" r="50" fill="#1e293b" opacity="0.4"/>
+          <text x="545" y="158" text-anchor="middle" fill="#64748b" font-size="10" font-family="JetBrains Mono">乗算（影を加える）</text>
+        </svg>
+      </div>
+
+      <div class="sec-title">バナー制作でよく使う描画モード5選</div>
+      <table class="tbl">
+        <thead><tr><th>描画モード</th><th>効果</th><th>使い方・場面</th><th>ブラシカラー</th></tr></thead>
+        <tbody>
+          <tr><td><strong>スクリーン</strong></td><td>明るくする・光を加える</td><td>バナー背景の光彩・グロー効果</td><td>白・明るい色</td></tr>
+          <tr><td><strong>覆い焼きカラー</strong></td><td>鮮やかに明るくする</td><td>ネオン感・発光表現・ハイライト</td><td>明るい黄・水色・白</td></tr>
+          <tr><td><strong>乗算</strong></td><td>暗くする・影を加える</td><td>写真に影を追加・暗い雰囲気を演出</td><td>黒・濃い青・茶</td></tr>
+          <tr><td><strong>オーバーレイ</strong></td><td>コントラストを強める</td><td>写真の色を鮮やかに・テクスチャ重ね</td><td>任意の色</td></tr>
+          <tr><td><strong>ソフトライト</strong></td><td>やわらかく明暗を調整</td><td>肌の光沢・自然な明暗調整</td><td>白（明るく）・黒（暗く）</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sec-title">光の効果の作り方（実践テクニック）</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-n" style="background:#d97706;">1</div>
+          <div class="step-text"><strong>新規レイヤーを作成：</strong>レイヤーパネルの「+」ボタンで新規レイヤーを追加</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#d97706;">2</div>
+          <div class="step-text"><strong>描画モードを「スクリーン」に変更：</strong>レイヤーパネル上部の描画モードプルダウンから「スクリーン」を選択</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#d97706;">3</div>
+          <div class="step-text"><strong>ブラシの設定：</strong>サイズ：<code>300〜500px</code> / 硬さ：<code>0%</code> / 不透明度：<code>20〜30%</code> / カラー：白</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#d97706;">4</div>
+          <div class="step-text"><strong>光を当てたい場所をクリック（ドラッグしない）：</strong>1クリックでふんわり光が加わる。薄ければ同じ場所を2〜3回クリックして重ねる</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#d97706;">5</div>
+          <div class="step-text"><strong>色を変えてカラー光を作る：</strong>白以外の色（ゴールド・水色・ピンク等）でスクリーンモードのブラシを使うとカラーの光彩になる</div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#fef3c7; border-color:#d97706;">
+        <p style="color:#78350f;"><strong>プロが使う光の重ね方：</strong>①大きいブラシ（500px）で薄く光の大枠を作る → ②中くらいのブラシ（200px）で中心を少し強くする → ③小さいブラシ（50px）で一番明るい核を作る。この3段階で「自然なグロー効果」になる。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 5: マスク修正への応用 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#ea580c,#fb923c);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#ffedd5;">🎭</div>
+      <div>
+        <div class="ch-eye" style="color:#ea580c;">CHAPTER 05</div>
+        <div class="ch-title">マスクの修正にブラシを使う</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">ブラシツールは<strong>レイヤーマスクの修正</strong>にも使います。Lesson03〜05で学んだ切り抜きの精度を後から修正できる、とても重要なテクニックです。</p>
+
+      <div class="compare">
+        <div class="cmp-box">
+          <div class="cmp-head" style="background:#d1fae5; color:#065f46;">⬜ 白で塗る → 表示される</div>
+          <div class="cmp-body">マスク上で<strong>白いブラシ</strong>を使うと、その部分が表示される。消えてしまった髪の毛・細かいパーツを戻すときに使う。</div>
+        </div>
+        <div class="cmp-box">
+          <div class="cmp-head" style="background:#1e293b; color:#fff;">⬛ 黒で塗る → 隠れる</div>
+          <div class="cmp-body">マスク上で<strong>黒いブラシ</strong>を使うと、その部分が隠れる。切り抜きで余計な背景が残ってしまった部分を消すときに使う。</div>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-n" style="background:#ea580c;">1</div>
+          <div class="step-text"><strong>マスクサムネをクリック：</strong>レイヤーパネルでマスクのサムネイル（白黒のもの）をクリックして選択状態にする</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#ea580c;">2</div>
+          <div class="step-text"><strong>前景色を白または黒に：</strong><code>D</code>キーでデフォルト（白・黒）に戻る。<code>X</code>キーで白・黒を切り替える</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#ea580c;">3</div>
+          <div class="step-text"><strong>硬さを調整して塗る：</strong>髪の毛など細かい境界は硬さ<code>0〜20%</code>でなめらかに。直線の境界は硬さ<code>80〜100%</code>でくっきりと。</div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#ffedd5; border-color:#ea580c;">
+        <p style="color:#7c2d12;"><strong>マスク修正の黄金ルール：</strong>「消しすぎた！」と思ったら、前景色を白に切り替えて塗り直すだけでOK。マスクは何度でもやり直せる。<strong>元の写真ピクセルは一切消えていない</strong>ので安心して修正できる。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 6: バナーへの応用 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#db2777,#f472b6);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#fce7f3;">🎨</div>
+      <div>
+        <div class="ch-eye" style="color:#db2777;">CHAPTER 06</div>
+        <div class="ch-title">バナー制作でのブラシ活用テクニック集</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">これまで学んだブラシの知識をバナー制作で活用する具体的なテクニックをまとめます。</p>
+
+      <div class="points">
+        <div class="point">
+          <div class="point-icon">💡</div>
+          <div class="point-text">
+            <strong>テク①：商品の後ろにグロー（光彩）を作る</strong><br>
+            商品写真レイヤーの下に新規レイヤー → スクリーンモード → 大きいブラシ（300px・硬さ0%）でブランドカラーを塗る → 商品が光の中から浮かび上がるような表現に。
+          </div>
+        </div>
+        <div class="point">
+          <div class="point-icon">💡</div>
+          <div class="point-text">
+            <strong>テク②：バナーの四隅を暗くするビネット効果</strong><br>
+            新規レイヤー → 乗算モード → 大きいブラシ（500px・硬さ0%・不透明度30%）で四隅を黒く塗る → 中央が引き立つ映画のような雰囲気に。
+          </div>
+        </div>
+        <div class="point">
+          <div class="point-icon">💡</div>
+          <div class="point-text">
+            <strong>テク③：テキストに光を当てる</strong><br>
+            テキストレイヤーの上に新規レイヤー（クリッピングマスク） → スクリーンモード → 白ブラシで文字の上から塗る → 文字が輝いているような演出に。
+          </div>
+        </div>
+        <div class="point">
+          <div class="point-icon">💡</div>
+          <div class="point-text">
+            <strong>テク④：空気感・奥行きを作る（大気遠近法）</strong><br>
+            遠くにある要素のレイヤーの上に新規レイヤー（クリッピング） → 通常モード・不透明度20%の水色または薄い背景色で薄く塗る → 遠近感・霞感が生まれる。
+          </div>
+        </div>
+        <div class="point">
+          <div class="point-icon">💡</div>
+          <div class="point-text">
+            <strong>テク⑤：カスタムブラシで装飾素材を散らす</strong><br>
+            花びら・星・ドットなどをカスタムブラシに登録 → ブラシ設定の散布をオンにして → 1クリックまたはドラッグでランダムに散らす（Lesson21参照）。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ワークシート -->
+  <div class="ws-header">
+    <div class="ws-eye">WORKSHEET · LESSON 22</div>
+    <div class="ws-title">✏️ ブラシツール ワークシート（全4問）</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="work-card">
+    <div class="work-head">
+      <div class="work-num" style="background:linear-gradient(135deg,#1e3a5f,#2563eb);">Q1</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#2563eb; margin-bottom:2px;">基本操作</div>
+        <div style="font-size:16px; font-weight:700;">4つのパラメータを試してみよう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:#dbeafe; color:#1e40af;">⏱ 10分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#dbeafe; border-color:#2563eb;">
+        <div class="task-label" style="color:#1e40af;">📋 課題</div>
+        <div class="task-text">1080×1080pxの新規ドキュメントに、ブラシの4つのパラメータをそれぞれ変えながら線や点を描いて、違いを確認してください。</div>
+      </div>
+
+      <div class="fill-grid">
+        <div class="fill">
+          <div class="fill-label">サイズを変えて描いた感想</div>
+          <div class="fill-line"></div>
+          <div class="fill-line"></div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">硬さを変えて描いた感想</div>
+          <div class="fill-line"></div>
+          <div class="fill-line"></div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">不透明度を変えて描いた感想</div>
+          <div class="fill-line"></div>
+          <div class="fill-line"></div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">流量を変えて描いた感想</div>
+          <div class="fill-line"></div>
+          <div class="fill-line"></div>
+        </div>
+      </div>
+      <div class="fill">
+        <div class="fill-label">不透明度と流量の違いを自分の言葉で説明する</div>
+        <div class="fill-line"></div>
+        <div class="fill-line"></div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#2563eb;"></div><div class="check-text">[ ] キーでサイズを変えられた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#2563eb;"></div><div class="check-text">数字キーで不透明度をすばやく変えられた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#2563eb;"></div><div class="check-text">硬さ0%のブラシでふんわりした線を描けた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="work-card">
+    <div class="work-head">
+      <div class="work-num" style="background:linear-gradient(135deg,#064e3b,#059669);">Q2</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#059669; margin-bottom:2px;">カスタムブラシ</div>
+        <div style="font-size:16px; font-weight:700;">カスタムブラシを作って登録しよう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:#d1fae5; color:#065f46;">⏱ 15分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#d1fae5; border-color:#059669;">
+        <div class="task-label" style="color:#065f46;">📋 課題</div>
+        <div class="task-text">自分でオリジナルのカスタムブラシを作って登録し、散布設定をオンにして使ってみてください。ブラシの形は自由（丸・星・ハート・葉っぱ等）。</div>
+      </div>
+
+      <div class="fill">
+        <div class="fill-label">作ったブラシの形・テーマ</div>
+        <div class="fill-line">（例：桜の花びら、雪の結晶、星形）</div>
+      </div>
+      <div class="fill-grid">
+        <div class="fill">
+          <div class="fill-label">ブラシの登録名</div>
+          <div class="fill-line"></div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">散布の設定値</div>
+          <div class="fill-line">散布：　　　%</div>
+        </div>
+      </div>
+      <div class="fill">
+        <div class="fill-label">使ってみた感想・うまくいかなかった点</div>
+        <div class="fill-line"></div>
+        <div class="fill-line"></div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#059669;"></div><div class="check-text">白い背景に黒で形を描いた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#059669;"></div><div class="check-text">編集 → ブラシを定義で登録できた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#059669;"></div><div class="check-text">散布をオンにしてランダムに散らせた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="work-card">
+    <div class="work-head">
+      <div class="work-num" style="background:linear-gradient(135deg,#78350f,#d97706);">Q3</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#d97706; margin-bottom:2px;">描画モード応用</div>
+        <div style="font-size:16px; font-weight:700;">スクリーンモードで光の効果を作ろう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:#fef3c7; color:#92400e;">⏱ 20分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#fef3c7; border-color:#d97706;">
+        <div class="task-label" style="color:#78350f;">📋 課題</div>
+        <div class="task-text">暗い背景（グラデーションまたは単色ダーク系）の上に、スクリーンモードのブラシを使って「3段階の光のグロー効果」を作ってください。</div>
+      </div>
+
+      <div style="background:#f8fafc; border-radius:8px; padding:12px 14px; margin-bottom:14px; font-size:12px; color:var(--text-sub); line-height:1.8; border:1px solid var(--border);">
+        <strong style="color:var(--text);">手順ヒント：</strong><br>
+        ① 暗い背景を作る（グラデ：深い紫・ネイビー等）<br>
+        ② 新規レイヤー → 描画モード「スクリーン」<br>
+        ③ 大（500px・不透明度15%）→ 中（200px・不透明度25%）→ 小（60px・不透明度40%）の順に同じ場所をクリック
+      </div>
+
+      <div class="fill-grid">
+        <div class="fill">
+          <div class="fill-label">背景のカラー</div>
+          <div class="fill-line">カラーコード：</div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">光のブラシカラー</div>
+          <div class="fill-line">（例：白・ゴールド・水色）</div>
+        </div>
+      </div>
+      <div class="fill">
+        <div class="fill-label">3段階の光の設定値</div>
+        <div class="fill-line">大：サイズ　　　px / 不透明度　　　%</div>
+        <div class="fill-line">中：サイズ　　　px / 不透明度　　　%</div>
+        <div class="fill-line">小：サイズ　　　px / 不透明度　　　%</div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#d97706;"></div><div class="check-text">新規レイヤーにスクリーンモードを設定してから描いた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#d97706;"></div><div class="check-text">3段階の大中小で自然なグローになった</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#d97706;"></div><div class="check-text">色のついた光（カラーグロー）も試してみた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 総合 -->
+  <div class="work-card" style="border:2px solid #2563eb;">
+    <div class="work-head" style="background:linear-gradient(135deg,#0f172a,#1e3a5f);">
+      <div class="work-num" style="background:rgba(255,255,255,0.15); border:2px solid rgba(255,255,255,0.3);">Q4</div>
+      <div style="flex:1; color:#fff;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#60a5fa; margin-bottom:2px;">総合課題</div>
+        <div style="font-size:16px; font-weight:700;">ブラシ技術を使ったバナー背景を完成させよう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:rgba(255,255,255,0.15); color:#fff;">⏱ 30分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#dbeafe; border-color:#2563eb;">
+        <div class="task-label" style="color:#1e40af;">📋 総合課題</div>
+        <div class="task-text">これまでの知識をすべて使って、<strong>ブラシで光・装飾を加えた1080×1080pxのバナー背景</strong>を作ってください。テーマ・カラーは自由。</div>
+      </div>
+
+      <div style="background:#f8fafc; border-radius:10px; padding:14px 16px; margin-bottom:16px; border:1px solid var(--border);">
+        <div style="font-size:12px; font-weight:700; color:#2563eb; font-family:'JetBrains Mono',monospace; margin-bottom:10px;">📋 使う技術（チェックしながら作る）</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:12px; color:var(--text-sub);">
+          <div>□ グラデーション背景（調整レイヤー）</div>
+          <div>□ スクリーンモードで光の効果</div>
+          <div>□ 乗算モードでビネット（四隅を暗く）</div>
+          <div>□ カスタムブラシで装飾を散らす</div>
+          <div>□ テキストを配置してブラシで光を当てる</div>
+          <div>□ レイヤー整理・グループ化</div>
+        </div>
+      </div>
+
+      <div class="fill-grid">
+        <div class="fill">
+          <div class="fill-label">バナーのテーマ</div>
+          <div class="fill-line"></div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">メインカラー</div>
+          <div class="fill-line"></div>
+        </div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:6px; font-family:'JetBrains Mono',monospace;">✅ 完成チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#2563eb;"></div><div class="check-text">すべてのブラシ効果を新規レイヤーに描いた（元レイヤーを汚していない）</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#2563eb;"></div><div class="check-text">スクリーンモードの光が自然に見える（強すぎない）</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#2563eb;"></div><div class="check-text">カスタムブラシの装飾が背景になじんでいる</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#2563eb;"></div><div class="check-text">レイヤーに名前をつけて整理した</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#2563eb;"></div><div class="check-text">PNGで書き出して完成した</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- まとめ -->
+  <div style="background:#0f172a; border-radius:14px; padding:24px; margin-top:8px;">
+    <div style="font-size:12px; font-weight:700; color:#60a5fa; font-family:'JetBrains Mono',monospace; margin-bottom:14px; letter-spacing:0.08em;">📚 Lesson22 ブラシツール まとめ</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;">
+        <div style="font-size:10px; color:#60a5fa; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">4つのパラメータ</div>
+        <div style="font-size:12px; color:#e2e8f0; line-height:1.7;">サイズ（[ ]）・硬さ（Shift+[ ]）・不透明度（数字）・流量（Shift+数字）</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;">
+        <div style="font-size:10px; color:#60a5fa; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">基本ルール</div>
+        <div style="font-size:12px; color:#e2e8f0; line-height:1.7;">必ず新規レイヤーに描く。元レイヤーを汚さない非破壊編集。</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;">
+        <div style="font-size:10px; color:#60a5fa; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">光の効果</div>
+        <div style="font-size:12px; color:#e2e8f0; line-height:1.7;">スクリーンモード＋白ブラシ（硬さ0%）。3段階の大中小で重ねる。</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;">
+        <div style="font-size:10px; color:#60a5fa; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">影の効果</div>
+        <div style="font-size:12px; color:#e2e8f0; line-height:1.7;">乗算モード＋黒ブラシ。ビネットや人物の影付けに。</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;">
+        <div style="font-size:10px; color:#60a5fa; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">カスタムブラシ</div>
+        <div style="font-size:12px; color:#e2e8f0; line-height:1.7;">白背景＋黒の形 → 編集→ブラシを定義。散布でランダム配置。</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;">
+        <div style="font-size:10px; color:#60a5fa; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">マスク修正</div>
+        <div style="font-size:12px; color:#e2e8f0; line-height:1.7;">マスクを選択 → 白で塗る（表示）・黒で塗る（隠す）。Xで切り替え。</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:24px; font-size:12px; color:#94a3b8;">Photoshop · Lesson 22｜ブラシツール完全解説 基礎から応用まで</div>
+
+</div>
+</body>
+</html>

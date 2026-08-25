@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>幻想的グラデーションバナーの作り方｜Photoshop Lesson 21</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8f7ff;
+    --surface: #ffffff;
+    --text: #1a1028;
+    --text-sub: #4a4060;
+    --border: #e8e0f0;
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+    --pink: #db2777;
+    --pink-light: #fce7f3;
+    --gold: #d97706;
+    --gold-light: #fef3c7;
+    --blue: #2563eb;
+    --blue-light: #dbeafe;
+    --green: #059669;
+    --green-light: #d1fae5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; padding: 40px 20px 100px; }
+  .container { max-width: 820px; margin: 0 auto; }
+
+  /* ヒーロー */
+  .hero { background: linear-gradient(135deg, #2d1b69 0%, #7c3aed 40%, #db2777 70%, #f59e0b 100%); border-radius: 16px; padding: 52px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::before { content: '🌸'; position: absolute; right: 30px; top: 16px; font-size: 80px; opacity: 0.15; }
+  .hero::after { content: '✨'; position: absolute; left: 20px; bottom: 16px; font-size: 60px; opacity: 0.15; }
+  .hero-content { position: relative; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
+  .hero h1 { font-family: 'Noto Serif JP', serif; font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.4; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.85); margin-bottom: 20px; line-height: 1.85; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-tag { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+
+  /* バナー分析 */
+  .analysis { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 32px; }
+  .analysis-head { padding: 18px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 12px; }
+  .analysis-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .analysis-title { font-size: 17px; font-weight: 700; }
+  .analysis-body { padding: 24px; }
+
+  /* チャプター */
+  .chapter { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; }
+  .ch-bar { height: 4px; }
+  .ch-head { padding: 20px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 14px; }
+  .ch-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .ch-eye { font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-bottom: 2px; }
+  .ch-title { font-size: 18px; font-weight: 700; }
+  .ch-body { padding: 24px; }
+  .desc { font-size: 14px; color: var(--text-sub); line-height: 1.9; margin-bottom: 18px; }
+
+  /* ステップ */
+  .steps { display: flex; flex-direction: column; gap: 10px; margin: 14px 0; }
+  .step { display: flex; gap: 12px; align-items: flex-start; background: #f8f7ff; border-radius: 10px; padding: 12px 16px; }
+  .step-n { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .step-text { font-size: 13px; color: var(--text-sub); line-height: 1.7; padding-top: 4px; }
+  .step-text strong { color: var(--text); }
+
+  /* ポイント */
+  .points { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+  .point { display: flex; gap: 10px; align-items: flex-start; background: #f8f7ff; border-radius: 8px; padding: 10px 14px; }
+  .point-icon { font-size: 14px; flex-shrink: 0; }
+  .point-text { font-size: 13px; color: var(--text-sub); line-height: 1.65; }
+  .point-text strong { color: var(--text); }
+
+  /* ヒント */
+  .tip { border-radius: 10px; padding: 12px 16px; margin: 12px 0; border-left: 4px solid; }
+  .tip p { font-size: 13px; line-height: 1.8; }
+
+  /* カラーパレット */
+  .palette { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0; }
+  .swatch { border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(0,0,0,0.08); }
+  .swatch-color { width: 32px; height: 32px; border-radius: 6px; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.1); }
+  .swatch-info { font-size: 11px; font-family: 'JetBrains Mono', monospace; }
+  .swatch-name { font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .swatch-hex { color: var(--text-sub); }
+
+  /* 設定表 */
+  .tbl { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  .tbl th { background: #1a1028; color: #fff; padding: 9px 14px; text-align: left; font-size: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.06em; }
+  .tbl td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text-sub); vertical-align: top; line-height: 1.7; }
+  .tbl tr:nth-child(even) td { background: #f8f7ff; }
+
+  code { background: #ede9fe; color: #5b21b6; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  /* レイヤー構造 */
+  .layer-list { display: flex; flex-direction: column; gap: 0; margin: 14px 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .layer-item { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .layer-item:last-child { border-bottom: none; }
+  .layer-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+  .layer-name { flex: 1; color: var(--text); font-weight: 500; }
+  .layer-type { font-size: 10px; font-family: 'JetBrains Mono', monospace; padding: 2px 8px; border-radius: 10px; }
+
+  /* NG/OK */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .cmp-box { border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .cmp-head { padding: 8px 14px; font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+  .cmp-body { padding: 12px 14px; font-size: 13px; color: var(--text-sub); line-height: 1.8; background: #f8f7ff; }
+
+  /* SVGモック */
+  .mock-wrap { background: #f0ecff; border-radius: 12px; border: 1px solid var(--border); padding: 16px; margin: 14px 0; }
+  .mock-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-sub); margin-bottom: 10px; letter-spacing: 0.08em; }
+
+  /* ワークシート */
+  .ws-header { background: linear-gradient(135deg, #2d1b69, #7c3aed); border-radius: 14px; padding: 26px 28px; margin-bottom: 24px; }
+  .ws-eye { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #c4b5fd; letter-spacing: 0.12em; margin-bottom: 8px; }
+  .ws-title { font-family: 'Noto Serif JP', serif; font-size: 20px; font-weight: 700; color: #fff; }
+
+  .work-card { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 24px; }
+  .work-head { padding: 18px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .work-num { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .work-title { font-size: 16px; font-weight: 700; flex: 1; }
+  .work-time { font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+  .work-body { padding: 24px; }
+
+  .task-box { border-radius: 10px; padding: 14px 16px; margin-bottom: 18px; border-left: 4px solid; }
+  .task-label { font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .task-text { font-size: 14px; line-height: 1.75; }
+
+  .fill { background: #f8f7ff; border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin: 8px 0; }
+  .fill-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-sub); margin-bottom: 7px; }
+  .fill-line { border-bottom: 1px dashed #d1d5db; padding-bottom: 6px; margin-bottom: 6px; font-size: 13px; color: #94a3b8; min-height: 26px; }
+  .fill-line:last-child { border-bottom: none; margin-bottom: 0; }
+  .fill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0; }
+
+  .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; }
+  .check-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px; background: #f8f7ff; border-radius: 8px; }
+  .check-box { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border); flex-shrink: 0; margin-top: 2px; }
+  .check-text { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
+
+  .sec-title { font-size: 13px; font-weight: 700; color: var(--text); margin: 18px 0 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 20px; }
+    .hero h1 { font-size: 22px; }
+    .ch-body, .work-body { padding: 16px; }
+    .compare { grid-template-columns: 1fr; }
+    .fill-grid { grid-template-columns: 1fr; }
+    .palette { gap: 6px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Photoshop · Lesson 21</div>
+      <h1>🌸 幻想的グラデーション<br>バナーの作り方</h1>
+      <p>SNSキャンペーンバナーを例に、グラデーション背景・商品写真の合成・テキストレイアウト・金バッジ装飾まで一から解説。</p>
+      <div class="hero-tags">
+        <span class="hero-tag">グラデーション背景</span>
+        <span class="hero-tag">商品写真合成</span>
+        <span class="hero-tag">テキストレイアウト</span>
+        <span class="hero-tag">バッジ装飾</span>
+        <span class="hero-tag">ノイズテクスチャ</span>
+        <span class="hero-tag">花びら素材</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- バナー分析 -->
+  <div class="analysis">
+    <div class="analysis-head">
+      <div class="analysis-icon" style="background:#ede9fe;">🔍</div>
+      <div>
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#7c3aed; margin-bottom:2px;">BANNER ANALYSIS</div>
+        <div class="analysis-title">参考バナーを徹底分析する</div>
+      </div>
+    </div>
+    <div class="analysis-body">
+      <p class="desc">制作前に参考バナーを「デザインの要素」に分解します。このバナーは<strong>5つの要素</strong>で構成されています。</p>
+
+      <!-- 分解図 -->
+      <div class="mock-wrap">
+        <div class="mock-label">📐 バナー要素の分解図（1080×1080px）</div>
+        <svg width="100%" viewBox="0 0 560 560" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#2d1b69"/>
+              <stop offset="40%" style="stop-color:#7c3aed"/>
+              <stop offset="70%" style="stop-color:#db2777"/>
+              <stop offset="100%" style="stop-color:#f59e0b; stop-opacity:0.6"/>
+            </linearGradient>
+            <linearGradient id="badge-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#fef3c7"/>
+              <stop offset="100%" style="stop-color:#d97706"/>
+            </linearGradient>
+          </defs>
+
+          <!-- 背景 -->
+          <rect width="560" height="560" rx="10" fill="url(#bg-grad)"/>
+
+          <!-- ノイズ感 -->
+          <rect width="560" height="560" rx="10" fill="rgba(255,255,255,0.03)"/>
+
+          <!-- 花びら装飾（ランダム配置） -->
+          <ellipse cx="80" cy="60" rx="12" ry="6" fill="rgba(255,182,193,0.5)" transform="rotate(-30 80 60)"/>
+          <ellipse cx="200" cy="40" rx="10" ry="5" fill="rgba(255,182,193,0.4)" transform="rotate(15 200 40)"/>
+          <ellipse cx="450" cy="100" rx="14" ry="7" fill="rgba(255,182,193,0.45)" transform="rotate(-20 450 100)"/>
+          <ellipse cx="500" cy="200" rx="11" ry="5" fill="rgba(255,182,193,0.3)" transform="rotate(40 500 200)"/>
+          <ellipse cx="350" cy="30" rx="9" ry="4" fill="rgba(255,182,193,0.5)" transform="rotate(-10 350 30)"/>
+          <ellipse cx="30" cy="300" rx="13" ry="6" fill="rgba(255,182,193,0.35)" transform="rotate(25 30 300)"/>
+          <ellipse cx="520" cy="400" rx="10" ry="5" fill="rgba(255,182,193,0.4)" transform="rotate(-35 520 400)"/>
+          <ellipse cx="100" cy="480" rx="12" ry="6" fill="rgba(255,182,193,0.3)" transform="rotate(20 100 480)"/>
+          <ellipse cx="400" cy="520" rx="9" ry="4" fill="rgba(255,182,193,0.45)" transform="rotate(-15 400 520)"/>
+
+          <!-- 右側の光の柱（カーテン状） -->
+          <rect x="380" y="0" width="80" height="560" fill="rgba(255,255,255,0.04)" rx="40"/>
+          <rect x="440" y="0" width="40" height="560" fill="rgba(255,255,255,0.03)" rx="20"/>
+
+          <!-- 商品ボトル（4本・SVG簡略） -->
+          <!-- ボトル1 -->
+          <rect x="115" y="260" width="52" height="220" rx="8" fill="rgba(255,140,50,0.7)"/>
+          <rect x="120" y="280" width="42" height="180" rx="6" fill="rgba(255,160,80,0.5)"/>
+          <rect x="133" y="248" width="26" height="20" rx="4" fill="#1a1028" opacity="0.8"/>
+          <rect x="140" y="235" width="12" height="18" rx="3" fill="#2d2040" opacity="0.9"/>
+          <!-- ボトル2 -->
+          <rect x="185" y="255" width="52" height="225" rx="8" fill="rgba(200,80,150,0.7)"/>
+          <rect x="190" y="275" width="42" height="185" rx="6" fill="rgba(220,100,170,0.5)"/>
+          <rect x="203" y="243" width="26" height="20" rx="4" fill="#1a1028" opacity="0.8"/>
+          <rect x="210" y="230" width="12" height="18" rx="3" fill="#2d2040" opacity="0.9"/>
+          <!-- ボトル3 -->
+          <rect x="258" y="255" width="52" height="225" rx="8" fill="rgba(100,100,220,0.7)"/>
+          <rect x="263" y="275" width="42" height="185" rx="6" fill="rgba(120,120,240,0.5)"/>
+          <rect x="276" y="243" width="26" height="20" rx="4" fill="#1a1028" opacity="0.8"/>
+          <rect x="283" y="230" width="12" height="18" rx="3" fill="#2d2040" opacity="0.9"/>
+          <!-- ボトル4 -->
+          <rect x="328" y="260" width="52" height="220" rx="8" fill="rgba(80,200,180,0.7)"/>
+          <rect x="333" y="280" width="42" height="180" rx="6" fill="rgba(100,220,200,0.5)"/>
+          <rect x="346" y="248" width="26" height="20" rx="4" fill="#1a1028" opacity="0.8"/>
+          <rect x="353" y="235" width="12" height="18" rx="3" fill="#2d2040" opacity="0.9"/>
+
+          <!-- メインテキスト（左上） -->
+          <rect x="30" y="50" width="280" height="40" rx="4" fill="rgba(255,255,255,0.95)"/>
+          <rect x="30" y="100" width="240" height="40" rx="4" fill="rgba(255,255,255,0.95)"/>
+          <text x="40" y="78" fill="#2d1b69" font-size="20" font-weight="bold" font-family="Noto Sans JP">フォロー＆リポストで</text>
+          <text x="40" y="128" fill="#2d1b69" font-size="20" font-weight="bold" font-family="Noto Sans JP">7点セットが当たる！</text>
+
+          <!-- サブテキスト -->
+          <rect x="30" y="160" width="200" height="14" rx="3" fill="rgba(255,255,255,0.7)"/>
+          <rect x="30" y="182" width="160" height="10" rx="2" fill="rgba(255,255,255,0.5)"/>
+
+          <!-- 金バッジ -->
+          <circle cx="460" cy="110" r="70" fill="url(#badge-grad)" opacity="0.95"/>
+          <circle cx="460" cy="110" r="64" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+          <text x="460" y="90" text-anchor="middle" fill="#78350f" font-size="10" font-family="Noto Sans JP" font-weight="bold">抽選で</text>
+          <text x="460" y="120" text-anchor="middle" fill="#78350f" font-size="36" font-family="JetBrains Mono" font-weight="bold">40</text>
+          <text x="460" y="140" text-anchor="middle" fill="#78350f" font-size="10" font-family="Noto Sans JP" font-weight="bold">名様プレゼント！</text>
+
+          <!-- ラベル -->
+          <rect x="0" y="20" width="110" height="18" rx="9" fill="#7c3aed" opacity="0.9"/>
+          <text x="55" y="32" text-anchor="middle" fill="white" font-size="10" font-family="JetBrains Mono">① 背景グラデ</text>
+
+          <rect x="0" y="250" width="100" height="18" rx="9" fill="#db2777" opacity="0.9"/>
+          <text x="50" y="262" text-anchor="middle" fill="white" font-size="10" font-family="JetBrains Mono">② 商品写真</text>
+
+          <rect x="30" y="42" width="90" height="16" rx="8" fill="#f59e0b" opacity="0.9"/>
+          <text x="75" y="53" text-anchor="middle" fill="white" font-size="10" font-family="JetBrains Mono">③ テキスト</text>
+
+          <rect x="400" y="42" width="80" height="16" rx="8" fill="#d97706" opacity="0.9"/>
+          <text x="440" y="53" text-anchor="middle" fill="white" font-size="10" font-family="JetBrains Mono">④ 金バッジ</text>
+
+          <rect x="30" y="520" width="100" height="16" rx="8" fill="#059669" opacity="0.9"/>
+          <text x="80" y="531" text-anchor="middle" fill="white" font-size="10" font-family="JetBrains Mono">⑤ 花びら装飾</text>
+        </svg>
+      </div>
+
+      <!-- カラーパレット分析 -->
+      <div class="sec-title">🎨 使用カラーパレット</div>
+      <div class="palette">
+        <div class="swatch">
+          <div class="swatch-color" style="background:#2d1b69;"></div>
+          <div class="swatch-info"><div class="swatch-name">ディープパープル</div><div class="swatch-hex">#2d1b69</div></div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#7c3aed;"></div>
+          <div class="swatch-info"><div class="swatch-name">バイオレット</div><div class="swatch-hex">#7c3aed</div></div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#db2777;"></div>
+          <div class="swatch-info"><div class="swatch-name">ピンク</div><div class="swatch-hex">#db2777</div></div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#f59e0b;"></div>
+          <div class="swatch-info"><div class="swatch-name">ゴールド</div><div class="swatch-hex">#f59e0b</div></div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#ffffff; border:1px solid #e2e8f0;"></div>
+          <div class="swatch-info"><div class="swatch-name">テキスト</div><div class="swatch-hex">#ffffff</div></div>
+        </div>
+      </div>
+
+      <!-- レイヤー構造 -->
+      <div class="sec-title">📂 レイヤー構成</div>
+      <div class="layer-list">
+        <div class="layer-item" style="background:#fef3c7;">
+          <div class="layer-icon" style="background:#d97706; color:#fff;">⑤</div>
+          <div class="layer-name">花びら素材（フリー素材PNG）</div>
+          <span class="layer-type" style="background:#fef3c7; color:#92400e;">通常 / スクリーン</span>
+        </div>
+        <div class="layer-item">
+          <div class="layer-icon" style="background:#ede9fe; color:#5b21b6;">④</div>
+          <div class="layer-name">金バッジグループ（円＋テキスト）</div>
+          <span class="layer-type" style="background:#ede9fe; color:#5b21b6;">シェイプ＋テキスト</span>
+        </div>
+        <div class="layer-item" style="background:#f8f7ff;">
+          <div class="layer-icon" style="background:#7c3aed; color:#fff;">③</div>
+          <div class="layer-name">テキストグループ（キャッチ＋サブ）</div>
+          <span class="layer-type" style="background:#ede9fe; color:#5b21b6;">テキストレイヤー</span>
+        </div>
+        <div class="layer-item">
+          <div class="layer-icon" style="background:#fce7f3; color:#9d174d;">②</div>
+          <div class="layer-name">商品写真グループ（4本のボトル）</div>
+          <span class="layer-type" style="background:#fce7f3; color:#9d174d;">スマートオブジェクト</span>
+        </div>
+        <div class="layer-item" style="background:#f8f7ff;">
+          <div class="layer-icon" style="background:#2d1b69; color:#fff;">①</div>
+          <div class="layer-name">背景グラデーション＋ノイズ</div>
+          <span class="layer-type" style="background:#f8f7ff; color:#4a4060;">調整レイヤー</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 1: 新規ドキュメント -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#2d1b69,#7c3aed);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#ede9fe;">📄</div>
+      <div>
+        <div class="ch-eye" style="color:#7c3aed;">STEP 01</div>
+        <div class="ch-title">新規ドキュメントを作成する</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">まずPhotoshopで新規ドキュメントを作ります。このバナーはInstagram正方形サイズです。</p>
+      <table class="tbl">
+        <thead><tr><th>設定項目</th><th>値</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td><strong>幅 × 高さ</strong></td><td>1080 × 1080 px</td><td>Instagram正方形・SNS標準サイズ</td></tr>
+          <tr><td><strong>解像度</strong></td><td>72 dpi</td><td>Web・SNS用（印刷は300dpi）</td></tr>
+          <tr><td><strong>カラーモード</strong></td><td>RGB カラー</td><td>画面表示用はRGB</td></tr>
+          <tr><td><strong>背景</strong></td><td>白 または 透明</td><td>どちらでもOK（後から塗りつぶす）</td></tr>
+        </tbody>
+      </table>
+      <div class="tip" style="background:#ede9fe; border-color:#7c3aed;">
+        <p style="color:#3b0764;"><strong>ショートカット：</strong><code>Cmd/Ctrl + N</code> で新規ドキュメントダイアログを開く。「最近使用した項目」に Instagram用のプリセットがある場合はそれを使うと楽。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: 背景グラデーション -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#7c3aed,#db2777);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#fce7f3;">🌈</div>
+      <div>
+        <div class="ch-eye" style="color:#db2777;">STEP 02</div>
+        <div class="ch-title">背景グラデーションを作る</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">このバナーの核心は<strong>「深い紫→バイオレット→ピンク→ゴールド」</strong>のグラデーション背景です。グラデーション調整レイヤーを使って非破壊で作成します。</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-n" style="background:#7c3aed;">1</div>
+          <div class="step-text"><strong>調整レイヤーを作成：</strong><br>レイヤーパネル下部の「新規塗りつぶし/調整レイヤー」→ <code>グラデーション</code> を選択</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#7c3aed;">2</div>
+          <div class="step-text"><strong>グラデーションエディターを開く：</strong><br>「グラデーション」のサムネをダブルクリック → グラデーションエディターが開く</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#7c3aed;">3</div>
+          <div class="step-text"><strong>カラーポイントを設定：</strong><br>左から <code>#2d1b69</code>（深紫）→ <code>#7c3aed</code>（バイオレット）→ <code>#db2777</code>（ピンク）→ <code>#f59e0b</code>（ゴールド）の4点を設定</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#7c3aed;">4</div>
+          <div class="step-text"><strong>スタイルと角度を設定：</strong><br>スタイル：<code>線形</code>・角度：<code>135°</code>（左上→右下の斜め方向）</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#7c3aed;">5</div>
+          <div class="step-text"><strong>ノイズで質感を追加：</strong><br>フィルター → ノイズ → ノイズを加える → <code>量：3〜5%</code>・<code>ガウス分布</code>・<code>モノクロ：チェック</code></div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#fce7f3; border-color:#db2777;">
+        <p style="color:#831843;"><strong>ノイズを加える理由：</strong>グラデーションだけだと「綺麗すぎて安っぽい」印象になることがある。ノイズ3〜5%を加えると印刷物のような質感・高級感が生まれる。Lesson01〜02でも使ったテクニック。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: 商品写真の配置 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#db2777,#f59e0b);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#fce7f3;">📸</div>
+      <div>
+        <div class="ch-eye" style="color:#db2777;">STEP 03</div>
+        <div class="ch-title">商品写真を切り抜いて配置する</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">商品写真（透過PNG）を4本並べて配置します。背景がある写真の場合は先に切り抜きが必要です。</p>
+
+      <div class="sec-title">背景がある写真を切り抜く方法（2パターン）</div>
+      <div class="compare">
+        <div class="cmp-box">
+          <div class="cmp-head" style="background:#dbeafe; color:#1e40af;">🚀 パターンA：自動切り抜き（簡単）</div>
+          <div class="cmp-body">
+            <strong>被写体を選択</strong>（選択範囲メニュー）を使う。<br>AIが自動で商品を認識して選択してくれる。<br>→ そのままレイヤーマスクを追加でOK。<br>背景が複雑な場合は精度が下がることも。
+          </div>
+        </div>
+        <div class="cmp-box">
+          <div class="cmp-head" style="background:#fce7f3; color:#9d174d;">✂️ パターンB：ペンツール（精密）</div>
+          <div class="cmp-body">
+            ペンツール（Lesson15）でボトルの輪郭を手動でなぞる。<br>→ パスを選択範囲に変換 → マスク追加。<br>丸みのあるボトルは曲線パスで正確に切り抜ける。
+          </div>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-n" style="background:#db2777;">1</div>
+          <div class="step-text"><strong>写真をドラッグ＆ドロップ：</strong>スマートオブジェクトとして配置（自動的になる）。サイズ調整は <code>Cmd/Ctrl+T</code> で自由変形。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#db2777;">2</div>
+          <div class="step-text"><strong>選択範囲 → 被写体を選択：</strong>メニューバーの「選択範囲」→「被写体を選択」でAIが自動選択。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#db2777;">3</div>
+          <div class="step-text"><strong>選択と合成で境界を整える：</strong>「選択とマスク」ボタン → エッジを調整してなめらかに。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#db2777;">4</div>
+          <div class="step-text"><strong>レイヤーマスクを追加：</strong>レイヤーパネル下部の「マスクを追加」ボタンで切り抜き完成。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#db2777;">5</div>
+          <div class="step-text"><strong>4本を並べて配置：</strong>同じ手順を繰り返して4本配置 → グループ化（<code>Cmd/Ctrl+G</code>）→ 整列ツールで均等に並べる。</div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#fef3c7; border-color:#d97706;">
+        <p style="color:#78350f;"><strong>商品を均等に並べるコツ：</strong>すべてのボトルレイヤーを選択した状態で、オプションバーの「整列」→「水平方向に均等配置」をクリックするだけで等間隔になる。手動で揃えようとしないこと。</p>
+      </div>
+
+      <div class="sec-title">商品写真に立体感を加える</div>
+      <div class="points">
+        <div class="point">
+          <div class="point-icon">💡</div>
+          <div class="point-text"><strong>ドロップシャドウ：</strong>レイヤースタイル → ドロップシャドウ。距離<code>10px</code>・スプレッド<code>0</code>・サイズ<code>20px</code>・不透明度<code>30%</code>程度で自然な影が付く。</div>
+        </div>
+        <div class="point">
+          <div class="point-icon">💡</div>
+          <div class="point-text"><strong>光彩（外側）：</strong>レイヤースタイル → 光彩（外側）。紫〜ピンク系のカラーに設定すると背景に自然になじむ。</div>
+        </div>
+        <div class="point">
+          <div class="point-icon">💡</div>
+          <div class="point-text"><strong>カラーバランス調整：</strong>商品写真の上に「カラーバランス」調整レイヤーをクリッピングマスクで適用。ハイライトに紫・シャドウにブルーを足すと背景となじむ。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4: テキスト -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#f59e0b,#fbbf24);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#fef3c7;">✍️</div>
+      <div>
+        <div class="ch-eye" style="color:#d97706;">STEP 04</div>
+        <div class="ch-title">テキストを配置する</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">このバナーのテキストは<strong>「大きな白文字のキャッチコピー」「細めのサブコピー」「ロゴ」</strong>の3層構成です。</p>
+
+      <table class="tbl">
+        <thead><tr><th>テキスト要素</th><th>フォント</th><th>サイズ目安</th><th>カラー</th><th>特徴</th></tr></thead>
+        <tbody>
+          <tr><td><strong>メインキャッチ</strong><br>「フォロー＆リポストで」「7点セットが当たる！」</td><td>Noto Sans JP / ヒラギノ角ゴ<br>Bold（太字）</td><td>72〜80px</td><td>白 #ffffff</td><td>2行に分けて大きく。行間1.1〜1.2</td></tr>
+          <tr><td><strong>サブコピー</strong><br>「サクラ香る、夜を満たすご褒美」</td><td>Noto Sans JP<br>Regular（細め）</td><td>28〜32px</td><td>白 #ffffff<br>不透明度80%</td><td>キャッチより細く控えめに</td></tr>
+          <tr><td><strong>ブランド名</strong><br>「Night Treats Collection」</td><td>英字セリフ体<br>（Garamond等）</td><td>20px</td><td>白 不透明度60%</td><td>月のアイコン付き・控えめに</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sec-title">テキストレイアウトのポイント</div>
+      <div class="points">
+        <div class="point">
+          <div class="point-icon">📐</div>
+          <div class="point-text"><strong>左寄せ・上部に配置：</strong>商品写真（右下〜中央）とテキスト（左上）でバランスを取る。Z字の視線誘導を意識。</div>
+        </div>
+        <div class="point">
+          <div class="point-icon">🔤</div>
+          <div class="point-text"><strong>文字サイズに大きな差をつける：</strong>キャッチ80px、サブ30pxのように<strong>2.5倍以上の差</strong>をつけると強弱が生まれてメリハリが出る（Lesson10参照）。</div>
+        </div>
+        <div class="point">
+          <div class="point-icon">✨</div>
+          <div class="point-text"><strong>ドロップシャドウで読みやすく：</strong>白文字が背景に埋もれる場合は、レイヤースタイルで<strong>薄いドロップシャドウ</strong>を追加。文字がはっきり読めるようになる。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5: 金バッジ -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#d97706,#fbbf24);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#fef3c7;">🏅</div>
+      <div>
+        <div class="ch-eye" style="color:#d97706;">STEP 05</div>
+        <div class="ch-title">金バッジを作る</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">右上の<strong>「抽選で40名様プレゼント！」の金バッジ</strong>はシェイプとテキストで作ります。このバッジがあるだけで「キャンペーン感」が一気に増します。</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-n" style="background:#d97706;">1</div>
+          <div class="step-text"><strong>正円を描く：</strong>楕円形ツール（U）を選択 → <code>Shift</code>を押しながらドラッグで正円を描く。サイズは約<code>180×180px</code>。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#d97706;">2</div>
+          <div class="step-text"><strong>塗りをゴールドグラデーションに：</strong>シェイプを選択 → プロパティパネルで「塗り」→ グラデーション → 放射状グラデーション。<code>#fef3c7</code>（明るい）→<code>#d97706</code>（濃いゴールド）に設定。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#d97706;">3</div>
+          <div class="step-text"><strong>内側に細い円を追加：</strong>同じサイズより少し小さい円を重ねて「線のみ・塗りなし」に設定。線の色は白・不透明度50%。枠として機能する。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#d97706;">4</div>
+          <div class="step-text"><strong>テキストを配置：</strong>円の中央に「抽選で」（小さめ）・「40」（大きく・JetBrains Mono等）・「名様」「プレゼント！」を縦に積み上げて配置。テキスト色は濃いブラウン <code>#78350f</code>。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#d97706;">5</div>
+          <div class="step-text"><strong>レイヤースタイルで光沢を追加：</strong>ドロップシャドウ＋グロー（外側）を追加してバッジをより立体的に見せる。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#d97706;">6</div>
+          <div class="step-text"><strong>グループ化して回転：</strong>バッジ全体をグループ化 → わずかに回転（<code>-5°〜-10°</code>）させると動きが生まれてよりインパクトが出る。</div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#fef3c7; border-color:#d97706;">
+        <p style="color:#78350f;"><strong>バッジデザインの応用：</strong>今回は円形バッジだが、形を変えると「スター型」「リボン型」「六角形」のバッジも作れる。シェイプツールのカスタムシェイプで様々な形が選べる。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 6: 花びら装飾 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#db2777,#f472b6);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#fce7f3;">🌸</div>
+      <div>
+        <div class="ch-eye" style="color:#db2777;">STEP 06</div>
+        <div class="ch-title">花びら装飾を追加する</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">フリー素材の花びらPNGを使って背景に散らします。これだけで<strong>「夜桜の幻想的な雰囲気」</strong>が生まれます。</p>
+
+      <div class="sec-title">花びら素材の入手方法</div>
+      <div class="points">
+        <div class="point">
+          <div class="point-icon">🔍</div>
+          <div class="point-text"><strong>フリー素材サイト：</strong>「桜 花びら PNG 透過」でGoogle検索。<strong>いらすとや・Pixabay・Unsplash・Freepik</strong>などで商用利用可能な素材を探す。</div>
+        </div>
+        <div class="point">
+          <div class="point-icon">🔍</div>
+          <div class="point-text"><strong>Adobe Stock（有料）：</strong>高品質な桜素材が多数。月額プランで使い放題。クライアント案件では有料素材を使うことが多い。</div>
+        </div>
+        <div class="point">
+          <div class="point-icon">💡</div>
+          <div class="point-text"><strong>Photoshopのブラシで作る：</strong>カスタムブラシを使って桜の花びらを直接ブラシで描く方法もある。一度作ればどこでも使えて便利。</div>
+        </div>
+      </div>
+
+      <div class="sec-title">花びらの配置テクニック</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-n" style="background:#db2777;">1</div>
+          <div class="step-text"><strong>素材を配置：</strong>花びらPNGをドラッグ＆ドロップ → スマートオブジェクトに。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#db2777;">2</div>
+          <div class="step-text"><strong>複数コピーして散らす：</strong><code>Cmd/Ctrl+J</code>で複製 → 各花びらをランダムに回転・縮小して自然な散り具合を演出。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#db2777;">3</div>
+          <div class="step-text"><strong>描画モードを変更：</strong>花びらレイヤーの描画モードを<code>スクリーン</code>に変更。背景となじんで自然な透明感が出る。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#db2777;">4</div>
+          <div class="step-text"><strong>不透明度を調整：</strong>各花びらの不透明度を<code>30〜70%</code>にバラバラに設定。遠近感・奥行きが生まれる。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#db2777;">5</div>
+          <div class="step-text"><strong>グループ化して整理：</strong>すべての花びらをグループ化（<code>Cmd/Ctrl+G</code>）→ グループ名を「花びら」にリネーム。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 7: 仕上げ・書き出し -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#059669,#34d399);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#d1fae5;">✅</div>
+      <div>
+        <div class="ch-eye" style="color:#059669;">STEP 07</div>
+        <div class="ch-title">仕上げ・調整・書き出し</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">すべてのパーツが揃ったら全体の色調整を行い、PNG形式で書き出します。</p>
+
+      <div class="sec-title">全体の色調整（調整レイヤーを使う）</div>
+      <div class="points">
+        <div class="point">
+          <div class="point-icon">🎨</div>
+          <div class="point-text"><strong>トーンカーブ：</strong>全体をわずかに暗くして高級感を出す。または明るくして爽やかに。シャドウを持ち上げてマットな質感にする方法も人気。</div>
+        </div>
+        <div class="point">
+          <div class="point-icon">🎨</div>
+          <div class="point-text"><strong>カラーバランス：</strong>全体にわずかに青紫を足すと「夜感・クールさ」が増す。ゴールドを足すと「温かみ・高級感」が増す。</div>
+        </div>
+        <div class="point">
+          <div class="point-icon">🎨</div>
+          <div class="point-text"><strong>ビネット効果：</strong>楕円形選択ツールで中央以外を選択 → ガウスぼかし → 暗くする調整レイヤー。周辺が暗くなり中央が引き立つ。</div>
+        </div>
+      </div>
+
+      <div class="sec-title">書き出し設定</div>
+      <table class="tbl">
+        <thead><tr><th>項目</th><th>設定値</th></tr></thead>
+        <tbody>
+          <tr><td>書き出し方法</td><td>ファイル → 書き出し → 書き出し形式…</td></tr>
+          <tr><td>形式</td><td>PNG（透過なし）またはJPG（品質85〜90%）</td></tr>
+          <tr><td>サイズ</td><td>1080 × 1080px（元のサイズのまま）</td></tr>
+          <tr><td>ファイル名</td><td>campaign_banner_yolu_1080.png</td></tr>
+          <tr><td>PSD保存</td><td>必ず <code>Cmd/Ctrl+S</code> でPSDも保存しておく</td></tr>
+        </tbody>
+      </table>
+
+      <div class="tip" style="background:#d1fae5; border-color:#059669;">
+        <p style="color:#064e3b;"><strong>完成前のチェックリスト：</strong>①文字に誤字がないか ②バッジの数字が正しいか ③SNSで使う場合はテキストが端に切れていないか（Instagram は丸くトリミングされる場合がある）④PNG書き出し後に実際のSNS投稿画面で確認する。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ワークシート -->
+  <div class="ws-header">
+    <div class="ws-eye">WORKSHEET</div>
+    <div class="ws-title">✏️ ワークシート（全3問）</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="work-card">
+    <div class="work-head">
+      <div class="work-num" style="background:linear-gradient(135deg,#2d1b69,#7c3aed);">Q1</div>
+      <div class="work-title">グラデーション背景を再現しよう</div>
+      <span class="work-time" style="background:#ede9fe; color:#5b21b6;">⏱ 15分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#ede9fe; border-color:#7c3aed;">
+        <div class="task-label" style="color:#5b21b6;">📋 課題</div>
+        <div class="task-text">1080×1080pxの新規ドキュメントを作成し、参考バナーと同じグラデーション背景を調整レイヤーで再現してください。ノイズも加えること。</div>
+      </div>
+      <div class="fill">
+        <div class="fill-label">使用したカラーコード（左から順に）</div>
+        <div class="fill-line">1番目：</div>
+        <div class="fill-line">2番目：</div>
+        <div class="fill-line">3番目：</div>
+        <div class="fill-line">4番目：</div>
+      </div>
+      <div class="fill-grid">
+        <div class="fill">
+          <div class="fill-label">グラデーションの角度</div>
+          <div class="fill-line">　　　°</div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">ノイズの量</div>
+          <div class="fill-line">　　　%</div>
+        </div>
+      </div>
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">グラデーションを調整レイヤーで作った（非破壊）</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">ノイズを加えてざらっとした質感になった</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">参考バナーの色味に近づいている</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="work-card">
+    <div class="work-head">
+      <div class="work-num" style="background:linear-gradient(135deg,#78350f,#d97706);">Q2</div>
+      <div class="work-title">金バッジを作ろう</div>
+      <span class="work-time" style="background:#fef3c7; color:#92400e;">⏱ 20分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#fef3c7; border-color:#d97706;">
+        <div class="task-label" style="color:#78350f;">📋 課題</div>
+        <div class="task-text">参考バナーの「抽選で40名様プレゼント！」のような金バッジを自分でオリジナルの内容で作ってください。内容は自由（例：「今だけ50%OFF」「先着100名様」等）。</div>
+      </div>
+      <div class="fill">
+        <div class="fill-label">バッジに入れる内容（考えたテキスト）</div>
+        <div class="fill-line">大きいテキスト（数字など）：</div>
+        <div class="fill-line">上のテキスト：</div>
+        <div class="fill-line">下のテキスト：</div>
+      </div>
+      <div class="fill-grid">
+        <div class="fill">
+          <div class="fill-label">バッジのメインカラー</div>
+          <div class="fill-line">カラーコード：</div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">テキストカラー</div>
+          <div class="fill-line">カラーコード：</div>
+        </div>
+      </div>
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#d97706;"></div><div class="check-text">正円シェイプにグラデーションを適用できた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#d97706;"></div><div class="check-text">内側に細い円（線のみ）で枠をつけた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#d97706;"></div><div class="check-text">テキストを中央に配置して読みやすい</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#d97706;"></div><div class="check-text">レイヤースタイル（シャドウ等）で立体感を出した</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 総合 -->
+  <div class="work-card" style="border:2px solid #7c3aed;">
+    <div class="work-head" style="background:linear-gradient(135deg,#2d1b69,#7c3aed);">
+      <div class="work-num" style="background:rgba(255,255,255,0.2); border:2px solid rgba(255,255,255,0.4);">Q3</div>
+      <div class="work-title" style="color:#fff;">総合課題：オリジナルSNSキャンペーンバナーを作ろう</div>
+      <span class="work-time" style="background:rgba(255,255,255,0.2); color:#fff;">⏱ 45分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#ede9fe; border-color:#7c3aed;">
+        <div class="task-label" style="color:#5b21b6;">📋 総合課題</div>
+        <div class="task-text">参考バナーを参考に、<strong>自分でテーマ・商品・キャンペーン内容を決めて</strong>オリジナルの幻想的グラデーションバナーを1枚制作してください。</div>
+      </div>
+
+      <div style="background:#f8f7ff; border-radius:10px; padding:16px 18px; margin-bottom:16px; border:1px solid var(--border);">
+        <div style="font-size:12px; font-weight:700; color:#7c3aed; font-family:'JetBrains Mono',monospace; margin-bottom:10px;">📋 仕様書（自分で埋める）</div>
+        <div class="fill-grid">
+          <div class="fill"><div class="fill-label">テーマ・商品</div><div class="fill-line"></div></div>
+          <div class="fill"><div class="fill-label">キャンペーン内容</div><div class="fill-line"></div></div>
+          <div class="fill"><div class="fill-label">メインカラー（グラデ）</div><div class="fill-line"></div></div>
+          <div class="fill"><div class="fill-label">サイズ</div><div class="fill-line">1080 × 1080 px</div></div>
+        </div>
+        <div class="fill" style="margin-top:8px;"><div class="fill-label">キャッチコピー</div><div class="fill-line">「　　　　　　　　　　　　　　　　　　　」</div></div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:6px; font-family:'JetBrains Mono',monospace;">✅ 完成チェックリスト</div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">グラデーション背景（調整レイヤー）＋ノイズテクスチャが適用されている</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">商品写真（またはフリー素材）を切り抜いて配置した</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">テキストに大小の強弱がついている（キャッチコピーが目立つ）</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">金バッジまたは装飾要素を作成して配置した</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">花びたまたはその他の装飾素材を散らした</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">レイヤーに名前をつけてグループ化して整理した</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">PNGで書き出して完成した</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- まとめ -->
+  <div style="background:#1a1028; border-radius:14px; padding:24px; margin-top:8px;">
+    <div style="font-size:12px; font-weight:700; color:#c4b5fd; font-family:'JetBrains Mono',monospace; margin-bottom:14px; letter-spacing:0.08em;">📚 Lesson21 まとめ</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#c4b5fd; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">背景グラデーション</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">調整レイヤーで非破壊作成。ノイズ3〜5%で質感UP。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#c4b5fd; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">商品写真合成</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">被写体を選択→マスク。整列ツールで均等配置。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#c4b5fd; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">テキスト</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">2.5倍以上の大小差でメリハリ。ドロップシャドウで視認性UP。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#c4b5fd; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">金バッジ</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">正円＋放射グラデ＋テキスト。レイヤースタイルで立体感。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#c4b5fd; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">花びら装飾</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">スクリーン描画モード＋不透明度バラバラで自然な奥行き。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#c4b5fd; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">仕上げ</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">トーンカーブ＋カラーバランスで全体統一。PNG書き出し。</div></div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:24px; font-size:12px; color:#94a3b8;">Photoshop · Lesson 21｜幻想的グラデーションバナーの作り方</div>
+
+</div>
+</body>
+</html>
