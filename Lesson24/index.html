@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>バナー制作ツール完全まとめ｜Photoshop Lesson 24</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --text: #0f172a;
+    --text-sub: #475569;
+    --border: #e2e8f0;
+    --ink: #0f172a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; padding: 40px 20px 100px; }
+  .container { max-width: 860px; margin: 0 auto; }
+
+  /* ヒーロー */
+  .hero { background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0369a1 100%); border-radius: 16px; padding: 52px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::before { content: '🛠'; position: absolute; right: 36px; top: 20px; font-size: 80px; opacity: 0.12; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
+  .hero h1 { font-family: 'Noto Serif JP', serif; font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.4; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.82); margin-bottom: 20px; line-height: 1.85; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-tag { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+
+  /* カテゴリヘッダー */
+  .cat-header { border-radius: 12px; padding: 18px 24px; margin-bottom: 16px; margin-top: 36px; display: flex; align-items: center; gap: 14px; }
+  .cat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; background: rgba(255,255,255,0.2); }
+  .cat-eye { font-size: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; margin-bottom: 3px; color: rgba(255,255,255,0.7); }
+  .cat-title { font-family: 'Noto Serif JP', serif; font-size: 20px; font-weight: 700; color: #fff; }
+
+  /* ツールカード */
+  .tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 8px; }
+  .tool-card { background: var(--surface); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+  .tool-head { padding: 14px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
+  .tool-emoji { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .tool-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .tool-key { font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; padding: 2px 8px; border-radius: 6px; display: inline-block; }
+  .tool-body { padding: 12px 16px; }
+  .tool-desc { font-size: 12px; color: var(--text-sub); line-height: 1.75; margin-bottom: 8px; }
+  .tool-banner { font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; padding: 3px 10px; border-radius: 10px; display: inline-block; }
+  .tool-tips { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+  .tool-tip { font-size: 11px; color: var(--text-sub); display: flex; gap: 6px; }
+  .tool-tip::before { content: '▸'; flex-shrink: 0; }
+
+  /* 幅広カード（1列） */
+  .tool-card.full { grid-column: 1 / -1; }
+  .tool-card.full .tool-body { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* ショートカット早見表 */
+  .shortcut-section { background: var(--ink); border-radius: 16px; padding: 28px 32px; margin-top: 48px; margin-bottom: 32px; }
+  .sc-title { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #60a5fa; letter-spacing: 0.15em; margin-bottom: 20px; }
+  .sc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .sc-group { background: rgba(255,255,255,0.06); border-radius: 10px; padding: 14px 16px; }
+  .sc-group-title { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #60a5fa; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .sc-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 8px; }
+  .sc-action { font-size: 11px; color: #cbd5e1; flex: 1; }
+  .sc-key { font-size: 10px; font-family: 'JetBrains Mono', monospace; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); color: #e2e8f0; padding: 2px 7px; border-radius: 5px; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
+
+  /* ツール選択フローチャート */
+  .flowchart { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 24px; margin-bottom: 32px; }
+  .flow-title { font-size: 15px; font-weight: 700; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+  .flow-row { display: flex; align-items: stretch; gap: 0; margin-bottom: 10px; }
+  .flow-q { background: #0f172a; color: #fff; font-size: 12px; font-weight: 700; padding: 10px 14px; border-radius: 8px 0 0 8px; display: flex; align-items: center; min-width: 220px; }
+  .flow-arrow { display: flex; align-items: center; padding: 0 8px; color: #94a3b8; font-size: 14px; background: #f8fafc; }
+  .flow-a { flex: 1; font-size: 12px; color: var(--text-sub); padding: 10px 14px; background: #f8fafc; border-radius: 0 8px 8px 0; border: 1px solid var(--border); border-left: none; display: flex; align-items: center; gap: 8px; }
+  .flow-tool { font-weight: 700; color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 11px; background: var(--border); padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+
+  code { background: #e0f2fe; color: #0369a1; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  .tip { border-radius: 10px; padding: 12px 16px; margin: 14px 0; border-left: 4px solid; }
+  .tip p { font-size: 13px; line-height: 1.8; }
+
+  /* レッスン対応表 */
+  .lesson-map { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 32px; }
+  .lm-head { background: #0f172a; padding: 14px 20px; }
+  .lm-head-title { font-size: 13px; font-weight: 700; color: #fff; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.08em; }
+  .lm-row { display: flex; align-items: center; padding: 10px 20px; border-bottom: 1px solid var(--border); gap: 12px; font-size: 12px; }
+  .lm-row:last-child { border-bottom: none; }
+  .lm-lesson { font-family: 'JetBrains Mono', monospace; font-weight: 700; min-width: 80px; }
+  .lm-tool { color: var(--text); font-weight: 700; min-width: 180px; }
+  .lm-desc { color: var(--text-sub); flex: 1; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 20px; }
+    .hero h1 { font-size: 22px; }
+    .tool-grid { grid-template-columns: 1fr; }
+    .tool-card.full .tool-body { grid-template-columns: 1fr; }
+    .sc-grid { grid-template-columns: 1fr; }
+    .flow-q { min-width: 160px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-badge">Photoshop · Lesson 24</div>
+    <h1>🛠 バナー制作で使う<br>Photoshopツール完全まとめ</h1>
+    <p>Lesson01〜23で登場したすべてのツールをカテゴリ別に整理。バナー制作での使いどころ・ショートカット早見表付き。迷ったときの辞書として使おう。</p>
+    <div class="hero-tags">
+      <span class="hero-tag">選択ツール</span>
+      <span class="hero-tag">描画ツール</span>
+      <span class="hero-tag">テキストツール</span>
+      <span class="hero-tag">変形ツール</span>
+      <span class="hero-tag">調整レイヤー</span>
+      <span class="hero-tag">ショートカット早見表</span>
+    </div>
+  </div>
+
+  <!-- どのツールを使うか迷ったときのフローチャート -->
+  <div class="flowchart">
+    <div class="flow-title">🤔 「何をしたいか」でツールを選ぶ</div>
+    <div class="flow-row">
+      <div class="flow-q">写真の背景を消したい</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-a"><span class="flow-tool">選択とマスク / 被写体を選択</span> または <span class="flow-tool">ペンツール（L15）</span></div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-q">図形・シェイプを描きたい</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-a"><span class="flow-tool">シェイプツール U（L08・L23）</span> または <span class="flow-tool">ペンツール P（L15）</span></div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-q">文字を入れたい</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-a"><span class="flow-tool">横書き文字ツール T（L10・L11・L13）</span></div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-q">光・影・テクスチャを加えたい</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-a"><span class="flow-tool">ブラシツール B（L22）</span>＋描画モード</div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-q">色・明るさを調整したい</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-a"><span class="flow-tool">調整レイヤー（L12）</span> ― トーンカーブ・カラーバランス等</div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-q">グラデーション背景を作りたい</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-a"><span class="flow-tool">グラデーションツール G（L12）</span> または <span class="flow-tool">塗りつぶしレイヤー</span></div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-q">要素を移動・変形したい</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-a"><span class="flow-tool">移動ツール V</span> ＋ <span class="flow-tool">自由変形 Cmd/Ctrl+T</span></div>
+    </div>
+    <div class="flow-row" style="border-bottom:none;">
+      <div class="flow-q">複雑なシェイプを作りたい</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-a"><span class="flow-tool">ブーリアン演算（L23）</span> ― 合体・型抜き・交差</div>
+    </div>
+  </div>
+
+  <!-- カテゴリ 1: 選択系 -->
+  <div class="cat-header" style="background:linear-gradient(135deg,#1e3a5f,#2563eb);">
+    <div class="cat-icon">🎯</div>
+    <div>
+      <div class="cat-eye">CATEGORY 01</div>
+      <div class="cat-title">選択・切り抜きツール</div>
+    </div>
+  </div>
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="tool-head" style="background:#eff6ff;">
+        <div class="tool-emoji" style="background:#dbeafe;">▭</div>
+        <div>
+          <div class="tool-name" style="color:#1e40af;">長方形選択ツール</div>
+          <span class="tool-key" style="background:#dbeafe; color:#1e40af;">M</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">四角形の範囲を選択する。バナーの一部を選択したり、選択範囲に色を塗る場面で使う。</div>
+        <span class="tool-banner" style="background:#dbeafe; color:#1e40af;">帯・ブロック作成</span>
+        <div class="tool-tips">
+          <div class="tool-tip">Shiftを押しながら → 正方形で選択</div>
+          <div class="tool-tip">Altを押しながら → 中心から選択</div>
+          <div class="tool-tip">楕円は同じ<code>M</code>で切り替え</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#eff6ff;">
+        <div class="tool-emoji" style="background:#dbeafe;">⊞</div>
+        <div>
+          <div class="tool-name" style="color:#1e40af;">なげなわツール</div>
+          <span class="tool-key" style="background:#dbeafe; color:#1e40af;">L</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">フリーハンドで自由な形を選択。「多角形選択」や「マグネット選択」も同キーで切替可能。</div>
+        <span class="tool-banner" style="background:#dbeafe; color:#1e40af;">不規則な範囲の選択</span>
+        <div class="tool-tips">
+          <div class="tool-tip">多角形選択：クリックで角を作って選択</div>
+          <div class="tool-tip">マグネット：境界線に自動でくっつく</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#eff6ff;">
+        <div class="tool-emoji" style="background:#dbeafe;">🪄</div>
+        <div>
+          <div class="tool-name" style="color:#1e40af;">クイック選択ツール</div>
+          <span class="tool-key" style="background:#dbeafe; color:#1e40af;">W</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">ブラシでなぞるだけでAIが自動で境界を認識して選択。写真の人物・商品の切り抜きに最適。</div>
+        <span class="tool-banner" style="background:#dbeafe; color:#1e40af;">商品・人物の切り抜き</span>
+        <div class="tool-tips">
+          <div class="tool-tip">「被写体を選択」ボタン → ワンクリックで自動選択</div>
+          <div class="tool-tip">Altを押しながら → 選択解除（引き算）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#eff6ff;">
+        <div class="tool-emoji" style="background:#dbeafe;">✂️</div>
+        <div>
+          <div class="tool-name" style="color:#1e40af;">切り抜きツール</div>
+          <span class="tool-key" style="background:#dbeafe; color:#1e40af;">C</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">画像のトリミング（余白のカット）やキャンバスサイズの変更に使う。比率を固定してカットできる。</div>
+        <span class="tool-banner" style="background:#dbeafe; color:#1e40af;">バナーサイズの調整</span>
+        <div class="tool-tips">
+          <div class="tool-tip">比率を入力（例：1080:1080）で固定比率トリム</div>
+          <div class="tool-tip">外に引き出すとキャンバスを拡張できる</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- カテゴリ 2: 描画・シェイプ -->
+  <div class="cat-header" style="background:linear-gradient(135deg,#7c3aed,#a855f7);">
+    <div class="cat-icon">✏️</div>
+    <div>
+      <div class="cat-eye">CATEGORY 02</div>
+      <div class="cat-title">描画・シェイプツール</div>
+    </div>
+  </div>
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="tool-head" style="background:#f3e8ff;">
+        <div class="tool-emoji" style="background:#ede9fe;">🖌</div>
+        <div>
+          <div class="tool-name" style="color:#5b21b6;">ブラシツール</div>
+          <span class="tool-key" style="background:#ede9fe; color:#5b21b6;">B</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">色を塗る・光や影を加える・テクスチャを描く万能ツール。描画モードと組み合わせて使う（Lesson22）。</div>
+        <span class="tool-banner" style="background:#ede9fe; color:#5b21b6;">光・影・テクスチャ表現</span>
+        <div class="tool-tips">
+          <div class="tool-tip">[ ] でサイズ変更 / 数字キーで不透明度</div>
+          <div class="tool-tip">スクリーンモードで光のグロー効果</div>
+          <div class="tool-tip">乗算モードで影・ビネット効果</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#f3e8ff;">
+        <div class="tool-emoji" style="background:#ede9fe;">🖊</div>
+        <div>
+          <div class="tool-name" style="color:#5b21b6;">ペンツール</div>
+          <span class="tool-key" style="background:#ede9fe; color:#5b21b6;">P</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">アンカーポイントとハンドルで自由な曲線・直線パスを描く。切り抜き・シェイプ作成に使う（Lesson15）。</div>
+        <span class="tool-banner" style="background:#ede9fe; color:#5b21b6;">精密な切り抜き・複雑な形</span>
+        <div class="tool-tips">
+          <div class="tool-tip">クリック→直線 / ドラッグ→曲線</div>
+          <div class="tool-tip">Alt+クリック→ハンドルを折る</div>
+          <div class="tool-tip">Cmd/Ctrl+Enter→選択範囲に変換</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#f3e8ff;">
+        <div class="tool-emoji" style="background:#ede9fe;">⬜</div>
+        <div>
+          <div class="tool-name" style="color:#5b21b6;">シェイプツール</div>
+          <span class="tool-key" style="background:#ede9fe; color:#5b21b6;">U</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">長方形・楕円・多角形・直線・カスタムシェイプの6種類。バナーの図形パーツ・バッジ作成に必須（Lesson08・L23）。</div>
+        <span class="tool-banner" style="background:#ede9fe; color:#5b21b6;">バッジ・帯・装飾パーツ</span>
+        <div class="tool-tips">
+          <div class="tool-tip">Shift→正方形・正円 / Alt→中心から描く</div>
+          <div class="tool-tip">Uを複数回押す→種類を切り替え</div>
+          <div class="tool-tip">ブーリアン演算で複合シェイプ作成（L23）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#f3e8ff;">
+        <div class="tool-emoji" style="background:#ede9fe;">🌈</div>
+        <div>
+          <div class="tool-name" style="color:#5b21b6;">グラデーションツール</div>
+          <span class="tool-key" style="background:#ede9fe; color:#5b21b6;">G</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">線形・円形・角度・反射・ひし形の5種類のグラデーションを描く。背景・バッジ・光沢表現に（Lesson12）。</div>
+        <span class="tool-banner" style="background:#ede9fe; color:#5b21b6;">背景・光沢・バッジ塗り</span>
+        <div class="tool-tips">
+          <div class="tool-tip">Shiftを押しながらドラッグ→水平・垂直・45°に固定</div>
+          <div class="tool-tip">調整レイヤーとして使うと非破壊編集できる</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#f3e8ff;">
+        <div class="tool-emoji" style="background:#ede9fe;">🪣</div>
+        <div>
+          <div class="tool-name" style="color:#5b21b6;">塗りつぶしツール</div>
+          <span class="tool-key" style="background:#ede9fe; color:#5b21b6;">G</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">同じ色の領域を一括で塗りつぶす。選択範囲に単色を流し込む使い方が多い。編集→塗りつぶしも同じ用途。</div>
+        <span class="tool-banner" style="background:#ede9fe; color:#5b21b6;">単色塗り・パターン塗り</span>
+        <div class="tool-tips">
+          <div class="tool-tip">Alt+Delete→前景色で塗りつぶし（最速）</div>
+          <div class="tool-tip">Cmd/Ctrl+Delete→背景色で塗りつぶし</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#f3e8ff;">
+        <div class="tool-emoji" style="background:#ede9fe;">💧</div>
+        <div>
+          <div class="tool-name" style="color:#5b21b6;">スポイトツール</div>
+          <span class="tool-key" style="background:#ede9fe; color:#5b21b6;">I</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">画像上の色をクリックして前景色として取得する。色の統一・配色の参考バナーから色を拾うときに使う。</div>
+        <span class="tool-banner" style="background:#ede9fe; color:#5b21b6;">配色の統一・色の取得</span>
+        <div class="tool-tips">
+          <div class="tool-tip">どのツール使用中でもAlt押しで一時的に切替</div>
+          <div class="tool-tip">サンプルの大きさを「3×3平均」に設定すると安定</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- カテゴリ 3: テキスト -->
+  <div class="cat-header" style="background:linear-gradient(135deg,#065f46,#059669);">
+    <div class="cat-icon">T</div>
+    <div>
+      <div class="cat-eye">CATEGORY 03</div>
+      <div class="cat-title">テキストツール</div>
+    </div>
+  </div>
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="tool-head" style="background:#f0fdf4;">
+        <div class="tool-emoji" style="background:#d1fae5;">T</div>
+        <div>
+          <div class="tool-name" style="color:#065f46;">横書き文字ツール</div>
+          <span class="tool-key" style="background:#d1fae5; color:#065f46;">T</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">横書きテキストを入力。バナーのキャッチコピー・サブコピー・価格表示など文字のすべてに使う（Lesson10〜13）。</div>
+        <span class="tool-banner" style="background:#d1fae5; color:#065f46;">キャッチ・サブコピー・価格</span>
+        <div class="tool-tips">
+          <div class="tool-tip">フォント・サイズ・カラーはオプションバーで変更</div>
+          <div class="tool-tip">Cmd/Ctrl+A→全テキスト選択</div>
+          <div class="tool-tip">Alt+↑↓→行送り調整（L10）</div>
+          <div class="tool-tip">Alt+←→→カーニング調整（L10）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#f0fdf4;">
+        <div class="tool-emoji" style="background:#d1fae5;">↕T</div>
+        <div>
+          <div class="tool-name" style="color:#065f46;">縦書き文字ツール</div>
+          <span class="tool-key" style="background:#d1fae5; color:#065f46;">T</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">縦書きテキストを入力。和風・伝統的なバナーデザインや、タイトル縦書き表現に使う（Lesson09）。</div>
+        <span class="tool-banner" style="background:#d1fae5; color:#065f46;">和風バナー・縦組みデザイン</span>
+        <div class="tool-tips">
+          <div class="tool-tip">横書きツールとTキーで切り替え可能</div>
+          <div class="tool-tip">文字パネルで文字方向（横・縦）も変更できる</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- カテゴリ 4: 移動・変形 -->
+  <div class="cat-header" style="background:linear-gradient(135deg,#92400e,#d97706);">
+    <div class="cat-icon">↔️</div>
+    <div>
+      <div class="cat-eye">CATEGORY 04</div>
+      <div class="cat-title">移動・変形・整列ツール</div>
+    </div>
+  </div>
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="tool-head" style="background:#fffbeb;">
+        <div class="tool-emoji" style="background:#fef3c7;">↔</div>
+        <div>
+          <div class="tool-name" style="color:#78350f;">移動ツール</div>
+          <span class="tool-key" style="background:#fef3c7; color:#78350f;">V</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">レイヤーを移動する。複数選択して整列させる機能も持つ。バナー制作で最もよく使うツール。</div>
+        <span class="tool-banner" style="background:#fef3c7; color:#78350f;">要素の配置・整列</span>
+        <div class="tool-tips">
+          <div class="tool-tip">矢印キー→1pxずつ移動 / Shift+矢印→10px移動</div>
+          <div class="tool-tip">複数レイヤー選択→整列ボタンで揃える</div>
+          <div class="tool-tip">他ツール使用中でもCmd/Ctrl押しで一時切替</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#fffbeb;">
+        <div class="tool-emoji" style="background:#fef3c7;">⟲</div>
+        <div>
+          <div class="tool-name" style="color:#78350f;">自由変形</div>
+          <span class="tool-key" style="background:#fef3c7; color:#78350f;">Cmd/Ctrl+T</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">拡大・縮小・回転・ゆがみ・遠近法変形を一括操作。バナーに配置した要素のサイズ調整に毎回使う。</div>
+        <span class="tool-banner" style="background:#fef3c7; color:#78350f;">写真・素材のサイズ調整</span>
+        <div class="tool-tips">
+          <div class="tool-tip">Shift→縦横比を固定（旧バージョン）</div>
+          <div class="tool-tip">右クリック→ゆがみ・遠近法・ワープ等に切替</div>
+          <div class="tool-tip">Enter→確定 / Escape→キャンセル</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#fffbeb;">
+        <div class="tool-emoji" style="background:#fef3c7;">🔍</div>
+        <div>
+          <div class="tool-name" style="color:#78350f;">ズームツール</div>
+          <span class="tool-key" style="background:#fef3c7; color:#78350f;">Z</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">キャンバスを拡大・縮小して表示する。細かい作業時に拡大・全体確認時に縮小して使う。</div>
+        <span class="tool-banner" style="background:#fef3c7; color:#78350f;">細部の確認・全体確認</span>
+        <div class="tool-tips">
+          <div class="tool-tip">Cmd/Ctrl++ / Cmd/Ctrl+- で拡大縮小</div>
+          <div class="tool-tip">Cmd/Ctrl+0 → 画面にフィット</div>
+          <div class="tool-tip">Cmd/Ctrl+1 → 実際のサイズ（100%）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#fffbeb;">
+        <div class="tool-emoji" style="background:#fef3c7;">✋</div>
+        <div>
+          <div class="tool-name" style="color:#78350f;">手のひらツール</div>
+          <span class="tool-key" style="background:#fef3c7; color:#78350f;">H / スペース</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">キャンバスをスクロール・パン（移動）する。拡大時に画面を動かして別の部分を見るときに使う。</div>
+        <span class="tool-banner" style="background:#fef3c7; color:#78350f;">キャンバスのスクロール</span>
+        <div class="tool-tips">
+          <div class="tool-tip">どのツール中でもスペース長押しで一時切替（最重要）</div>
+          <div class="tool-tip">ダブルクリック→画面にフィット</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- カテゴリ 5: 修正・加工 -->
+  <div class="cat-header" style="background:linear-gradient(135deg,#7f1d1d,#dc2626);">
+    <div class="cat-icon">🔧</div>
+    <div>
+      <div class="cat-eye">CATEGORY 05</div>
+      <div class="cat-title">修正・加工ツール</div>
+    </div>
+  </div>
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="tool-head" style="background:#fef2f2;">
+        <div class="tool-emoji" style="background:#fee2e2;">⬛</div>
+        <div>
+          <div class="tool-name" style="color:#b91c1c;">消しゴムツール</div>
+          <span class="tool-key" style="background:#fee2e2; color:#b91c1c;">E</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">ピクセルを消去する。ただし<strong>使うとやり直し不可能</strong>なため、基本的にはマスクを使うことを推奨。</div>
+        <span class="tool-banner" style="background:#fee2e2; color:#b91c1c;">⚠️ マスクで代用推奨</span>
+        <div class="tool-tips">
+          <div class="tool-tip">背景レイヤーでは背景色に塗り替えられる</div>
+          <div class="tool-tip">マジック消しゴム→同じ色の領域を一括削除</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#fef2f2;">
+        <div class="tool-emoji" style="background:#fee2e2;">🩹</div>
+        <div>
+          <div class="tool-name" style="color:#b91c1c;">コンテンツに応じた塗りつぶし</div>
+          <span class="tool-key" style="background:#fee2e2; color:#b91c1c;">編集メニュー</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">選択した部分をAIが周囲の背景から自然に補完して消す。写真から不要な要素を取り除くときに使う。</div>
+        <span class="tool-banner" style="background:#fee2e2; color:#b91c1c;">不要要素の除去</span>
+        <div class="tool-tips">
+          <div class="tool-tip">選択範囲を作成 → 編集 → コンテンツに応じた塗りつぶし</div>
+          <div class="tool-tip">スポット修復ブラシツール（J）でもできる</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#fef2f2;">
+        <div class="tool-emoji" style="background:#fee2e2;">🌀</div>
+        <div>
+          <div class="tool-name" style="color:#b91c1c;">ぼかし（ガウス）</div>
+          <span class="tool-key" style="background:#fee2e2; color:#b91c1c;">フィルター</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">レイヤーをぼかす。背景をぼかして被写体を際立たせる・影をぼかして自然にする場面で使う。</div>
+        <span class="tool-banner" style="background:#fee2e2; color:#b91c1c;">影のぼかし・背景ぼかし</span>
+        <div class="tool-tips">
+          <div class="tool-tip">フィルター → ぼかし → ぼかし（ガウス）</div>
+          <div class="tool-tip">スマートオブジェクト化してから使うと後から変更できる</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#fef2f2;">
+        <div class="tool-emoji" style="background:#fee2e2;">🔲</div>
+        <div>
+          <div class="tool-name" style="color:#b91c1c;">ダイレクト選択ツール</div>
+          <span class="tool-key" style="background:#fee2e2; color:#b91c1c;">A</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">シェイプ・パスの個別アンカーポイントを選択・移動する。シェイプの細かい形状修正・パス修正に使う（L15・L23）。</div>
+        <span class="tool-banner" style="background:#fee2e2; color:#b91c1c;">シェイプの形状修正</span>
+        <div class="tool-tips">
+          <div class="tool-tip">パス上のアンカーをクリック→個別移動</div>
+          <div class="tool-tip">ハンドルを動かして曲線の形を調整</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- カテゴリ 6: 調整レイヤー -->
+  <div class="cat-header" style="background:linear-gradient(135deg,#1e3a5f,#0891b2);">
+    <div class="cat-icon">🎚</div>
+    <div>
+      <div class="cat-eye">CATEGORY 06</div>
+      <div class="cat-title">調整レイヤー（非破壊編集）</div>
+    </div>
+  </div>
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="tool-head" style="background:#ecfeff;">
+        <div class="tool-emoji" style="background:#cffafe;">📈</div>
+        <div>
+          <div class="tool-name" style="color:#0e7490;">トーンカーブ</div>
+          <span class="tool-key" style="background:#cffafe; color:#0e7490;">調整レイヤー</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">明るさ・コントラスト・色調を細かく調整。RGB各チャンネルを個別調整できるのでプロ御用達。</div>
+        <span class="tool-banner" style="background:#cffafe; color:#0e7490;">全体の色調補正</span>
+        <div class="tool-tips">
+          <div class="tool-tip">真ん中を上げる→明るく / 下げる→暗く</div>
+          <div class="tool-tip">Sカーブ→コントラスト強調</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#ecfeff;">
+        <div class="tool-emoji" style="background:#cffafe;">🎨</div>
+        <div>
+          <div class="tool-name" style="color:#0e7490;">カラーバランス</div>
+          <span class="tool-key" style="background:#cffafe; color:#0e7490;">調整レイヤー</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">シャドウ・中間調・ハイライトそれぞれの色を調整。「夜感」「夏感」などバナーの雰囲気作りに使う。</div>
+        <span class="tool-banner" style="background:#cffafe; color:#0e7490;">雰囲気・色味の演出</span>
+        <div class="tool-tips">
+          <div class="tool-tip">シャドウに青→夜・クール感</div>
+          <div class="tool-tip">ハイライトにゴールド→温かみ・高級感</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#ecfeff;">
+        <div class="tool-emoji" style="background:#cffafe;">💡</div>
+        <div>
+          <div class="tool-name" style="color:#0e7490;">明るさ・コントラスト</div>
+          <span class="tool-key" style="background:#cffafe; color:#0e7490;">調整レイヤー</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">シンプルに明るさとコントラストをスライダーで調整。直感的に使えるので初心者向け。</div>
+        <span class="tool-banner" style="background:#cffafe; color:#0e7490;">簡単な明るさ調整</span>
+        <div class="tool-tips">
+          <div class="tool-tip">コントラストを上げる→メリハリが出る</div>
+          <div class="tool-tip">トーンカーブより直感的だが細かい調整は不得意</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-head" style="background:#ecfeff;">
+        <div class="tool-emoji" style="background:#cffafe;">🌡</div>
+        <div>
+          <div class="tool-name" style="color:#0e7490;">色相・彩度</div>
+          <span class="tool-key" style="background:#cffafe; color:#0e7490;">調整レイヤー</span>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-desc">色相（色の種類）・彩度（鮮やかさ）・明度（明るさ）を調整。商品写真の色を変えたり鮮やかにするときに使う。</div>
+        <span class="tool-banner" style="background:#cffafe; color:#0e7490;">商品の色変え・彩度調整</span>
+        <div class="tool-tips">
+          <div class="tool-tip">「色彩の統一」チェック→単色化（モノトーン化）</div>
+          <div class="tool-tip">特定の色だけを変えることもできる</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ショートカット早見表 -->
+  <div class="shortcut-section">
+    <div class="sc-title">⌨️ SHORTCUT REFERENCE — バナー制作で使うショートカット早見表</div>
+    <div class="sc-grid">
+
+      <!-- ツール選択 -->
+      <div class="sc-group">
+        <div class="sc-group-title">🛠 ツール選択</div>
+        <div class="sc-row"><span class="sc-action">移動ツール</span><span class="sc-key">V</span></div>
+        <div class="sc-row"><span class="sc-action">長方形選択</span><span class="sc-key">M</span></div>
+        <div class="sc-row"><span class="sc-action">なげなわツール</span><span class="sc-key">L</span></div>
+        <div class="sc-row"><span class="sc-action">クイック選択</span><span class="sc-key">W</span></div>
+        <div class="sc-row"><span class="sc-action">切り抜きツール</span><span class="sc-key">C</span></div>
+        <div class="sc-row"><span class="sc-action">スポイト</span><span class="sc-key">I</span></div>
+        <div class="sc-row"><span class="sc-action">ブラシツール</span><span class="sc-key">B</span></div>
+        <div class="sc-row"><span class="sc-action">グラデーション</span><span class="sc-key">G</span></div>
+        <div class="sc-row"><span class="sc-action">テキストツール</span><span class="sc-key">T</span></div>
+        <div class="sc-row"><span class="sc-action">ペンツール</span><span class="sc-key">P</span></div>
+        <div class="sc-row"><span class="sc-action">シェイプツール</span><span class="sc-key">U</span></div>
+        <div class="sc-row"><span class="sc-action">手のひら</span><span class="sc-key">H / スペース</span></div>
+        <div class="sc-row"><span class="sc-action">ズーム</span><span class="sc-key">Z</span></div>
+        <div class="sc-row"><span class="sc-action">消しゴム</span><span class="sc-key">E</span></div>
+        <div class="sc-row"><span class="sc-action">ダイレクト選択</span><span class="sc-key">A</span></div>
+      </div>
+
+      <!-- ファイル・編集操作 -->
+      <div class="sc-group">
+        <div class="sc-group-title">📁 ファイル・編集</div>
+        <div class="sc-row"><span class="sc-action">新規ドキュメント</span><span class="sc-key">⌘N</span></div>
+        <div class="sc-row"><span class="sc-action">開く</span><span class="sc-key">⌘O</span></div>
+        <div class="sc-row"><span class="sc-action">保存（PSD）</span><span class="sc-key">⌘S</span></div>
+        <div class="sc-row"><span class="sc-action">別名で保存</span><span class="sc-key">⌘⇧S</span></div>
+        <div class="sc-row"><span class="sc-action">書き出し形式</span><span class="sc-key">⌘⇧Alt+W</span></div>
+        <div class="sc-row"><span class="sc-action">元に戻す</span><span class="sc-key">⌘Z</span></div>
+        <div class="sc-row"><span class="sc-action">やり直す</span><span class="sc-key">⌘⇧Z</span></div>
+        <div class="sc-row"><span class="sc-action">コピー</span><span class="sc-key">⌘C</span></div>
+        <div class="sc-row"><span class="sc-action">ペースト</span><span class="sc-key">⌘V</span></div>
+        <div class="sc-row"><span class="sc-action">全選択</span><span class="sc-key">⌘A</span></div>
+        <div class="sc-row"><span class="sc-action">選択解除</span><span class="sc-key">⌘D</span></div>
+        <div class="sc-row"><span class="sc-action">選択範囲を反転</span><span class="sc-key">⌘⇧I</span></div>
+        <div class="sc-row"><span class="sc-action">塗りつぶし（前景色）</span><span class="sc-key">Alt+Del</span></div>
+        <div class="sc-row"><span class="sc-action">塗りつぶし（背景色）</span><span class="sc-key">⌘+Del</span></div>
+        <div class="sc-row"><span class="sc-action">自由変形</span><span class="sc-key">⌘T</span></div>
+      </div>
+
+      <!-- レイヤー操作 -->
+      <div class="sc-group">
+        <div class="sc-group-title">📂 レイヤー・表示</div>
+        <div class="sc-row"><span class="sc-action">新規レイヤー</span><span class="sc-key">⌘⇧N</span></div>
+        <div class="sc-row"><span class="sc-action">レイヤーを複製</span><span class="sc-key">⌘J</span></div>
+        <div class="sc-row"><span class="sc-action">レイヤーを結合</span><span class="sc-key">⌘E</span></div>
+        <div class="sc-row"><span class="sc-action">グループ化</span><span class="sc-key">⌘G</span></div>
+        <div class="sc-row"><span class="sc-action">グループ解除</span><span class="sc-key">⌘⇧G</span></div>
+        <div class="sc-row"><span class="sc-action">レイヤーマスク追加</span><span class="sc-key">レイヤーパネル □ボタン</span></div>
+        <div class="sc-row"><span class="sc-action">ブラシサイズ縮小</span><span class="sc-key">[</span></div>
+        <div class="sc-row"><span class="sc-action">ブラシサイズ拡大</span><span class="sc-key">]</span></div>
+        <div class="sc-row"><span class="sc-action">不透明度10%単位</span><span class="sc-key">数字キー 1〜0</span></div>
+        <div class="sc-row"><span class="sc-action">拡大</span><span class="sc-key">⌘+</span></div>
+        <div class="sc-row"><span class="sc-action">縮小</span><span class="sc-key">⌘-</span></div>
+        <div class="sc-row"><span class="sc-action">画面にフィット</span><span class="sc-key">⌘0</span></div>
+        <div class="sc-row"><span class="sc-action">100%表示</span><span class="sc-key">⌘1</span></div>
+        <div class="sc-row"><span class="sc-action">定規の表示切替</span><span class="sc-key">⌘R</span></div>
+        <div class="sc-row"><span class="sc-action">ガイド線の表示切替</span><span class="sc-key">⌘;</span></div>
+      </div>
+
+    </div>
+    <div style="margin-top:14px; font-size:11px; color:#64748b; font-family:'JetBrains Mono',monospace;">⌘ = Cmd（Mac）/ Ctrl（Windows）　⇧ = Shift　Alt = Option（Mac）</div>
+  </div>
+
+  <!-- レッスン対応表 -->
+  <div class="lesson-map">
+    <div class="lm-head">
+      <div class="lm-head-title">📚 ツール × Lessonの対応表</div>
+    </div>
+    <div class="lm-row" style="background:#1e293b; font-size:10px; font-family:'JetBrains Mono',monospace; color:#94a3b8;">
+      <span class="lm-lesson">Lesson</span><span class="lm-tool">メインツール</span><span class="lm-desc">学んだこと</span>
+    </div>
+    <div class="lm-row"><span class="lm-lesson" style="color:#7c3aed;">L00</span><span class="lm-tool">全ツール共通</span><span class="lm-desc">ショートカットキー完全リファレンス</span></div>
+    <div class="lm-row" style="background:#f8fafc;"><span class="lm-lesson" style="color:#2563eb;">L08</span><span class="lm-tool">シェイプツール（U）</span><span class="lm-desc">シェイプ・パスの基礎・6種のシェイプツール</span></div>
+    <div class="lm-row"><span class="lm-lesson" style="color:#059669;">L10</span><span class="lm-tool">テキストツール（T）</span><span class="lm-desc">カーニング・トラッキング・行送りの基礎</span></div>
+    <div class="lm-row" style="background:#f8fafc;"><span class="lm-lesson" style="color:#059669;">L11</span><span class="lm-tool">テキストツール（T）</span><span class="lm-desc">テキスト技術の応用・フォント選択・整列</span></div>
+    <div class="lm-row"><span class="lm-lesson" style="color:#0891b2;">L12</span><span class="lm-tool">グラデーションツール（G）</span><span class="lm-desc">5種類のグラデーション・調整レイヤー</span></div>
+    <div class="lm-row" style="background:#f8fafc;"><span class="lm-lesson" style="color:#059669;">L13</span><span class="lm-tool">テキストツール（T）</span><span class="lm-desc">フォントの種類・Google Fonts・Adobe Fonts</span></div>
+    <div class="lm-row"><span class="lm-lesson" style="color:#7c3aed;">L15</span><span class="lm-tool">ペンツール（P）</span><span class="lm-desc">直線・曲線パス・Sカーブ・文字トレース</span></div>
+    <div class="lm-row" style="background:#f8fafc;"><span class="lm-lesson" style="color:#d97706;">L17</span><span class="lm-tool">パターン・塗りつぶし</span><span class="lm-desc">カスタムパターン定義・描画モード応用</span></div>
+    <div class="lm-row"><span class="lm-lesson" style="color:#dc2626;">L21</span><span class="lm-tool">グラデーション・ブラシ・シェイプ</span><span class="lm-desc">幻想的バナー制作・商品写真合成・金バッジ</span></div>
+    <div class="lm-row" style="background:#f8fafc;"><span class="lm-lesson" style="color:#7c3aed;">L22</span><span class="lm-tool">ブラシツール（B）</span><span class="lm-desc">描画モード・光・影・カスタムブラシ</span></div>
+    <div class="lm-row"><span class="lm-lesson" style="color:#312e81;">L23</span><span class="lm-tool">シェイプツール（U）＋パスファインダー</span><span class="lm-desc">ブーリアン演算・レイヤー統合・ラスタライズ</span></div>
+  </div>
+
+  <!-- まとめ -->
+  <div style="background:#0f172a; border-radius:14px; padding:24px;">
+    <div style="font-size:12px; font-weight:700; color:#60a5fa; font-family:'JetBrains Mono',monospace; margin-bottom:16px; letter-spacing:0.08em;">📌 Lesson24 まとめ — バナー制作でよく使うツールTOP10</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 14px; display:flex; gap:10px; align-items:center;">
+        <span style="font-size:18px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#60a5fa; min-width:28px;">1</span>
+        <div><div style="font-size:12px; color:#e2e8f0; font-weight:700;">移動ツール（V）</div><div style="font-size:11px; color:#94a3b8;">配置・整列・毎回使う基本中の基本</div></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 14px; display:flex; gap:10px; align-items:center;">
+        <span style="font-size:18px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#60a5fa; min-width:28px;">2</span>
+        <div><div style="font-size:12px; color:#e2e8f0; font-weight:700;">テキストツール（T）</div><div style="font-size:11px; color:#94a3b8;">コピー・フォント・カーニングを駆使</div></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 14px; display:flex; gap:10px; align-items:center;">
+        <span style="font-size:18px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#60a5fa; min-width:28px;">3</span>
+        <div><div style="font-size:12px; color:#e2e8f0; font-weight:700;">シェイプツール（U）</div><div style="font-size:11px; color:#94a3b8;">帯・バッジ・吹き出しなどパーツ作成</div></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 14px; display:flex; gap:10px; align-items:center;">
+        <span style="font-size:18px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#60a5fa; min-width:28px;">4</span>
+        <div><div style="font-size:12px; color:#e2e8f0; font-weight:700;">自由変形（⌘T）</div><div style="font-size:11px; color:#94a3b8;">写真・素材のサイズ・回転を毎回使う</div></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 14px; display:flex; gap:10px; align-items:center;">
+        <span style="font-size:18px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#60a5fa; min-width:28px;">5</span>
+        <div><div style="font-size:12px; color:#e2e8f0; font-weight:700;">クイック選択（W）</div><div style="font-size:11px; color:#94a3b8;">商品写真の切り抜きに必須</div></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 14px; display:flex; gap:10px; align-items:center;">
+        <span style="font-size:18px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#60a5fa; min-width:28px;">6</span>
+        <div><div style="font-size:12px; color:#e2e8f0; font-weight:700;">調整レイヤー</div><div style="font-size:11px; color:#94a3b8;">色調補正・雰囲気作り・非破壊</div></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 14px; display:flex; gap:10px; align-items:center;">
+        <span style="font-size:18px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#60a5fa; min-width:28px;">7</span>
+        <div><div style="font-size:12px; color:#e2e8f0; font-weight:700;">グラデーションツール（G）</div><div style="font-size:11px; color:#94a3b8;">背景・バッジ塗り・光沢</div></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 14px; display:flex; gap:10px; align-items:center;">
+        <span style="font-size:18px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#60a5fa; min-width:28px;">8</span>
+        <div><div style="font-size:12px; color:#e2e8f0; font-weight:700;">ブラシツール（B）</div><div style="font-size:11px; color:#94a3b8;">光・影・グロー効果・マスク修正</div></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 14px; display:flex; gap:10px; align-items:center;">
+        <span style="font-size:18px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#60a5fa; min-width:28px;">9</span>
+        <div><div style="font-size:12px; color:#e2e8f0; font-weight:700;">ペンツール（P）</div><div style="font-size:11px; color:#94a3b8;">精密切り抜き・複雑な形のパス</div></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 14px; display:flex; gap:10px; align-items:center;">
+        <span style="font-size:18px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#60a5fa; min-width:28px;">10</span>
+        <div><div style="font-size:12px; color:#e2e8f0; font-weight:700;">スポイトツール（I）</div><div style="font-size:11px; color:#94a3b8;">配色統一・参考バナーから色を拾う</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:24px; font-size:12px; color:#94a3b8;">Photoshop · Lesson 24｜バナー制作ツール完全まとめ＋ショートカット早見表</div>
+
+</div>
+</body>
+</html>
