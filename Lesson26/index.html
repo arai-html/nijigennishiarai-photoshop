@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>バナーデザイン理論 完全解説｜Photoshop Lesson 26</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --text: #0f172a;
+    --text-sub: #475569;
+    --border: #e2e8f0;
+    --ink: #0f172a;
+    --blue: #2563eb;
+    --blue-light: #dbeafe;
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+    --green: #059669;
+    --green-light: #d1fae5;
+    --orange: #ea580c;
+    --orange-light: #ffedd5;
+    --red: #dc2626;
+    --red-light: #fee2e2;
+    --gold: #d97706;
+    --gold-light: #fef3c7;
+    --pink: #db2777;
+    --pink-light: #fce7f3;
+    --teal: #0891b2;
+    --teal-light: #e0f2fe;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; padding: 40px 20px 100px; }
+  .container { max-width: 860px; margin: 0 auto; }
+
+  /* ヒーロー */
+  .hero { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #4338ca 100%); border-radius: 16px; padding: 52px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::before { content: '🎨'; position: absolute; right: 36px; top: 16px; font-size: 90px; opacity: 0.1; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
+  .hero h1 { font-family: 'Noto Serif JP', serif; font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.4; }
+  .hero h1 em { color: #818cf8; font-style: normal; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.82); margin-bottom: 20px; line-height: 1.85; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-tag { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+
+  /* チャプター */
+  .chapter { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .ch-bar { height: 4px; }
+  .ch-head { padding: 20px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 14px; }
+  .ch-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .ch-eye { font-size: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; margin-bottom: 3px; }
+  .ch-title { font-size: 18px; font-weight: 700; }
+  .ch-body { padding: 24px; }
+  .desc { font-size: 14px; color: var(--text-sub); line-height: 1.9; margin-bottom: 18px; }
+
+  code { background: #e0e7ff; color: #3730a3; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  /* ポイント */
+  .points { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+  .point { display: flex; gap: 10px; align-items: flex-start; background: #f8fafc; border-radius: 8px; padding: 10px 14px; }
+  .point-icon { font-size: 14px; flex-shrink: 0; }
+  .point-text { font-size: 13px; color: var(--text-sub); line-height: 1.7; }
+  .point-text strong { color: var(--text); }
+
+  /* 比較 */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .cmp-box { border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .cmp-head { padding: 8px 14px; font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+  .cmp-body { padding: 12px 14px; font-size: 13px; color: var(--text-sub); line-height: 1.85; background: #f8fafc; }
+
+  /* ヒント */
+  .tip { border-radius: 10px; padding: 12px 16px; margin: 12px 0; border-left: 4px solid; }
+  .tip p { font-size: 13px; line-height: 1.8; }
+
+  /* テーブル */
+  .tbl { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  .tbl th { background: var(--ink); color: #fff; padding: 9px 14px; text-align: left; font-size: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.06em; }
+  .tbl td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text-sub); vertical-align: top; line-height: 1.7; }
+  .tbl tr:nth-child(even) td { background: #f8fafc; }
+
+  /* セクションタイトル */
+  .sec-title { font-size: 13px; font-weight: 700; color: var(--text); margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--border); }
+
+  /* SVGデモ */
+  .demo-wrap { background: #f1f5f9; border-radius: 10px; border: 1px solid var(--border); padding: 14px; margin: 14px 0; }
+  .demo-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-sub); margin-bottom: 10px; letter-spacing: 0.08em; }
+
+  /* カラーパレット */
+  .palette-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+  .swatch { border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(0,0,0,0.08); background: var(--surface); }
+  .swatch-color { width: 32px; height: 32px; border-radius: 6px; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.1); }
+  .swatch-info { font-size: 11px; font-family: 'JetBrains Mono', monospace; }
+  .swatch-name { font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .swatch-hex { color: var(--text-sub); }
+
+  /* ワークシート */
+  .ws-header { background: linear-gradient(135deg, #0f172a, #1e1b4b); border-radius: 14px; padding: 26px 28px; margin-bottom: 24px; position: relative; overflow: hidden; }
+  .ws-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #4338ca, #7c3aed, #db2777, #d97706); }
+  .ws-eye { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #818cf8; letter-spacing: 0.15em; margin-bottom: 8px; }
+  .ws-title { font-family: 'Noto Serif JP', serif; font-size: 22px; font-weight: 700; color: #fff; }
+
+  .work-card { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 24px; }
+  .work-head { padding: 18px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .work-num { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .work-body { padding: 24px; }
+
+  .task-box { border-radius: 10px; padding: 14px 16px; margin-bottom: 18px; border-left: 4px solid; }
+  .task-label { font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; margin-bottom: 6px; }
+  .task-text { font-size: 14px; line-height: 1.75; }
+
+  .fill { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin: 8px 0; }
+  .fill-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-sub); margin-bottom: 7px; }
+  .fill-line { border-bottom: 1px dashed #d1d5db; padding-bottom: 6px; margin-bottom: 6px; font-size: 13px; color: #94a3b8; min-height: 26px; }
+  .fill-line:last-child { border-bottom: none; margin-bottom: 0; }
+  .fill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0; }
+
+  /* 分析ボックス */
+  .analysis-box { background: #f8fafc; border-radius: 10px; border: 1px solid var(--border); padding: 14px 16px; margin: 10px 0; }
+  .analysis-title { font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--text-sub); margin-bottom: 10px; letter-spacing: 0.08em; }
+  .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .analysis-item { background: var(--surface); border-radius: 6px; padding: 8px 12px; border: 1px solid var(--border); }
+  .analysis-item-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-sub); margin-bottom: 4px; }
+  .analysis-item-line { border-bottom: 1px dashed #d1d5db; padding-bottom: 4px; margin-bottom: 4px; font-size: 12px; color: #94a3b8; min-height: 22px; }
+  .analysis-item-line:last-child { border-bottom: none; margin-bottom: 0; }
+
+  .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; }
+  .check-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; }
+  .check-box { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border); flex-shrink: 0; margin-top: 2px; }
+  .check-text { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 20px; }
+    .hero h1 { font-size: 22px; }
+    .ch-body, .work-body { padding: 16px; }
+    .compare, .fill-grid, .analysis-grid { grid-template-columns: 1fr; }
+    .palette-row { gap: 6px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-badge">Photoshop · Lesson 26</div>
+    <h1>🎨 バナーデザイン理論<br><em>完全解説＋実践ワークシート</em></h1>
+    <p>「なんとなく作る」から「理由があるデザイン」へ。レイアウト・視線誘導・配色・フォント選び・バナー模写の方法まで、デザインの判断根拠を身につける。</p>
+    <div class="hero-tags">
+      <span class="hero-tag">レイアウトの法則</span>
+      <span class="hero-tag">視線誘導</span>
+      <span class="hero-tag">余白の使い方</span>
+      <span class="hero-tag">配色理論</span>
+      <span class="hero-tag">フォント選び</span>
+      <span class="hero-tag">バナー模写の方法</span>
+      <span class="hero-tag">デザイン分析</span>
+    </div>
+  </div>
+
+  <!-- CHAPTER 1: レイアウトの基本法則 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#2563eb,#60a5fa);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#dbeafe;">📐</div>
+      <div>
+        <div class="ch-eye" style="color:#2563eb;">CHAPTER 01</div>
+        <div class="ch-title">レイアウトの基本法則</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">バナーのレイアウトは「なんとなく配置する」のではなく<strong>「理由のある配置をする」</strong>ことが重要です。見る人が自然に情報を受け取れるように設計します。</p>
+
+      <!-- グリッドシステム -->
+      <div class="sec-title">① グリッドシステム ― 見えない格子が整えるバランス</div>
+      <div class="demo-wrap">
+        <div class="demo-label">📐 グリッドを使った配置の例（1080×1080px）</div>
+        <svg width="100%" viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg">
+          <rect width="560" height="300" fill="#1e293b" rx="10"/>
+          <!-- グリッド線 -->
+          <line x1="56" y1="0" x2="56" y2="300" stroke="#334155" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="112" y1="0" x2="112" y2="300" stroke="#334155" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="168" y1="0" x2="168" y2="300" stroke="#334155" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="224" y1="0" x2="224" y2="300" stroke="#334155" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="280" y1="0" x2="280" y2="300" stroke="#334155" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="336" y1="0" x2="336" y2="300" stroke="#334155" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="392" y1="0" x2="392" y2="300" stroke="#334155" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="448" y1="0" x2="448" y2="300" stroke="#334155" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="504" y1="0" x2="504" y2="300" stroke="#334155" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="0" y1="60" x2="560" y2="60" stroke="#334155" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="0" y1="120" x2="560" y2="120" stroke="#334155" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="0" y1="180" x2="560" y2="180" stroke="#334155" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="0" y1="240" x2="560" y2="240" stroke="#334155" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <!-- コンテンツ配置 -->
+          <rect x="56" y="30" width="220" height="50" rx="4" fill="#3b82f6" opacity="0.8"/>
+          <text x="66" y="60" fill="#fff" font-size="13" font-weight="bold" font-family="Noto Sans JP">キャッチコピーはここ</text>
+          <rect x="56" y="95" width="180" height="14" rx="3" fill="#64748b" opacity="0.8"/>
+          <rect x="56" y="115" width="150" height="14" rx="3" fill="#64748b" opacity="0.6"/>
+          <rect x="56" y="135" width="160" height="14" rx="3" fill="#64748b" opacity="0.4"/>
+          <rect x="56" y="200" width="120" height="40" rx="20" fill="#f59e0b" opacity="0.9"/>
+          <text x="72" y="225" fill="#fff" font-size="11" font-weight="bold" font-family="Noto Sans JP">CTAボタン</text>
+          <!-- 画像エリア -->
+          <rect x="310" y="20" width="220" height="250" rx="6" fill="#334155" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="420" y="148" text-anchor="middle" fill="#64748b" font-size="11" font-family="Noto Sans JP">メインビジュアル</text>
+          <!-- マージン線 -->
+          <rect x="28" y="10" width="504" height="280" rx="2" fill="none" stroke="#4338ca" stroke-width="1" stroke-dasharray="5,4" opacity="0.4"/>
+          <text x="10" y="155" fill="#4338ca" font-size="8" font-family="JetBrains Mono" writing-mode="vertical-rl">マージン</text>
+        </svg>
+      </div>
+      <div class="points">
+        <div class="point"><div class="point-icon">📏</div><div class="point-text"><strong>マージン（余白）を先に決める：</strong>バナーの端から内側に一定の余白を設ける。端にぴったり要素を置かない。目安はバナー幅の5〜8%。1080pxなら54〜86px。</div></div>
+        <div class="point"><div class="point-icon">📏</div><div class="point-text"><strong>Photoshopのガイド線を使う：</strong>表示 → 新規ガイド / <code>⌘R</code>で定規を出してドラッグ。ガイドに沿って要素を揃えると自然に整列される。</div></div>
+        <div class="point"><div class="point-icon">📏</div><div class="point-text"><strong>要素の整列は移動ツールで：</strong>複数レイヤーを選択 → 移動ツール（V）のオプションバーで「左揃え・中央揃え・等間隔」ボタンを使う。</div></div>
+      </div>
+
+      <!-- 視線誘導 -->
+      <div class="sec-title">② 視線誘導パターン ― 読む順番を設計する</div>
+      <div class="demo-wrap">
+        <div class="demo-label">👁 主な視線誘導パターン</div>
+        <svg width="100%" viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg">
+          <rect width="680" height="220" fill="#1e293b" rx="10"/>
+
+          <!-- Z字型 -->
+          <rect x="20" y="20" width="190" height="180" rx="6" fill="#1e3a5f"/>
+          <text x="115" y="42" text-anchor="middle" fill="#60a5fa" font-size="10" font-family="JetBrains Mono">Z字型（横書き用）</text>
+          <rect x="35" y="52" width="160" height="20" rx="3" fill="#3b82f6" opacity="0.8"/>
+          <rect x="35" y="80" width="120" height="12" rx="2" fill="#64748b" opacity="0.6"/>
+          <rect x="35" y="100" width="140" height="12" rx="2" fill="#64748b" opacity="0.5"/>
+          <rect x="35" y="145" width="160" height="20" rx="3" fill="#64748b" opacity="0.6"/>
+          <!-- Z矢印 -->
+          <path d="M 35 62 L 195 62 L 35 145 L 195 145" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <polygon points="195,140 200,145 195,150" fill="#fbbf24"/>
+
+          <!-- F字型 -->
+          <rect x="230" y="20" width="190" height="180" rx="6" fill="#1e3a5f"/>
+          <text x="325" y="42" text-anchor="middle" fill="#60a5fa" font-size="10" font-family="JetBrains Mono">F字型（縦スクロール用）</text>
+          <rect x="245" y="52" width="160" height="16" rx="3" fill="#3b82f6" opacity="0.8"/>
+          <rect x="245" y="76" width="120" height="10" rx="2" fill="#3b82f6" opacity="0.6"/>
+          <rect x="245" y="96" width="160" height="10" rx="2" fill="#64748b" opacity="0.5"/>
+          <rect x="245" y="114" width="100" height="10" rx="2" fill="#64748b" opacity="0.4"/>
+          <rect x="245" y="132" width="140" height="10" rx="2" fill="#64748b" opacity="0.35"/>
+          <rect x="245" y="150" width="90" height="10" rx="2" fill="#64748b" opacity="0.3"/>
+          <!-- F矢印 -->
+          <path d="M 245 60 L 405 60" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+          <path d="M 245 60 L 245 180" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+          <path d="M 245 84 L 365 84" fill="none" stroke="#fbbf24" stroke-width="1"/>
+
+          <!-- 中央集中型 -->
+          <rect x="440" y="20" width="220" height="180" rx="6" fill="#1e3a5f"/>
+          <text x="550" y="42" text-anchor="middle" fill="#60a5fa" font-size="10" font-family="JetBrains Mono">中央集中型（SNS正方形）</text>
+          <circle cx="550" cy="115" r="60" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <rect x="490" y="100" width="120" height="18" rx="3" fill="#3b82f6" opacity="0.8"/>
+          <rect x="500" y="126" width="100" height="12" rx="2" fill="#64748b" opacity="0.6"/>
+          <rect x="510" y="80" width="80" height="12" rx="2" fill="#64748b" opacity="0.5"/>
+          <!-- 放射矢印 -->
+          <line x1="550" y1="60" x2="550" y2="75" stroke="#fbbf24" stroke-width="1.5"/>
+          <line x1="550" y1="155" x2="550" y2="170" stroke="#fbbf24" stroke-width="1.5"/>
+          <line x1="470" y1="115" x2="485" y2="115" stroke="#fbbf24" stroke-width="1.5"/>
+          <line x1="615" y1="115" x2="630" y2="115" stroke="#fbbf24" stroke-width="1.5"/>
+          <polygon points="550,70 545,82 555,82" fill="#fbbf24"/>
+        </svg>
+      </div>
+      <div class="points">
+        <div class="point"><div class="point-icon">👁</div><div class="point-text"><strong>Z字型：</strong>左上→右上→左下→右下の順に目が動く。横長バナー・Web広告に最適。最重要情報を左上と右下に置く。</div></div>
+        <div class="point"><div class="point-icon">👁</div><div class="point-text"><strong>F字型：</strong>上を横に読んで左側を縦に流れる。LP・縦長バナーに多い。最重要情報は上部と左端に置く。</div></div>
+        <div class="point"><div class="point-icon">👁</div><div class="point-text"><strong>中央集中型：</strong>中央から外に視線が広がる。Instagram正方形・ポスター型バナーに使われる。最重要情報を中央に。</div></div>
+      </div>
+
+      <!-- 余白 -->
+      <div class="sec-title">③ 余白（ホワイトスペース）の使い方</div>
+      <div class="compare">
+        <div class="cmp-box">
+          <div class="cmp-head" style="background:#fee2e2; color:#b91c1c;">❌ 余白が少ない（情報過多）</div>
+          <div class="cmp-body">要素が詰まって息苦しい。何が大切かわからない。安っぽい・急いで作った印象になる。<br>→「とにかく情報を入れたい」という衝動を抑えること。</div>
+        </div>
+        <div class="cmp-box">
+          <div class="cmp-head" style="background:#d1fae5; color:#065f46;">✅ 余白が適切（上品・高級感）</div>
+          <div class="cmp-body">要素が際立って読みやすい。高級感・信頼感が出る。「引き算のデザイン」とも言われる。<br>→ 余白はデザインの一部。怖がらず大胆に使う。</div>
+        </div>
+      </div>
+      <div class="tip" style="background:#dbeafe; border-color:#2563eb;">
+        <p style="color:#1e3a8a;"><strong>余白のルール：</strong>関連する要素は<strong>近く</strong>に置く（近接の法則）。関係ない要素は<strong>離す</strong>。「見出し」と「説明文」はセット。「CTAボタン」と「安心ワード」もセット。グループ内の余白より、グループ間の余白を大きくする。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 2: 配色理論 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#db2777,#f472b6);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#fce7f3;">🎨</div>
+      <div>
+        <div class="ch-eye" style="color:#db2777;">CHAPTER 02</div>
+        <div class="ch-title">配色理論 ― 色が伝えるメッセージ</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">バナーの配色は<strong>「好きな色」ではなく「目的に合う色」</strong>を選びます。色には感情・印象・意味があり、ターゲットやブランドによって最適な色が変わります。</p>
+
+      <!-- 色の印象 -->
+      <div class="sec-title">色が持つ印象・使われる業種</div>
+      <table class="tbl">
+        <thead><tr><th>カラー</th><th>印象・感情</th><th>よく使われる業種</th><th>バナーでの使いどころ</th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:#dc2626;">🔴 赤・オレンジ</strong></td><td>情熱・緊急性・食欲・エネルギー</td><td>食品・セール・スポーツ・エンタメ</td><td>CTAボタン・セール帯・限定感の演出</td></tr>
+          <tr><td><strong style="color:#2563eb;">🔵 青・ネイビー</strong></td><td>信頼・誠実・知性・冷静</td><td>金融・IT・医療・転職</td><td>背景・テキスト・企業ロゴ系</td></tr>
+          <tr><td><strong style="color:#059669;">🟢 緑</strong></td><td>自然・健康・安心・環境</td><td>農業・美容・健康食品・エコ</td><td>背景グラデ・ブランドカラー</td></tr>
+          <tr><td><strong style="color:#d97706;">🟡 黄・ゴールド</strong></td><td>明るさ・注意・高級感・幸福</td><td>高級品・キャンペーン・バッジ</td><td>CTAボタン・バッジ・アクセント</td></tr>
+          <tr><td><strong style="color:#7c3aed;">🟣 紫</strong></td><td>神秘・高貴・クリエイティブ</td><td>美容・コスメ・ラグジュアリー</td><td>背景グラデ・プレミアム感の演出</td></tr>
+          <tr><td><strong>⚫ 黒・ダーク</strong></td><td>洗練・高級感・シック・重厚</td><td>ファッション・高級ブランド・車</td><td>背景・テキスト・ハイエンド表現</td></tr>
+          <tr><td><strong>⚪ 白・ライト</strong></td><td>清潔感・シンプル・余白感</td><td>医療・ブライダル・デジタル</td><td>背景・余白・クリーンな印象に</td></tr>
+        </tbody>
+      </table>
+
+      <!-- 配色の組み合わせ方 -->
+      <div class="sec-title">配色の組み合わせ方 ― 3色ルール</div>
+      <div class="points">
+        <div class="point">
+          <div class="point-icon">🎨</div>
+          <div class="point-text">
+            <strong>バナーの配色は基本「3色以内」：</strong>ベースカラー（60%）＋メインカラー（30%）＋アクセントカラー（10%）の黄金比。<br>
+            例：ネイビー背景60% ＋ 白テキスト30% ＋ ゴールドCTAボタン10%
+          </div>
+        </div>
+        <div class="point">
+          <div class="point-icon">🎨</div>
+          <div class="point-text"><strong>補色（反対色）でコントラスト：</strong>CTAボタンは背景の反対色（補色）にするとクリック率が上がる。青背景なら橙のボタン、紫背景なら黄のボタン。</div>
+        </div>
+        <div class="point">
+          <div class="point-icon">🎨</div>
+          <div class="point-text"><strong>同系色でまとめると上品に：</strong>ブルー系・グリーン系など近い色でまとめると落ち着いた高級感が出る。アクセントカラーは1色だけ補色を使う。</div>
+        </div>
+        <div class="point">
+          <div class="point-icon">🎨</div>
+          <div class="point-text"><strong>参考バナーからカラーコードを拾う：</strong>スポイトツール（I）でバナーの色を取得。Lesson16で学んだ競合調査のバナーから配色を分析してパクる（パクらない）→<strong>「参考にする」</strong>。</div>
+        </div>
+      </div>
+
+      <!-- 配色ツール -->
+      <div class="sec-title">無料の配色ツール</div>
+      <div class="points">
+        <div class="point"><div class="point-icon">🔧</div><div class="point-text"><strong>Adobe Color（無料）：</strong><code>color.adobe.com</code>。補色・類似色・トライアドなど配色パターンを自動生成。Photoshopとも連携できる。</div></div>
+        <div class="point"><div class="point-icon">🔧</div><div class="point-text"><strong>Coolors（無料）：</strong><code>coolors.co</code>。スペースキーを押すたびにランダムな配色が生成される。気に入ったものをロックして微調整できる。</div></div>
+        <div class="point"><div class="point-icon">🔧</div><div class="point-text"><strong>Pinterest：</strong>「カラーパレット」「color palette」で検索するとデザイナーが作った美しい配色集が見つかる。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 3: フォント選び -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#059669,#34d399);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#d1fae5;">🔤</div>
+      <div>
+        <div class="ch-eye" style="color:#059669;">CHAPTER 03</div>
+        <div class="ch-title">フォント選び ― 文字が伝える雰囲気</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">フォント選びはデザインの雰囲気を決定する重要な要素です。<strong>「どんなブランドか」「誰に向けているか」</strong>に合わせて選びます（Lesson13参照）。</p>
+
+      <table class="tbl">
+        <thead><tr><th>フォントの種類</th><th>印象</th><th>バナーでの使い方</th><th>代表例</th></tr></thead>
+        <tbody>
+          <tr><td><strong>ゴシック体（サンセリフ）</strong></td><td>現代的・シンプル・読みやすい</td><td>本文・説明文・IT/テック系全般</td><td>Noto Sans JP・游ゴシック</td></tr>
+          <tr><td><strong>明朝体（セリフ）</strong></td><td>上品・伝統的・高級感</td><td>高級品・ブライダル・和系バナー</td><td>Noto Serif JP・游明朝</td></tr>
+          <tr><td><strong>筆記体（スクリプト）</strong></td><td>おしゃれ・ナチュラル・手作り感</td><td>カフェ・コスメ・SNSバナー</td><td>Dancing Script・Pacifico</td></tr>
+          <tr><td><strong>太字ゴシック（ディスプレイ）</strong></td><td>インパクト・力強さ・主張</td><td>キャッチコピー・セール・スポーツ</td><td>Montserrat Black・Impact</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sec-title">フォントの大小でメリハリを出す（Lesson10復習）</div>
+      <div class="demo-wrap">
+        <div class="demo-label">🔤 文字の大小差によるメリハリの違い</div>
+        <svg width="100%" viewBox="0 0 680 180" xmlns="http://www.w3.org/2000/svg">
+          <rect width="680" height="180" fill="#0f172a" rx="10"/>
+
+          <!-- NG：差が少ない -->
+          <rect x="20" y="20" width="290" height="140" rx="6" fill="#1e293b"/>
+          <text x="40" y="56" fill="#e2e8f0" font-size="22" font-weight="bold" font-family="Noto Sans JP">夏の新メニュー登場</text>
+          <text x="40" y="82" fill="#e2e8f0" font-size="18" font-family="Noto Sans JP">マンゴーラテ 販売中</text>
+          <text x="40" y="106" fill="#e2e8f0" font-size="16" font-family="Noto Sans JP">7月1日〜8月31日</text>
+          <text x="40" y="130" fill="#e2e8f0" font-size="14" font-family="Noto Sans JP">グリーンカフェ</text>
+          <text x="155" y="155" text-anchor="middle" fill="#ef4444" font-size="9" font-family="JetBrains Mono">❌ 文字サイズの差が少ない → 平坦</text>
+
+          <!-- OK：差が大きい -->
+          <rect x="340" y="20" width="320" height="140" rx="6" fill="#1e293b"/>
+          <text x="360" y="90" fill="#e2e8f0" font-size="52" font-weight="bold" font-family="Noto Sans JP">夏到来</text>
+          <text x="360" y="115" fill="#94a3b8" font-size="14" font-family="Noto Sans JP">マンゴーラテ 7月1日〜限定販売</text>
+          <text x="360" y="138" fill="#64748b" font-size="11" font-family="Noto Sans JP">グリーンカフェ</text>
+          <text x="500" y="155" text-anchor="middle" fill="#34d399" font-size="9" font-family="JetBrains Mono">✅ 大小差をつける → メリハリ</text>
+        </svg>
+      </div>
+
+      <div class="tip" style="background:#d1fae5; border-color:#059669;">
+        <p style="color:#064e3b;"><strong>フォント選びの実践ルール：</strong>①1つのバナーで使うフォントは<strong>2種類まで</strong>（3種類以上はごちゃごちゃになる）②キャッチコピーは太め・インパクト系、本文は細め・読みやすい系で使い分け ③英語フォントと日本語フォントを組み合わせるときはx-heightが近いものを選ぶ。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 4: バナー模写の方法 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#d97706,#fbbf24);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#fef3c7;">🔍</div>
+      <div>
+        <div class="ch-eye" style="color:#d97706;">CHAPTER 04</div>
+        <div class="ch-title">バナー模写の方法 ― デザイン力を最速で上げる練習法</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">バナーデザイン力を上げる最速の方法が<strong>「模写（もしゃ）」</strong>です。プロが作ったバナーを分析しながら自分で再現することで、デザインの判断力が身につきます。</p>
+
+      <div class="sec-title">模写の手順（5ステップ）</div>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:18px;">
+        <div style="background:#fffff0; border-radius:10px; padding:14px 16px; border-left:4px solid #d97706;">
+          <div style="font-size:12px; font-weight:700; color:#d97706; font-family:'JetBrains Mono',monospace; margin-bottom:6px;">STEP 1：バナーを選ぶ</div>
+          <div style="font-size:13px; color:var(--text-sub); line-height:1.75;">Pinterest・競合サイト・Instagram広告から「よくできている」と感じるバナーを1枚選ぶ。最初は<strong>シンプルな構成のもの</strong>から始める。</div>
+        </div>
+        <div style="background:#fffff0; border-radius:10px; padding:14px 16px; border-left:4px solid #d97706;">
+          <div style="font-size:12px; font-weight:700; color:#d97706; font-family:'JetBrains Mono',monospace; margin-bottom:6px;">STEP 2：バナーを分析する（作る前が大事）</div>
+          <div style="font-size:13px; color:var(--text-sub); line-height:1.75;">
+            <strong>必ず目で分析してからPhotoshopを開く：</strong><br>
+            ①サイズ・比率　②レイアウト（何がどこにあるか）　③使っている色（カラーコードをスポイトで取得）<br>
+            ④フォントの種類・太さ　⑤視線誘導のパターン　⑥なぜこのデザインが効くのか
+          </div>
+        </div>
+        <div style="background:#fffff0; border-radius:10px; padding:14px 16px; border-left:4px solid #d97706;">
+          <div style="font-size:12px; font-weight:700; color:#d97706; font-family:'JetBrains Mono',monospace; margin-bottom:6px;">STEP 3：再現する（Photoshopで作る）</div>
+          <div style="font-size:13px; color:var(--text-sub); line-height:1.75;">分析した内容をもとにPhotoshopで再現。<strong>参考バナーを並べながら作る</strong>（Photoshopの横に参考画像を置く）。完全一致を目指さず「構造・配色・バランスを学ぶ」のが目的。</div>
+        </div>
+        <div style="background:#fffff0; border-radius:10px; padding:14px 16px; border-left:4px solid #d97706;">
+          <div style="font-size:12px; font-weight:700; color:#d97706; font-family:'JetBrains Mono',monospace; margin-bottom:6px;">STEP 4：比較して差を言語化する</div>
+          <div style="font-size:13px; color:var(--text-sub); line-height:1.75;">完成した模写と元のバナーを並べて<strong>「どこが違うか・なぜ違うか」</strong>を言葉にする。この言語化がスキルアップの鍵。</div>
+        </div>
+        <div style="background:#fffff0; border-radius:10px; padding:14px 16px; border-left:4px solid #d97706;">
+          <div style="font-size:12px; font-weight:700; color:#d97706; font-family:'JetBrains Mono',monospace; margin-bottom:6px;">STEP 5：週3枚×1ヶ月継続する</div>
+          <div style="font-size:13px; color:var(--text-sub); line-height:1.75;">1枚で終わらず継続することが大切。1ヶ月で約12〜15枚模写すると、バナーを見る目が劇的に変わる。</div>
+        </div>
+      </div>
+
+      <!-- 模写のNG -->
+      <div class="compare">
+        <div class="cmp-box">
+          <div class="cmp-head" style="background:#fee2e2; color:#b91c1c;">❌ ダメな模写の仕方</div>
+          <div class="cmp-body">
+            ・分析せずにPhotoshopを開く<br>
+            ・「なんとなく似てる」で満足する<br>
+            ・元バナーを見ながら「コピー」する<br>
+            ・1枚でやめる<br>
+            → 手を動かしているだけで頭が働いていない
+          </div>
+        </div>
+        <div class="cmp-box">
+          <div class="cmp-head" style="background:#d1fae5; color:#065f46;">✅ 正しい模写の仕方</div>
+          <div class="cmp-body">
+            ・分析シートを埋めてからPhotoshopを開く<br>
+            ・「なぜこの色・この配置なのか」を考える<br>
+            ・元バナーを見ずに再現できるか試す<br>
+            ・違いを言語化してメモする<br>
+            → 手と頭を同時に動かす
+          </div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#fef3c7; border-color:#d97706;">
+        <p style="color:#78350f;"><strong>模写はトレースじゃない：</strong>模写は「そっくりに作ること」ではなく「デザインの判断を学ぶこと」。テキスト・素材は自分で用意し、色・構成・バランスを学ぶ。完成品を商用利用するのはNG。あくまで練習用。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 5: デザイン分析の方法 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#7c3aed,#a78bfa);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#ede9fe;">🔬</div>
+      <div>
+        <div class="ch-eye" style="color:#7c3aed;">CHAPTER 05</div>
+        <div class="ch-title">デザイン分析の方法 ― 「なぜ良いのか」を言語化する</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">バナーを「きれいだな」で終わらせず<strong>「なぜこのデザインが効くのか」を言語化する習慣</strong>をつけましょう。分析力 ＝ 制作力です。</p>
+
+      <div class="sec-title">バナー分析の7つの視点</div>
+      <table class="tbl">
+        <thead><tr><th>#</th><th>分析項目</th><th>見るべきポイント</th></tr></thead>
+        <tbody>
+          <tr><td><strong>①</strong></td><td><strong>サイズ・比率</strong></td><td>縦横比・想定媒体（Instagram/Web/SNS）</td></tr>
+          <tr><td><strong>②</strong></td><td><strong>レイアウト</strong></td><td>要素の配置・視線誘導パターン（Z/F/中央）・余白のとり方</td></tr>
+          <tr><td><strong>③</strong></td><td><strong>カラー</strong></td><td>使用色数・ベース/メイン/アクセントの配分・業種との整合性</td></tr>
+          <tr><td><strong>④</strong></td><td><strong>フォント</strong></td><td>フォントの種類・太さ・大小の差・フォント数</td></tr>
+          <tr><td><strong>⑤</strong></td><td><strong>コピー（テキスト）</strong></td><td>キャッチコピーの方向性（共感型/数字型/ベネフィット型）・文字数</td></tr>
+          <tr><td><strong>⑥</strong></td><td><strong>写真・ビジュアル</strong></td><td>メインビジュアルの位置・切り抜き方・写真のトーン</td></tr>
+          <tr><td><strong>⑦</strong></td><td><strong>ターゲット・目的</strong></td><td>誰に向けているか・何をさせたいか（CV）・ペルソナは誰か</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ワークシート -->
+  <div class="ws-header">
+    <div class="ws-eye">WORKSHEET · LESSON 26</div>
+    <div class="ws-title">✏️ バナーデザイン ワークシート（全4問）</div>
+  </div>
+
+  <!-- Q1: レイアウト分析 -->
+  <div class="work-card">
+    <div class="work-head">
+      <div class="work-num" style="background:linear-gradient(135deg,#1e3a5f,#2563eb);">Q1</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#2563eb; margin-bottom:2px;">レイアウト分析</div>
+        <div style="font-size:16px; font-weight:700;">好きなバナー1枚を選んでレイアウトを分析しよう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:#dbeafe; color:#1e40af;">⏱ 15分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#dbeafe; border-color:#2563eb;">
+        <div class="task-label" style="color:#1e40af;">📋 課題</div>
+        <div class="task-text">PinterestまたはInstagramで気に入ったバナーを1枚選び、レイアウトを分析してください。バナーのURLまたはスクリーンショットも保存すること。</div>
+      </div>
+      <div class="fill">
+        <div class="fill-label">分析するバナーのURL・出典</div>
+        <div class="fill-line"></div>
+      </div>
+      <div class="analysis-box">
+        <div class="analysis-title">📊 分析シート</div>
+        <div class="analysis-grid">
+          <div class="analysis-item">
+            <div class="analysis-item-label">① サイズ・比率</div>
+            <div class="analysis-item-line">（推定）</div>
+          </div>
+          <div class="analysis-item">
+            <div class="analysis-item-label">② 視線誘導パターン</div>
+            <div class="analysis-item-line">□Z字 □F字 □中央集中 □その他</div>
+          </div>
+          <div class="analysis-item">
+            <div class="analysis-item-label">③ 余白の使い方</div>
+            <div class="analysis-item-line">□多め □適切 □少なめ</div>
+          </div>
+          <div class="analysis-item">
+            <div class="analysis-item-label">④ 最初に目が行く場所</div>
+            <div class="analysis-item-line"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fill">
+        <div class="fill-label">このレイアウトの「なぜ良いか」を自分の言葉で説明する</div>
+        <div class="fill-line"></div>
+        <div class="fill-line"></div>
+      </div>
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#2563eb;"></div><div class="check-text">視線誘導パターンを特定できた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#2563eb;"></div><div class="check-text">「なぜ良いか」を自分の言葉で言語化できた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2: 配色分析 -->
+  <div class="work-card">
+    <div class="work-head">
+      <div class="work-num" style="background:linear-gradient(135deg,#831843,#db2777);">Q2</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#db2777; margin-bottom:2px;">配色分析</div>
+        <div style="font-size:16px; font-weight:700;">Q1のバナーの配色を分析しよう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:#fce7f3; color:#9d174d;">⏱ 15分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#fce7f3; border-color:#db2777;">
+        <div class="task-label" style="color:#9d174d;">📋 課題</div>
+        <div class="task-text">Q1で選んだバナーの配色を分析してください。スポイトツールでカラーコードを取得し、色の役割（ベース・メイン・アクセント）を分類する。</div>
+      </div>
+      <div class="analysis-box">
+        <div class="analysis-title">🎨 カラー分析シート</div>
+        <div class="analysis-grid">
+          <div class="analysis-item">
+            <div class="analysis-item-label">ベースカラー（60%）</div>
+            <div class="analysis-item-line">カラーコード：</div>
+            <div class="analysis-item-line">使われている場所：</div>
+          </div>
+          <div class="analysis-item">
+            <div class="analysis-item-label">メインカラー（30%）</div>
+            <div class="analysis-item-line">カラーコード：</div>
+            <div class="analysis-item-line">使われている場所：</div>
+          </div>
+          <div class="analysis-item">
+            <div class="analysis-item-label">アクセントカラー（10%）</div>
+            <div class="analysis-item-line">カラーコード：</div>
+            <div class="analysis-item-line">使われている場所：</div>
+          </div>
+          <div class="analysis-item">
+            <div class="analysis-item-label">配色の印象・狙い</div>
+            <div class="analysis-item-line">（例：高級感・爽やか・緊急性）</div>
+          </div>
+        </div>
+      </div>
+      <div class="fill">
+        <div class="fill-label">この配色がターゲット・業種に合っている理由</div>
+        <div class="fill-line"></div>
+        <div class="fill-line"></div>
+      </div>
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#db2777;"></div><div class="check-text">3色の役割（ベース・メイン・アクセント）を分類できた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#db2777;"></div><div class="check-text">CTAボタンのカラーがなぜ目立つかを説明できた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3: バナー分析シート（7項目） -->
+  <div class="work-card">
+    <div class="work-head">
+      <div class="work-num" style="background:linear-gradient(135deg,#064e3b,#059669);">Q3</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#059669; margin-bottom:2px;">総合分析</div>
+        <div style="font-size:16px; font-weight:700;">7つの視点でバナーを完全分析しよう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:#d1fae5; color:#065f46;">⏱ 20分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#d1fae5; border-color:#059669;">
+        <div class="task-label" style="color:#065f46;">📋 課題</div>
+        <div class="task-text">Q1またはまったく別の新しいバナーを選んで、Chapter05の7つの視点で完全分析してください。</div>
+      </div>
+      <div class="fill">
+        <div class="fill-label">分析するバナーの出典・URL</div>
+        <div class="fill-line"></div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; margin:12px 0;">
+        <div class="fill"><div class="fill-label">① サイズ・比率（推定）</div><div class="fill-line"></div></div>
+        <div class="fill"><div class="fill-label">② レイアウト（配置の特徴・視線誘導）</div><div class="fill-line"></div><div class="fill-line"></div></div>
+        <div class="fill"><div class="fill-label">③ カラー（使用色・配分・印象）</div><div class="fill-line"></div><div class="fill-line"></div></div>
+        <div class="fill"><div class="fill-label">④ フォント（種類・太さ・大小の差）</div><div class="fill-line"></div></div>
+        <div class="fill"><div class="fill-label">⑤ コピー（キャッチのタイプ・文字数・メッセージ）</div><div class="fill-line"></div></div>
+        <div class="fill"><div class="fill-label">⑥ ビジュアル（写真・イラストの使い方）</div><div class="fill-line"></div></div>
+        <div class="fill"><div class="fill-label">⑦ ターゲット・目的（誰に・何をさせたい）</div><div class="fill-line"></div><div class="fill-line"></div></div>
+      </div>
+      <div class="fill">
+        <div class="fill-label">このバナーが「効く」理由をまとめる（自分の言葉で）</div>
+        <div class="fill-line"></div>
+        <div class="fill-line"></div>
+        <div class="fill-line"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4: 模写実践 -->
+  <div class="work-card" style="border:2px solid #d97706;">
+    <div class="work-head" style="background:linear-gradient(135deg,#0f172a,#1e1b4b);">
+      <div class="work-num" style="background:rgba(255,255,255,0.15); border:2px solid rgba(255,255,255,0.3);">Q4</div>
+      <div style="flex:1; color:#fff;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#fbbf24; margin-bottom:2px;">模写実践</div>
+        <div style="font-size:16px; font-weight:700;">バナー1枚を模写して分析・言語化しよう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:rgba(255,255,255,0.15); color:#fff;">⏱ 60分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#fef3c7; border-color:#d97706;">
+        <div class="task-label" style="color:#78350f;">📋 総合課題（模写）</div>
+        <div class="task-text">参考バナー1枚を選んで分析シートを埋めてからPhotoshopで模写してください。テキストや素材は自分で用意し、構成・配色・バランスを学ぶことが目的です。</div>
+      </div>
+
+      <div style="background:#f8fafc; border-radius:10px; padding:14px 16px; margin-bottom:16px; border:1px solid var(--border);">
+        <div style="font-size:12px; font-weight:700; color:#d97706; font-family:'JetBrains Mono',monospace; margin-bottom:10px;">📋 模写前の分析シート（Photoshopを開く前に必ず記入）</div>
+        <div class="analysis-grid">
+          <div class="analysis-item"><div class="analysis-item-label">バナーのサイズ</div><div class="analysis-item-line">　　　×　　　px</div></div>
+          <div class="analysis-item"><div class="analysis-item-label">レイアウトパターン</div><div class="analysis-item-line">□Z字 □F字 □中央集中</div></div>
+          <div class="analysis-item"><div class="analysis-item-label">使用色（3色以内で）</div><div class="analysis-item-line">① ② ③</div></div>
+          <div class="analysis-item"><div class="analysis-item-label">フォントの種類</div><div class="analysis-item-line">□ゴシック □明朝 □筆記体</div></div>
+          <div class="analysis-item"><div class="analysis-item-label">要素の配置順序（上から）</div><div class="analysis-item-line">1. 2. 3. 4.</div></div>
+          <div class="analysis-item"><div class="analysis-item-label">CTAボタンのテキスト・色</div><div class="analysis-item-line"></div></div>
+        </div>
+      </div>
+
+      <div class="fill">
+        <div class="fill-label">模写後：元バナーと自分の模写を比べて違う点・改善できる点</div>
+        <div class="fill-line"></div>
+        <div class="fill-line"></div>
+        <div class="fill-line"></div>
+      </div>
+
+      <div class="fill">
+        <div class="fill-label">模写を通して学んだデザインのポイント（言語化）</div>
+        <div class="fill-line"></div>
+        <div class="fill-line"></div>
+      </div>
+
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:6px; font-family:'JetBrains Mono',monospace;">✅ 模写完了チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#d97706;"></div><div class="check-text">Photoshopを開く前に分析シートをすべて記入した</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#d97706;"></div><div class="check-text">テキスト・素材は自分で用意した（元バナーのコピーではない）</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#d97706;"></div><div class="check-text">レイヤーに名前をつけて整理した</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#d97706;"></div><div class="check-text">元バナーと並べて比較して違いを言語化した</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#d97706;"></div><div class="check-text">PNGで書き出して完成した</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- まとめ -->
+  <div style="background:#0f172a; border-radius:14px; padding:24px;">
+    <div style="font-size:12px; font-weight:700; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:14px; letter-spacing:0.08em;">📚 Lesson26 バナーデザイン理論 まとめ</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">レイアウト</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">グリッド・余白・近接の法則。視線誘導はZ字・F字・中央集中の3パターン。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">配色</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">3色ルール（ベース60%・メイン30%・アクセント10%）。CTAは補色。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">フォント</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">2種類まで。大小差をつけてメリハリ。業種・ターゲットに合わせて選ぶ。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">模写</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">分析→再現→比較→言語化。週3枚×1ヶ月で目が変わる。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">分析の7視点</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">サイズ・レイアウト・カラー・フォント・コピー・ビジュアル・ターゲット。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">言語化が大事</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">「なんとなくいい」→「なぜいいか」を言葉にできると自分のデザインに活かせる。</div></div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:24px; font-size:12px; color:#94a3b8;">Photoshop · Lesson 26｜バナーデザイン理論 完全解説＋実践ワークシート</div>
+
+</div>
+</body>
+</html>

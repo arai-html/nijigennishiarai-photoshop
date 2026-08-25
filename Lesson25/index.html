@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文字をシェイプに変換｜Photoshop Lesson 25</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --text: #0f172a;
+    --text-sub: #475569;
+    --border: #e2e8f0;
+    --ink: #0f172a;
+    --blue: #2563eb;
+    --blue-light: #dbeafe;
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+    --green: #059669;
+    --green-light: #d1fae5;
+    --orange: #ea580c;
+    --orange-light: #ffedd5;
+    --red: #dc2626;
+    --red-light: #fee2e2;
+    --gold: #d97706;
+    --gold-light: #fef3c7;
+    --pink: #db2777;
+    --pink-light: #fce7f3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; padding: 40px 20px 100px; }
+  .container { max-width: 820px; margin: 0 auto; }
+
+  /* ヒーロー */
+  .hero { background: linear-gradient(135deg, #0f172a 0%, #312e81 50%, #7c3aed 100%); border-radius: 16px; padding: 52px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::before { content: 'A'; position: absolute; right: 30px; top: 10px; font-size: 140px; font-weight: 900; opacity: 0.07; color: #fff; font-family: serif; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
+  .hero h1 { font-family: 'Noto Serif JP', serif; font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.4; }
+  .hero h1 em { color: #a78bfa; font-style: normal; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.82); margin-bottom: 20px; line-height: 1.85; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-tag { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+
+  /* チャプター */
+  .chapter { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .ch-bar { height: 4px; }
+  .ch-head { padding: 20px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 14px; }
+  .ch-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .ch-eye { font-size: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; margin-bottom: 3px; }
+  .ch-title { font-size: 18px; font-weight: 700; }
+  .ch-body { padding: 24px; }
+  .desc { font-size: 14px; color: var(--text-sub); line-height: 1.9; margin-bottom: 18px; }
+
+  code { background: #e0e7ff; color: #3730a3; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  /* 比較 */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .cmp-box { border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .cmp-head { padding: 8px 14px; font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+  .cmp-body { padding: 12px 14px; font-size: 13px; color: var(--text-sub); line-height: 1.85; background: #f8fafc; }
+
+  /* ステップ */
+  .steps { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+  .step { display: flex; gap: 10px; align-items: flex-start; background: #f8fafc; border-radius: 8px; padding: 10px 14px; }
+  .step-n { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .step-text { font-size: 13px; color: var(--text-sub); line-height: 1.7; padding-top: 3px; }
+  .step-text strong { color: var(--text); }
+
+  /* ポイント */
+  .points { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+  .point { display: flex; gap: 10px; align-items: flex-start; background: #f8fafc; border-radius: 8px; padding: 10px 14px; }
+  .point-icon { font-size: 14px; flex-shrink: 0; }
+  .point-text { font-size: 13px; color: var(--text-sub); line-height: 1.7; }
+  .point-text strong { color: var(--text); }
+
+  /* ヒント */
+  .tip { border-radius: 10px; padding: 12px 16px; margin: 12px 0; border-left: 4px solid; }
+  .tip p { font-size: 13px; line-height: 1.8; }
+
+  /* テーブル */
+  .tbl { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  .tbl th { background: var(--ink); color: #fff; padding: 9px 14px; text-align: left; font-size: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.06em; }
+  .tbl td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text-sub); vertical-align: top; line-height: 1.7; }
+  .tbl tr:nth-child(even) td { background: #f8fafc; }
+
+  /* SVGデモ */
+  .demo-wrap { background: #f1f5f9; border-radius: 10px; border: 1px solid var(--border); padding: 14px; margin: 14px 0; }
+  .demo-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-sub); margin-bottom: 10px; letter-spacing: 0.08em; }
+
+  /* テクニックカード */
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .tech-card { border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .tech-head { padding: 10px 14px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .tech-body { padding: 10px 14px; font-size: 12px; color: var(--text-sub); line-height: 1.8; background: #f8fafc; }
+
+  .sec-title { font-size: 13px; font-weight: 700; color: var(--text); margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--border); }
+
+  /* ワークシート */
+  .ws-header { background: linear-gradient(135deg, #0f172a, #312e81); border-radius: 14px; padding: 26px 28px; margin-bottom: 24px; position: relative; overflow: hidden; }
+  .ws-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #7c3aed, #2563eb, #059669); }
+  .ws-eye { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #818cf8; letter-spacing: 0.15em; margin-bottom: 8px; }
+  .ws-title { font-family: 'Noto Serif JP', serif; font-size: 22px; font-weight: 700; color: #fff; }
+
+  .work-card { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 24px; }
+  .work-head { padding: 18px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .work-num { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .work-body { padding: 24px; }
+
+  .task-box { border-radius: 10px; padding: 14px 16px; margin-bottom: 18px; border-left: 4px solid; }
+  .task-label { font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; margin-bottom: 6px; }
+  .task-text { font-size: 14px; line-height: 1.75; }
+
+  .fill { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin: 8px 0; }
+  .fill-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-sub); margin-bottom: 7px; }
+  .fill-line { border-bottom: 1px dashed #d1d5db; padding-bottom: 6px; margin-bottom: 6px; font-size: 13px; color: #94a3b8; min-height: 26px; }
+  .fill-line:last-child { border-bottom: none; margin-bottom: 0; }
+  .fill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0; }
+
+  .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; }
+  .check-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; }
+  .check-box { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border); flex-shrink: 0; margin-top: 2px; }
+  .check-text { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 20px; }
+    .hero h1 { font-size: 22px; }
+    .ch-body, .work-body { padding: 16px; }
+    .compare, .tech-grid, .fill-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-badge">Photoshop · Lesson 25</div>
+    <h1>🔠 文字を<em>シェイプに変換</em>する<br>完全解説＋ワークシート</h1>
+    <p>テキストレイヤーをシェイプに変換することで、文字の形を自由に編集できるようになります。ロゴ・タイトル・バナーの文字デザインに欠かせないテクニックを基礎から応用まで解説します。</p>
+    <div class="hero-tags">
+      <span class="hero-tag">シェイプへ変換</span>
+      <span class="hero-tag">パス編集</span>
+      <span class="hero-tag">アンカー操作</span>
+      <span class="hero-tag">ブーリアン応用</span>
+      <span class="hero-tag">アウトライン化</span>
+      <span class="hero-tag">ロゴデザイン</span>
+      <span class="hero-tag">バナー実践</span>
+    </div>
+  </div>
+
+  <!-- CHAPTER 1: シェイプ変換とは -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#7c3aed,#a78bfa);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#ede9fe;">🔠</div>
+      <div>
+        <div class="ch-eye" style="color:#7c3aed;">CHAPTER 01</div>
+        <div class="ch-title">文字をシェイプに変換するとは</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">テキストレイヤーをシェイプレイヤーに変換することを<strong>「アウトライン化」</strong>とも呼びます。変換すると文字の1点1点のアンカーポイントを動かして<strong>形を自由に変形・加工</strong>できるようになります。</p>
+
+      <div class="compare">
+        <div class="cmp-box">
+          <div class="cmp-head" style="background:#dbeafe; color:#1e40af;">📝 テキストレイヤー（変換前）</div>
+          <div class="cmp-body">
+            ✅ フォントを後から変更できる<br>
+            ✅ 文字の内容を編集できる<br>
+            ✅ カーニング・行間を調整できる<br>
+            ❌ 文字の形（パス）を変えられない<br>
+            ❌ フィルターが直接適用できない<br>
+            ❌ フォントがないPCで開くと崩れる
+          </div>
+        </div>
+        <div class="cmp-box">
+          <div class="cmp-head" style="background:#ede9fe; color:#5b21b6;">🔷 シェイプレイヤー（変換後）</div>
+          <div class="cmp-body">
+            ✅ 文字のパス・形を自由に変形できる<br>
+            ✅ ブーリアン演算で型抜きなどができる<br>
+            ✅ フォントがなくても崩れない<br>
+            ❌ フォントの変更ができない<br>
+            ❌ 文字の内容を編集できない<br>
+            ❌ <strong>元のテキストには戻せない</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#fef3c7; border-color:#d97706;">
+        <p style="color:#78350f;"><strong>変換は「最後の一手」：</strong>テキストをシェイプに変換すると元に戻せません。必ず<strong>変換前にテキストレイヤーを複製（⌘J）して非表示</strong>にしておきましょう。「やっぱり文字を直したい」という場面が必ずあります。</p>
+      </div>
+
+      <!-- 変換の使いどころ -->
+      <div class="sec-title">シェイプ変換を使う主な場面</div>
+      <div class="points">
+        <div class="point"><div class="point-icon">🎨</div><div class="point-text"><strong>ロゴ・タイトルのカスタマイズ：</strong>既存フォントをベースに文字の一部を変形してオリジナルロゴを作る。</div></div>
+        <div class="point"><div class="point-icon">🎨</div><div class="point-text"><strong>文字の型抜き・くり抜き：</strong>文字の形に背景をくり抜いて「中が透けた文字」を作る（ブーリアン演算と組み合わせ）。</div></div>
+        <div class="point"><div class="point-icon">🎨</div><div class="point-text"><strong>文字とシェイプの合体：</strong>文字に装飾シェイプをくっつけたり、一部の文字を図形に置き換えてデザイン性を上げる。</div></div>
+        <div class="point"><div class="point-icon">🎨</div><div class="point-text"><strong>フォント固定での納品：</strong>クライアントにデータを渡すとき、先方のPCにフォントがなくても崩れないようにアウトライン化して納品。</div></div>
+        <div class="point"><div class="point-icon">🎨</div><div class="point-text"><strong>フィルター・変形の適用：</strong>ぼかし・ゆがみ・波紋などのフィルターを文字に適用したいときにラスタライズの代わりに使う場面も。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 2: 変換の手順 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#2563eb,#60a5fa);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#dbeafe;">⚙️</div>
+      <div>
+        <div class="ch-eye" style="color:#2563eb;">CHAPTER 02</div>
+        <div class="ch-title">シェイプへの変換手順（基本操作）</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">変換操作はシンプル。ただし<strong>変換前の準備が最重要</strong>です。順番通りに行いましょう。</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-n" style="background:#2563eb;">準</div>
+          <div class="step-text"><strong>変換前の準備：テキストレイヤーを複製して非表示にする</strong><br>レイヤーを選択 → <code>⌘J</code> で複製 → 複製したレイヤーの目玉アイコンをクリックして非表示に。これが保険になる。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#2563eb;">1</div>
+          <div class="step-text"><strong>テキストレイヤーを選択：</strong>レイヤーパネルで変換したいテキストレイヤーをクリックして選択状態にする。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#2563eb;">2</div>
+          <div class="step-text"><strong>メニューから変換を実行：</strong><code>書式 → シェイプに変換</code> をクリック。または、レイヤーパネルでテキストレイヤーを<strong>右クリック → 「テキストをシェイプに変換」</strong>。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#2563eb;">3</div>
+          <div class="step-text"><strong>レイヤーの変化を確認：</strong>レイヤーパネルのアイコンが「T（テキスト）」から「シェイプ（パスのアイコン）」に変わる。</div>
+        </div>
+        <div class="step">
+          <div class="step-n" style="background:#2563eb;">4</div>
+          <div class="step-text"><strong>ダイレクト選択ツール（A）でパスを確認：</strong><code>A</code>キーでダイレクト選択ツールに切り替えてシェイプをクリックすると、文字の各アンカーポイントが表示される。</div>
+        </div>
+      </div>
+
+      <!-- SVGデモ：変換前後の視覚化 -->
+      <div class="demo-wrap">
+        <div class="demo-label">📐 変換前後のイメージ</div>
+        <svg width="100%" viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="680" height="200" fill="#0f172a" rx="10"/>
+
+          <!-- 変換前 -->
+          <rect x="20" y="20" width="290" height="160" rx="8" fill="#1e293b"/>
+          <text x="40" y="55" fill="#94a3b8" font-size="10" font-family="JetBrains Mono">変換前：テキストレイヤー</text>
+          <text x="50" y="130" fill="#e2e8f0" font-size="72" font-weight="bold" font-family="serif">Aa</text>
+          <rect x="40" y="60" width="250" height="100" rx="4" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="40" y="175" fill="#3b82f6" font-size="9" font-family="JetBrains Mono">T テキストレイヤー — 文字を直接編集できる</text>
+
+          <!-- 矢印 -->
+          <text x="322" y="110" fill="#d97706" font-size="28" font-family="JetBrains Mono">→</text>
+          <text x="313" y="128" fill="#d97706" font-size="9" font-family="JetBrains Mono">変換</text>
+
+          <!-- 変換後 -->
+          <rect x="370" y="20" width="290" height="160" rx="8" fill="#1e293b"/>
+          <text x="390" y="55" fill="#94a3b8" font-size="10" font-family="JetBrains Mono">変換後：シェイプレイヤー</text>
+          <text x="400" y="130" fill="#a78bfa" font-size="72" font-weight="bold" font-family="serif">Aa</text>
+          <!-- アンカーポイントを表示 -->
+          <circle cx="400" cy="65" r="4" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+          <circle cx="432" cy="60" r="4" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+          <circle cx="460" cy="72" r="4" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+          <circle cx="412" cy="90" r="4" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+          <circle cx="440" cy="100" r="4" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+          <circle cx="420" cy="130" r="4" fill="#60a5fa" stroke="#a78bfa" stroke-width="1.5"/>
+          <circle cx="455" cy="135" r="4" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+          <!-- ハンドル線 -->
+          <line x1="420" y1="130" x2="408" y2="118" stroke="#a78bfa" stroke-width="1" stroke-dasharray="2,2"/>
+          <line x1="420" y1="130" x2="434" y2="143" stroke="#a78bfa" stroke-width="1" stroke-dasharray="2,2"/>
+          <circle cx="408" cy="118" r="2.5" fill="#a78bfa"/>
+          <circle cx="434" cy="143" r="2.5" fill="#a78bfa"/>
+          <text x="390" y="175" fill="#a78bfa" font-size="9" font-family="JetBrains Mono">◆ シェイプレイヤー — パスを自由に変形できる</text>
+        </svg>
+      </div>
+
+      <div class="tip" style="background:#d1fae5; border-color:#059669;">
+        <p style="color:#064e3b;"><strong>複数の文字レイヤーを一括変換できる：</strong>複数のテキストレイヤーをShiftクリックで選択してから「シェイプに変換」を実行すると、それぞれがシェイプレイヤーになる。ただし1つにまとめたい場合はさらにパスファインダーで統合する。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 3: パス編集 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#059669,#34d399);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#d1fae5;">✏️</div>
+      <div>
+        <div class="ch-eye" style="color:#059669;">CHAPTER 03</div>
+        <div class="ch-title">変換後のパス編集テクニック</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">シェイプに変換したあとは<strong>ダイレクト選択ツール（A）</strong>を使ってアンカーポイントを操作します。Lesson15のペンツールの知識がここで活きます。</p>
+
+      <div class="sec-title">よく使うパス編集ツール</div>
+      <table class="tbl">
+        <thead><tr><th>ツール</th><th>ショートカット</th><th>できること</th></tr></thead>
+        <tbody>
+          <tr><td><strong>ダイレクト選択ツール</strong></td><td><code>A</code></td><td>アンカーポイントを個別に選択・移動。ハンドルを動かして曲線を調整。</td></tr>
+          <tr><td><strong>アンカーポイントの追加</strong></td><td>ペンツール状態でパス上をクリック</td><td>パスの途中にアンカーポイントを追加する。変形の自由度が上がる。</td></tr>
+          <tr><td><strong>アンカーポイントの削除</strong></td><td>ペンツール状態でアンカーをクリック</td><td>不要なアンカーポイントを削除してパスをシンプルにする。</td></tr>
+          <tr><td><strong>アンカーポイントの切り替え</strong></td><td><code>Alt+クリック</code></td><td>スムーズポイント（曲線）とコーナーポイント（角）を切り替える。</td></tr>
+          <tr><td><strong>パスコンポーネント選択</strong></td><td><code>A</code>（文字全体クリック）</td><td>1文字全体のパスを選択して移動・変形する。</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sec-title">文字のパス編集 実践テクニック</div>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <div class="tech-head" style="background:#dbeafe; color:#1e40af;">① セリフを削る・追加する</div>
+          <div class="tech-body">明朝体を変換後、セリフ（文字の端の飾り）のアンカーを動かして独自の形に変形。モダンな印象に変えられる。</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-head" style="background:#d1fae5; color:#065f46;">② 文字の一部を引き伸ばす</div>
+          <div class="tech-body">特定のアンカーだけを選択して下に引っ張る・横に伸ばすなど、文字の一部を誇張してデザイン性を出す。</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-head" style="background:#ede9fe; color:#5b21b6;">③ 文字同士をつなげる</div>
+          <div class="tech-body">隣り合う文字のアンカーを近づけてつなげることで、リガチャ（合字）のような独自のロゴ文字が作れる。</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-head" style="background:#fef3c7; color:#78350f;">④ 一部の文字を図形に置き換え</div>
+          <div class="tech-body">「O」を円形に・「I」を矢印に置き換えるなど、文字と図形を組み合わせたロゴデザインの定番テクニック。</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-head" style="background:#fee2e2; color:#b91c1c;">⑤ ブーリアン演算で型抜き（L23応用）</div>
+          <div class="tech-body">文字シェイプを別のシェイプに重ねて「型抜き」演算を使う。文字の形で背景がくり抜かれた表現が作れる。</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-head" style="background:#fce7f3; color:#9d174d;">⑥ 文字をパスに沿って変形</div>
+          <div class="tech-body">シェイプに変換した文字を「編集→変形→ワープ」でアーチ・波・膨張などに変形できる。</div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#d1fae5; border-color:#059669;">
+        <p style="color:#064e3b;"><strong>パス編集の作業手順：</strong>①ダイレクト選択ツール（A）で編集したい文字をクリック → ②アンカーポイントが表示される → ③動かしたいアンカーをクリックして選択（水色になる）→ ④矢印キーまたはドラッグで移動。複数選択はShiftクリック。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 4: 文字型抜きテクニック -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#ea580c,#fb923c);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#ffedd5;">🔲</div>
+      <div>
+        <div class="ch-eye" style="color:#ea580c;">CHAPTER 04</div>
+        <div class="ch-title">文字の型抜き・アウトライン文字を作る</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">バナーでよく使う<strong>「中が透けた文字（アウトライン文字）」</strong>と<strong>「背景を文字の形にくり抜く」</strong>テクニックを解説します。</p>
+
+      <div class="sec-title">① アウトライン文字（枠線だけの文字）の作り方</div>
+      <div class="steps">
+        <div class="step"><div class="step-n" style="background:#ea580c;">1</div><div class="step-text"><strong>テキストをシェイプに変換する（Chapter02の手順）</strong></div></div>
+        <div class="step"><div class="step-n" style="background:#ea580c;">2</div><div class="step-text"><strong>塗りをなしにする：</strong>プロパティパネルまたはオプションバーで「塗り」→<code>なし（斜線アイコン）</code>に設定</div></div>
+        <div class="step"><div class="step-n" style="background:#ea580c;">3</div><div class="step-text"><strong>線を設定する：</strong>「線」に色を設定 → 太さを<code>2〜4px</code>程度に設定。太くするほど存在感が増す。</div></div>
+        <div class="step"><div class="step-n" style="background:#ea580c;">4</div><div class="step-text"><strong>線の位置を「内側」に：</strong>線の位置を「内側」にすると文字の形を保ちやすい。「外側」だと文字が太くなる。</div></div>
+      </div>
+
+      <div class="sec-title">② 文字の形に背景をくり抜く（ブーリアン応用）</div>
+      <div class="steps">
+        <div class="step"><div class="step-n" style="background:#ea580c;">1</div><div class="step-text"><strong>背景となるシェイプを作る：</strong>大きめの長方形シェイプを好きな色で作る</div></div>
+        <div class="step"><div class="step-n" style="background:#ea580c;">2</div><div class="step-text"><strong>文字をシェイプに変換：</strong>Chapter02の手順でテキスト→シェイプに変換</div></div>
+        <div class="step"><div class="step-n" style="background:#ea580c;">3</div><div class="step-text"><strong>文字シェイプを長方形の上に配置：</strong>移動ツールで好きな位置に配置する</div></div>
+        <div class="step"><div class="step-n" style="background:#ea580c;">4</div><div class="step-text"><strong>両方のレイヤーを選択してパスファインダーで「型抜き」：</strong>ウィンドウ → パスファインダー → 「前面シェイプで型抜き」。文字の形に長方形がくり抜かれる。</div></div>
+        <div class="step"><div class="step-n" style="background:#ea580c;">5</div><div class="step-text"><strong>下に写真や別の背景を敷く：</strong>くり抜かれた文字部分から下のレイヤーが透けて見える。背景を変えると多彩な表現に。</div></div>
+      </div>
+
+      <!-- SVGデモ：型抜き文字の視覚化 -->
+      <div class="demo-wrap">
+        <div class="demo-label">📐 文字型抜きの仕組み</div>
+        <svg width="100%" viewBox="0 0 680 180" xmlns="http://www.w3.org/2000/svg">
+          <rect width="680" height="180" fill="#1e293b" rx="8"/>
+          <!-- 長方形 -->
+          <rect x="20" y="30" width="180" height="120" rx="6" fill="#7c3aed" opacity="0.9"/>
+          <text x="110" y="165" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="JetBrains Mono">① 長方形シェイプ</text>
+          <!-- プラス -->
+          <text x="218" y="95" fill="#94a3b8" font-size="24" font-family="JetBrains Mono">+</text>
+          <!-- 文字シェイプ -->
+          <rect x="250" y="30" width="180" height="120" rx="6" fill="#1e293b" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="265" y="110" fill="#a78bfa" font-size="70" font-weight="bold" font-family="serif">Aa</text>
+          <text x="340" y="165" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="JetBrains Mono">② 文字シェイプ</text>
+          <!-- 矢印 -->
+          <text x="445" y="95" fill="#d97706" font-size="24" font-family="JetBrains Mono">→</text>
+          <text x="438" y="112" fill="#d97706" font-size="9" font-family="JetBrains Mono">型抜き</text>
+          <!-- 結果 -->
+          <rect x="480" y="30" width="180" height="120" rx="6" fill="#7c3aed" opacity="0.9"/>
+          <text x="495" y="110" fill="#1e293b" font-size="70" font-weight="bold" font-family="serif">Aa</text>
+          <!-- 文字の中に星（透けている演出） -->
+          <text x="510" y="95" fill="#fbbf24" font-size="14" opacity="0.5">★</text>
+          <text x="565" y="80" fill="#fbbf24" font-size="10" opacity="0.4">✦</text>
+          <text x="575" y="165" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="JetBrains Mono">③ 文字の形にくり抜かれた → 下が透けて見える</text>
+        </svg>
+      </div>
+
+      <div class="tip" style="background:#ffedd5; border-color:#ea580c;">
+        <p style="color:#7c2d12;"><strong>型抜き後に下のレイヤーが見えない場合：</strong>パスファインダーで統合したレイヤーの下に別のレイヤーを置くと透けた部分から下が見える。くり抜きが完成したレイヤーは1つのシェイプになっているので、その下に写真やグラデーションを置くと完成。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 5: バナー実践活用 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#d97706,#fbbf24);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#fef3c7;">🎨</div>
+      <div>
+        <div class="ch-eye" style="color:#d97706;">CHAPTER 05</div>
+        <div class="ch-title">バナー制作での実践活用パターン</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">文字のシェイプ変換をバナー制作でどう活かすか、具体的なパターンを紹介します。</p>
+
+      <table class="tbl">
+        <thead><tr><th>バナーパーツ</th><th>テクニック</th><th>使い方のポイント</th></tr></thead>
+        <tbody>
+          <tr><td><strong>セール・割引の数字</strong></td><td>一部変形＋色付き</td><td>「50」の「5」だけ引き伸ばして強調。パーセント記号を小さく変形。</td></tr>
+          <tr><td><strong>ロゴ・ブランド名</strong><br>（Lesson21・L16参照）</td><td>シェイプ化＋パス編集</td><td>フォントをベースにセリフ削り・一部連結でオリジナルロゴに。納品時はアウトライン化必須。</td></tr>
+          <tr><td><strong>タイトルの文字</strong></td><td>文字同士を合体</td><td>隣接する文字のパスをくっつけて筆記体のようなつながりを手動で作る。</td></tr>
+          <tr><td><strong>型抜き文字バナー</strong></td><td>型抜き＋写真レイヤー</td><td>文字の形にくり抜いた帯シェイプの下に商品写真を置く。文字の中から商品が見えるデザイン。</td></tr>
+          <tr><td><strong>アウトライン文字の重ね</strong></td><td>塗り文字＋アウトライン文字</td><td>同じ文字を2枚重ねて1枚は塗り・1枚はアウトライン。わずかにずらして影やエコーのような表現に。</td></tr>
+          <tr><td><strong>数字と単位の組み合わせ</strong></td><td>個別変換＋サイズ差</td><td>「30%OFF」の「30」を大きく変換して強調。「%OFF」は小さく変換して添える。</td></tr>
+        </tbody>
+      </table>
+
+      <div class="tip" style="background:#fef3c7; border-color:#d97706;">
+        <p style="color:#78350f;"><strong>クライアントへの納品時の注意：</strong>フォントをアウトライン化せずにPSDを渡すと、クライアントのPCにそのフォントがない場合に文字が崩れます。<strong>納品前に必ずすべてのテキストをシェイプに変換（アウトライン化）</strong>してから渡すのがプロのマナー。ただしPSD編集用には元のテキストレイヤーも別途保管しておく。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ワークシート -->
+  <div class="ws-header">
+    <div class="ws-eye">WORKSHEET · LESSON 25</div>
+    <div class="ws-title">✏️ 文字→シェイプ変換 ワークシート（全4問）</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="work-card">
+    <div class="work-head">
+      <div class="work-num" style="background:linear-gradient(135deg,#312e81,#7c3aed);">Q1</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#7c3aed; margin-bottom:2px;">基本操作</div>
+        <div style="font-size:16px; font-weight:700;">テキストをシェイプに変換して確認しよう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:#ede9fe; color:#5b21b6;">⏱ 10分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#ede9fe; border-color:#7c3aed;">
+        <div class="task-label" style="color:#5b21b6;">📋 課題</div>
+        <div class="task-text">好きな文字（1〜3文字）を入力してシェイプに変換し、ダイレクト選択ツールでアンカーポイントを確認してください。変換前にかならずレイヤーを複製すること。</div>
+      </div>
+      <div class="fill-grid">
+        <div class="fill">
+          <div class="fill-label">入力した文字・フォント</div>
+          <div class="fill-line">文字：</div>
+          <div class="fill-line">フォント：</div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">変換後のレイヤーアイコンの変化</div>
+          <div class="fill-line">T（テキスト）→（　　　　　）に変わった</div>
+        </div>
+      </div>
+      <div class="fill">
+        <div class="fill-label">アンカーポイントを確認して気づいたこと</div>
+        <div class="fill-line"></div>
+        <div class="fill-line"></div>
+      </div>
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">変換前にレイヤーを複製（⌘J）して非表示にした</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">書式 → シェイプに変換 で変換できた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">ダイレクト選択ツール（A）でアンカーポイントを確認した</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="work-card">
+    <div class="work-head">
+      <div class="work-num" style="background:linear-gradient(135deg,#064e3b,#059669);">Q2</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#059669; margin-bottom:2px;">パス編集</div>
+        <div style="font-size:16px; font-weight:700;">文字の形を変形してオリジナル文字を作ろう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:#d1fae5; color:#065f46;">⏱ 20分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#d1fae5; border-color:#059669;">
+        <div class="task-label" style="color:#065f46;">📋 課題</div>
+        <div class="task-text">Q1で変換した文字（またはアルファベット1文字）のアンカーポイントを編集して、オリジナルの文字デザインを作ってください。どこをどう変えたかメモすること。</div>
+      </div>
+      <div class="fill">
+        <div class="fill-label">どのアンカーをどう動かしたか（変形内容）</div>
+        <div class="fill-line">例：「R」の足の部分を下に20px伸ばした</div>
+        <div class="fill-line"></div>
+        <div class="fill-line"></div>
+      </div>
+      <div class="fill-grid">
+        <div class="fill">
+          <div class="fill-label">使った編集テクニック</div>
+          <div class="fill-line">□ アンカー移動</div>
+          <div class="fill-line">□ ハンドル調整</div>
+          <div class="fill-line">□ アンカー追加/削除</div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">変形してみた感想・難しかった点</div>
+          <div class="fill-line"></div>
+          <div class="fill-line"></div>
+        </div>
+      </div>
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#059669;"></div><div class="check-text">最低3箇所以上のアンカーを動かした</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#059669;"></div><div class="check-text">曲線のハンドルも調整してみた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#059669;"></div><div class="check-text">元の文字と見比べてデザインの違いがわかる</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="work-card">
+    <div class="work-head">
+      <div class="work-num" style="background:linear-gradient(135deg,#7f1d1d,#dc2626);">Q3</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#dc2626; margin-bottom:2px;">型抜き応用</div>
+        <div style="font-size:16px; font-weight:700;">文字の型抜きバナーパーツを作ろう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:#fee2e2; color:#b91c1c;">⏱ 20分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#fee2e2; border-color:#dc2626;">
+        <div class="task-label" style="color:#b91c1c;">📋 課題</div>
+        <div class="task-text">「SALE」または自分で選んだ単語をシェイプに変換し、カラーの帯（長方形）をその文字の形でくり抜いてバナーパーツを作ってください。下には好きな色や画像を敷いてください。</div>
+      </div>
+      <div class="fill-grid">
+        <div class="fill">
+          <div class="fill-label">くり抜きに使った文字</div>
+          <div class="fill-line">（例：SALE・NEW・OPEN）</div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">帯（長方形）のカラー</div>
+          <div class="fill-line">カラーコード：</div>
+        </div>
+      </div>
+      <div class="fill">
+        <div class="fill-label">くり抜いた下に配置したもの</div>
+        <div class="fill-line">（例：グラデーション・商品写真・テクスチャ）</div>
+      </div>
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#dc2626;"></div><div class="check-text">文字シェイプと帯シェイプを両方選択してパスファインダーで型抜きした</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#dc2626;"></div><div class="check-text">くり抜かれた文字から下のレイヤーが透けて見えている</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#dc2626;"></div><div class="check-text">バナーパーツとして見栄えが良い状態になった</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 総合 -->
+  <div class="work-card" style="border:2px solid #7c3aed;">
+    <div class="work-head" style="background:linear-gradient(135deg,#0f172a,#312e81);">
+      <div class="work-num" style="background:rgba(255,255,255,0.15); border:2px solid rgba(255,255,255,0.3);">Q4</div>
+      <div style="flex:1; color:#fff;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#818cf8; margin-bottom:2px;">総合課題</div>
+        <div style="font-size:16px; font-weight:700;">シェイプ変換を使ったオリジナルロゴ・タイトルデザインを作ろう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:rgba(255,255,255,0.15); color:#fff;">⏱ 40分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#ede9fe; border-color:#7c3aed;">
+        <div class="task-label" style="color:#5b21b6;">📋 総合課題</div>
+        <div class="task-text">好きなブランド名・サービス名・キャッチコピーをフォントで入力し、シェイプに変換してパス編集・加工を加えたオリジナルのロゴ／タイトルデザインを1点作ってください。</div>
+      </div>
+      <div style="background:#f8fafc; border-radius:10px; padding:14px 16px; margin-bottom:16px; border:1px solid var(--border);">
+        <div style="font-size:12px; font-weight:700; color:#7c3aed; font-family:'JetBrains Mono',monospace; margin-bottom:10px;">📋 使う技術（チェックしながら作る）</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:12px; color:var(--text-sub);">
+          <div>□ テキストをシェイプに変換</div>
+          <div>□ アンカーポイントの編集</div>
+          <div>□ 文字の一部を変形・誇張</div>
+          <div>□ ブーリアン演算（型抜き等）応用</div>
+          <div>□ アウトライン文字の作成</div>
+          <div>□ 色・レイヤースタイルで仕上げ</div>
+        </div>
+      </div>
+      <div class="fill-grid">
+        <div class="fill">
+          <div class="fill-label">ブランド名・キャッチコピー</div>
+          <div class="fill-line"></div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">ベースに使ったフォント</div>
+          <div class="fill-line"></div>
+        </div>
+      </div>
+      <div class="fill">
+        <div class="fill-label">加工した内容・工夫した点</div>
+        <div class="fill-line"></div>
+        <div class="fill-line"></div>
+      </div>
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:6px; font-family:'JetBrains Mono',monospace;">✅ 完成チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">変換前のテキストレイヤーを複製して保管している</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">シェイプ変換後にパス編集で独自の形に加工した</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">元のフォントのままでは出せないデザイン性が出ている</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">レイヤーに名前をつけて整理した</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">PNG（透過）で書き出した</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- まとめ -->
+  <div style="background:#0f172a; border-radius:14px; padding:24px;">
+    <div style="font-size:12px; font-weight:700; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:14px; letter-spacing:0.08em;">📚 Lesson25 文字をシェイプに変換 まとめ</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">変換の鉄則</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">必ず複製（⌘J）して非表示にしてから変換。元には戻せない。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">変換方法</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">書式 → シェイプに変換 / または右クリック → テキストをシェイプに変換。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">パス編集</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">ダイレクト選択ツール（A）でアンカーを選択・移動。ハンドルで曲線調整。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">アウトライン文字</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">塗りなし・線あり に設定。線の太さ・位置で印象が変わる。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">文字の型抜き</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">文字シェイプ＋帯シェイプ → パスファインダーで型抜き → 下から透ける。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">納品時の注意</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">クライアントへの納品前にすべてのテキストをアウトライン化する。</div></div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:24px; font-size:12px; color:#94a3b8;">Photoshop · Lesson 25｜文字をシェイプに変換 完全解説＋ワークシート</div>
+
+</div>
+</body>
+</html>
