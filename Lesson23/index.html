@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>シェイプの統合・ブーリアン演算 完全解説｜Photoshop Lesson 23</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --text: #0f172a;
+    --text-sub: #475569;
+    --border: #e2e8f0;
+    --blue: #2563eb;
+    --blue-light: #dbeafe;
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+    --green: #059669;
+    --green-light: #d1fae5;
+    --orange: #ea580c;
+    --orange-light: #ffedd5;
+    --red: #dc2626;
+    --red-light: #fee2e2;
+    --gold: #d97706;
+    --gold-light: #fef3c7;
+    --ink: #0f172a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; padding: 40px 20px 100px; }
+  .container { max-width: 820px; margin: 0 auto; }
+
+  .hero { background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #312e81 100%); border-radius: 16px; padding: 52px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+  .hero::before { content: '🔷'; position: absolute; right: 36px; top: 20px; font-size: 80px; opacity: 0.13; }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
+  .hero h1 { font-family: 'Noto Serif JP', serif; font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.4; }
+  .hero h1 em { color: #818cf8; font-style: normal; }
+  .hero p { font-size: 14px; color: rgba(255,255,255,0.82); margin-bottom: 20px; line-height: 1.85; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-tag { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+
+  .chapter { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .ch-bar { height: 4px; }
+  .ch-head { padding: 20px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 14px; }
+  .ch-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .ch-eye { font-size: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; margin-bottom: 3px; }
+  .ch-title { font-size: 18px; font-weight: 700; }
+  .ch-body { padding: 24px; }
+  .desc { font-size: 14px; color: var(--text-sub); line-height: 1.9; margin-bottom: 18px; }
+
+  code { background: #e0e7ff; color: #3730a3; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+
+  /* ブーリアンカード */
+  .bool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+  .bool-card { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+  .bool-head { padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
+  .bool-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .bool-name { font-size: 14px; font-weight: 700; }
+  .bool-shortcut { font-size: 10px; font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+  .bool-diagram { padding: 12px; display: flex; justify-content: center; background: #f8fafc; }
+  .bool-desc { padding: 10px 16px 14px; font-size: 12px; color: var(--text-sub); line-height: 1.7; }
+  .bool-use { font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; margin-top: 6px; }
+
+  .points { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+  .point { display: flex; gap: 10px; align-items: flex-start; background: #f8fafc; border-radius: 8px; padding: 10px 14px; }
+  .point-icon { font-size: 14px; flex-shrink: 0; }
+  .point-text { font-size: 13px; color: var(--text-sub); line-height: 1.7; }
+  .point-text strong { color: var(--text); }
+
+  .steps { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+  .step { display: flex; gap: 10px; align-items: flex-start; background: #f8fafc; border-radius: 8px; padding: 10px 14px; }
+  .step-n { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .step-text { font-size: 13px; color: var(--text-sub); line-height: 1.7; padding-top: 3px; }
+  .step-text strong { color: var(--text); }
+
+  .tip { border-radius: 10px; padding: 12px 16px; margin: 12px 0; border-left: 4px solid; }
+  .tip p { font-size: 13px; line-height: 1.8; }
+
+  .tbl { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  .tbl th { background: var(--ink); color: #fff; padding: 9px 14px; text-align: left; font-size: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.06em; }
+  .tbl td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text-sub); vertical-align: top; line-height: 1.7; }
+  .tbl tr:nth-child(even) td { background: #f8fafc; }
+
+  .sec-title { font-size: 13px; font-weight: 700; color: var(--text); margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--border); }
+
+  /* デモSVGラップ */
+  .demo-wrap { background: #f1f5f9; border-radius: 10px; border: 1px solid var(--border); padding: 14px; margin: 14px 0; }
+  .demo-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-sub); margin-bottom: 10px; letter-spacing: 0.08em; }
+
+  /* ワークシート */
+  .ws-header { background: linear-gradient(135deg, #0f172a, #312e81); border-radius: 14px; padding: 26px 28px; margin-bottom: 24px; }
+  .ws-eye { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #818cf8; letter-spacing: 0.15em; margin-bottom: 8px; }
+  .ws-title { font-family: 'Noto Serif JP', serif; font-size: 22px; font-weight: 700; color: #fff; }
+
+  .work-card { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 24px; }
+  .work-head { padding: 18px 24px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .work-num { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .work-body { padding: 24px; }
+
+  .task-box { border-radius: 10px; padding: 14px 16px; margin-bottom: 18px; border-left: 4px solid; }
+  .task-label { font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; margin-bottom: 6px; }
+  .task-text { font-size: 14px; line-height: 1.75; }
+
+  .fill { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin: 8px 0; }
+  .fill-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-sub); margin-bottom: 7px; }
+  .fill-line { border-bottom: 1px dashed #d1d5db; padding-bottom: 6px; margin-bottom: 6px; font-size: 13px; color: #94a3b8; min-height: 26px; }
+  .fill-line:last-child { border-bottom: none; margin-bottom: 0; }
+  .fill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0; }
+
+  .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; }
+  .check-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; }
+  .check-box { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border); flex-shrink: 0; margin-top: 2px; }
+  .check-text { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 20px; }
+    .hero h1 { font-size: 22px; }
+    .ch-body, .work-body { padding: 16px; }
+    .bool-grid { grid-template-columns: 1fr; }
+    .fill-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-badge">Photoshop · Lesson 23</div>
+    <h1>🔷 シェイプの統合・<em>ブーリアン演算</em><br>完全解説＋ワークシート</h1>
+    <p>シェイプを組み合わせて複雑な形を作る「ブーリアン演算」、複数シェイプの結合・統合方法、ラスタライズの使いどころまで初心者から丁寧に解説します。</p>
+    <div class="hero-tags">
+      <span class="hero-tag">ブーリアン演算</span>
+      <span class="hero-tag">合体</span>
+      <span class="hero-tag">型抜き</span>
+      <span class="hero-tag">交差</span>
+      <span class="hero-tag">パス操作</span>
+      <span class="hero-tag">レイヤー統合</span>
+      <span class="hero-tag">ラスタライズ</span>
+      <span class="hero-tag">バナー応用</span>
+    </div>
+  </div>
+
+  <!-- CHAPTER 1: シェイプ統合とは -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#2563eb,#60a5fa);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#dbeafe;">🔷</div>
+      <div>
+        <div class="ch-eye" style="color:#2563eb;">CHAPTER 01</div>
+        <div class="ch-title">シェイプの統合とは？なぜ必要か</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">Photoshopでシェイプを組み合わせる方法は<strong>3種類</strong>あります。それぞれ使いどころが異なるので整理して覚えましょう。</p>
+
+      <table class="tbl">
+        <thead><tr><th>方法</th><th>内容</th><th>使いどころ</th><th>編集の自由度</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>① ブーリアン演算</strong></td>
+            <td>同じレイヤー内のパスを合体・型抜き・交差させる</td>
+            <td>複雑なシェイプを作る・くり抜き表現</td>
+            <td>⭐⭐⭐ 後から変更できる</td>
+          </tr>
+          <tr>
+            <td><strong>② レイヤーの結合・統合</strong></td>
+            <td>別々のシェイプレイヤーを1つにまとめる</td>
+            <td>整理・グループ化・書き出し前</td>
+            <td>⭐⭐ 統合後は分離できない</td>
+          </tr>
+          <tr>
+            <td><strong>③ ラスタライズ</strong></td>
+            <td>シェイプをピクセル画像に変換する</td>
+            <td>フィルター適用・ブラシで加工する前</td>
+            <td>⭐ 変換後はシェイプに戻せない</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="tip" style="background:#dbeafe; border-color:#2563eb;">
+        <p style="color:#1e3a8a;"><strong>基本方針：できるだけ「ブーリアン演算」を使う。</strong>レイヤー統合・ラスタライズは「後から変更できなくなる」ため、本当に必要になるまで使わないのがプロの鉄則。編集の自由度を保つことが大切。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 2: ブーリアン演算 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#7c3aed,#a78bfa);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#ede9fe;">⚙️</div>
+      <div>
+        <div class="ch-eye" style="color:#7c3aed;">CHAPTER 02</div>
+        <div class="ch-title">ブーリアン演算の4種類</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">ブーリアン演算は<strong>同じシェイプレイヤー内の複数のパスを組み合わせる</strong>機能です。4種類の操作で複雑な形を自由に作れます。</p>
+
+      <!-- ブーリアン演算 図解 -->
+      <div class="bool-grid">
+
+        <!-- 合体 -->
+        <div class="bool-card">
+          <div class="bool-head" style="background:#dbeafe;">
+            <div class="bool-icon" style="background:#2563eb; color:#fff;">＋</div>
+            <div>
+              <div class="bool-name" style="color:#1e40af;">① 合体（Unite）</div>
+              <div class="bool-shortcut" style="color:#3b82f6;">パスファインダー → 合体</div>
+            </div>
+          </div>
+          <div class="bool-diagram">
+            <svg width="160" height="90" viewBox="0 0 160 90" xmlns="http://www.w3.org/2000/svg">
+              <!-- 前：2つの円 -->
+              <circle cx="30" cy="45" r="22" fill="#93c5fd" stroke="#2563eb" stroke-width="1.5"/>
+              <circle cx="50" cy="45" r="22" fill="#93c5fd" stroke="#2563eb" stroke-width="1.5" opacity="0.8"/>
+              <text x="40" y="82" text-anchor="middle" fill="#64748b" font-size="9" font-family="JetBrains Mono">元</text>
+              <!-- 矢印 -->
+              <text x="78" y="50" fill="#475569" font-size="18" font-family="JetBrains Mono">→</text>
+              <!-- 後：合体した形 -->
+              <path d="M 100 45 m -22 0 a 22 22 0 1 1 44 0 a 22 22 0 1 1 -24 0 a 22 22 0 1 0 24 0 a 22 22 0 1 0 -44 0 Z" fill="#2563eb" stroke="#1e40af" stroke-width="1.5" opacity="0.85"/>
+              <ellipse cx="110" cy="45" rx="32" ry="22" fill="#2563eb" stroke="#1e40af" stroke-width="1.5" opacity="0.85"/>
+              <text x="118" y="82" text-anchor="middle" fill="#64748b" font-size="9" font-family="JetBrains Mono">合体後</text>
+            </svg>
+          </div>
+          <div class="bool-desc">
+            複数のシェイプを<strong>1つの形に合体</strong>。重なった部分も含めて全体が1つのシェイプになる。
+            <div class="bool-use" style="color:#2563eb;">使用例：吹き出し・複合ロゴ・帯の組み合わせ</div>
+          </div>
+        </div>
+
+        <!-- 型抜き -->
+        <div class="bool-card">
+          <div class="bool-head" style="background:#fee2e2;">
+            <div class="bool-icon" style="background:#dc2626; color:#fff;">－</div>
+            <div>
+              <div class="bool-name" style="color:#b91c1c;">② 型抜き（Subtract）</div>
+              <div class="bool-shortcut" style="color:#ef4444;">前面シェイプで型抜き</div>
+            </div>
+          </div>
+          <div class="bool-diagram">
+            <svg width="160" height="90" viewBox="0 0 160 90" xmlns="http://www.w3.org/2000/svg">
+              <!-- 元 -->
+              <rect x="8" y="23" width="44" height="44" rx="4" fill="#fca5a5" stroke="#dc2626" stroke-width="1.5"/>
+              <circle cx="36" cy="45" r="16" fill="#f87171" stroke="#dc2626" stroke-width="1.5"/>
+              <text x="30" y="82" text-anchor="middle" fill="#64748b" font-size="9" font-family="JetBrains Mono">元（四角に丸）</text>
+              <!-- 矢印 -->
+              <text x="70" y="50" fill="#475569" font-size="18" font-family="JetBrains Mono">→</text>
+              <!-- 型抜き後 -->
+              <path d="M 92 23 h 44 v 44 h -44 z M 120 29 m -16 0 a 16 16 0 1 0 32 0 a 16 16 0 1 0 -32 0 z" fill="#dc2626" fill-rule="evenodd" stroke="#b91c1c" stroke-width="1.5" opacity="0.85"/>
+              <text x="114" y="82" text-anchor="middle" fill="#64748b" font-size="9" font-family="JetBrains Mono">くり抜かれた</text>
+            </svg>
+          </div>
+          <div class="bool-desc">
+            前面のシェイプで背面のシェイプを<strong>くり抜く</strong>。ドーナツ型・穴あきシェイプを作るのに使う。
+            <div class="bool-use" style="color:#dc2626;">使用例：ドーナツ・枠だけの円・窓のある形</div>
+          </div>
+        </div>
+
+        <!-- 交差 -->
+        <div class="bool-card">
+          <div class="bool-head" style="background:#d1fae5;">
+            <div class="bool-icon" style="background:#059669; color:#fff;">∩</div>
+            <div>
+              <div class="bool-name" style="color:#065f46;">③ 交差（Intersect）</div>
+              <div class="bool-shortcut" style="color:#10b981;">重なっている部分だけ</div>
+            </div>
+          </div>
+          <div class="bool-diagram">
+            <svg width="160" height="90" viewBox="0 0 160 90" xmlns="http://www.w3.org/2000/svg">
+              <!-- 元 -->
+              <circle cx="25" cy="45" r="20" fill="#6ee7b7" stroke="#059669" stroke-width="1.5" opacity="0.7"/>
+              <circle cx="45" cy="45" r="20" fill="#6ee7b7" stroke="#059669" stroke-width="1.5" opacity="0.7"/>
+              <text x="35" y="82" text-anchor="middle" fill="#64748b" font-size="9" font-family="JetBrains Mono">元</text>
+              <!-- 矢印 -->
+              <text x="70" y="50" fill="#475569" font-size="18" font-family="JetBrains Mono">→</text>
+              <!-- 交差後（重なり部分のみ） -->
+              <path d="M 113 45 a 20 20 0 0 1 -16.7 -10 a 20 20 0 0 1 16.7 -10 a 20 20 0 0 1 16.7 10 a 20 20 0 0 1 -16.7 10 z" fill="#059669" stroke="#065f46" stroke-width="1.5" opacity="0.9"/>
+              <ellipse cx="113" cy="45" rx="10" ry="20" fill="#059669" stroke="#065f46" stroke-width="1.5" opacity="0.9"/>
+              <text x="113" y="82" text-anchor="middle" fill="#64748b" font-size="9" font-family="JetBrains Mono">重なりのみ</text>
+            </svg>
+          </div>
+          <div class="bool-desc">
+            2つのシェイプの<strong>重なっている部分だけ</strong>が残る。独特の形を作るのに使う。
+            <div class="bool-use" style="color:#059669;">使用例：三日月・レンズ型・特殊な切り抜き</div>
+          </div>
+        </div>
+
+        <!-- 前面で型抜き -->
+        <div class="bool-card">
+          <div class="bool-head" style="background:#fef3c7;">
+            <div class="bool-icon" style="background:#d97706; color:#fff;">⊕</div>
+            <div>
+              <div class="bool-name" style="color:#92400e;">④ 前面で型抜き（Exclude）</div>
+              <div class="bool-shortcut" style="color:#d97706;">重なり部分を除外</div>
+            </div>
+          </div>
+          <div class="bool-diagram">
+            <svg width="160" height="90" viewBox="0 0 160 90" xmlns="http://www.w3.org/2000/svg">
+              <!-- 元 -->
+              <circle cx="25" cy="45" r="20" fill="#fcd34d" stroke="#d97706" stroke-width="1.5" opacity="0.8"/>
+              <circle cx="45" cy="45" r="20" fill="#fcd34d" stroke="#d97706" stroke-width="1.5" opacity="0.8"/>
+              <text x="35" y="82" text-anchor="middle" fill="#64748b" font-size="9" font-family="JetBrains Mono">元</text>
+              <!-- 矢印 -->
+              <text x="70" y="50" fill="#475569" font-size="18" font-family="JetBrains Mono">→</text>
+              <!-- 前面で型抜き後：重なり部分だけ穴 -->
+              <circle cx="104" cy="45" r="20" fill="#d97706" stroke="#92400e" stroke-width="1.5" opacity="0.85"/>
+              <circle cx="124" cy="45" r="20" fill="#d97706" stroke="#92400e" stroke-width="1.5" opacity="0.85"/>
+              <ellipse cx="114" cy="45" rx="10" ry="20" fill="#f8fafc" stroke="none"/>
+              <text x="114" y="82" text-anchor="middle" fill="#64748b" font-size="9" font-family="JetBrains Mono">重なりが穴に</text>
+            </svg>
+          </div>
+          <div class="bool-desc">
+            重なっている部分が<strong>穴（透明）</strong>になる。交差の逆でユニークな形が作れる。
+            <div class="bool-use" style="color:#d97706;">使用例：リング・チェーン・特殊な装飾</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="sec-title">ブーリアン演算の操作方法（2つのやり方）</div>
+
+      <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:16px;">
+        <!-- 方法A：同一レイヤー内 -->
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:#ede9fe; padding:10px 16px; font-size:12px; font-weight:700; color:#5b21b6;">方法A：同じレイヤー内でパスを追加（推奨）</div>
+          <div style="padding:12px 16px; font-size:13px; color:var(--text-sub); line-height:1.8; background:#f8fafc;">
+            1. シェイプレイヤーを選択 → ペンツールまたはシェイプツールで新しい形を描く<br>
+            2. オプションバーで<code>合体</code>/<code>型抜き</code>/<code>交差</code>/<code>除外</code>を選んで描く<br>
+            → <strong>同じレイヤーにパスが追加</strong>されてリアルタイムにブーリアン演算が適用される
+          </div>
+        </div>
+        <!-- 方法B：パスファインダー -->
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--border);">
+          <div style="background:#dbeafe; padding:10px 16px; font-size:12px; font-weight:700; color:#1e40af;">方法B：パスファインダーパネルで統合</div>
+          <div style="padding:12px 16px; font-size:13px; color:var(--text-sub); line-height:1.8; background:#f8fafc;">
+            1. <code>ウィンドウ → パスファインダー</code>でパネルを開く<br>
+            2. 複数のシェイプレイヤーを選択（Shiftクリック）<br>
+            3. パスファインダーパネルの合体・型抜き・交差ボタンをクリック<br>
+            → シェイプが<strong>1つのレイヤーに統合</strong>される（元には戻せない）
+          </div>
+        </div>
+      </div>
+
+      <div class="tip" style="background:#ede9fe; border-color:#7c3aed;">
+        <p style="color:#3b0764;"><strong>方法Aが推奨な理由：</strong>方法A（同一レイヤー内）はパスをいつでも個別に選択・修正できる。方法B（パスファインダー）は統合後に戻せない。<strong>方法Aで作っておいて、最終的に固定したいときだけ方法Bで統合</strong>するのがベスト。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 3: 実践例 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#059669,#34d399);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#d1fae5;">🎯</div>
+      <div>
+        <div class="ch-eye" style="color:#059669;">CHAPTER 03</div>
+        <div class="ch-title">ブーリアン演算の実践例（よく使う形）</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">実際のバナー制作でよく登場するシェイプをブーリアン演算で作る方法を紹介します。</p>
+
+      <div class="demo-wrap">
+        <div class="demo-label">📐 よく使うシェイプの作り方</div>
+        <svg width="100%" viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg">
+          <rect width="680" height="280" fill="#1e293b" rx="10"/>
+
+          <!-- ドーナツ -->
+          <text x="70" y="28" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="JetBrains Mono">ドーナツ（型抜き）</text>
+          <circle cx="70" cy="90" r="46" fill="#7c3aed" opacity="0.9"/>
+          <circle cx="70" cy="90" r="26" fill="#1e293b"/>
+          <text x="70" y="152" text-anchor="middle" fill="#a78bfa" font-size="9" font-family="JetBrains Mono">大円 - 小円</text>
+
+          <!-- 三日月 -->
+          <text x="210" y="28" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="JetBrains Mono">三日月（交差）</text>
+          <circle cx="196" cy="90" r="44" fill="#f59e0b" opacity="0.9"/>
+          <circle cx="220" cy="82" r="38" fill="#1e293b"/>
+          <text x="210" y="152" text-anchor="middle" fill="#fbbf24" font-size="9" font-family="JetBrains Mono">円 × ずらした円</text>
+
+          <!-- 吹き出し -->
+          <text x="370" y="28" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="JetBrains Mono">吹き出し（合体）</text>
+          <rect x="320" y="44" width="100" height="70" rx="12" fill="#2563eb" opacity="0.9"/>
+          <polygon points="350,114 340,140 368,114" fill="#2563eb" opacity="0.9"/>
+          <text x="370" y="164" text-anchor="middle" fill="#60a5fa" font-size="9" font-family="JetBrains Mono">角丸四角 + 三角形</text>
+
+          <!-- 矢印 -->
+          <text x="540" y="28" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="JetBrains Mono">矢印（合体）</text>
+          <rect x="492" y="72" width="70" height="36" rx="0" fill="#059669" opacity="0.9"/>
+          <polygon points="562,54 606,90 562,126" fill="#059669" opacity="0.9"/>
+          <text x="540" y="152" text-anchor="middle" fill="#34d399" font-size="9" font-family="JetBrains Mono">四角 + 三角形</text>
+
+          <!-- 星（複雑） -->
+          <text x="90" y="195" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="JetBrains Mono">角丸リボン（型抜き）</text>
+          <rect x="40" y="210" width="100" height="50" rx="6" fill="#db2777" opacity="0.9"/>
+          <rect x="48" y="218" width="84" height="34" rx="4" fill="#1e293b"/>
+          <text x="90" y="272" text-anchor="middle" fill="#f472b6" font-size="9" font-family="JetBrains Mono">外枠 - 内枠</text>
+
+          <!-- チェックマーク -->
+          <text x="270" y="195" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="JetBrains Mono">バッジ文字抜き</text>
+          <circle cx="270" cy="238" r="34" fill="#d97706" opacity="0.9"/>
+          <text x="270" y="247" text-anchor="middle" fill="#1e293b" font-size="22" font-weight="bold" font-family="JetBrains Mono">40</text>
+          <text x="270" y="272" text-anchor="middle" fill="#fbbf24" font-size="9" font-family="JetBrains Mono">円 + テキストシェイプ型抜き</text>
+
+          <!-- タブ -->
+          <text x="450" y="195" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="JetBrains Mono">角丸片側のみ（合体）</text>
+          <rect x="400" y="218" width="100" height="46" rx="0" fill="#ea580c" opacity="0.9"/>
+          <rect x="400" y="210" width="100" height="20" rx="10" fill="#ea580c" opacity="0.9"/>
+          <rect x="400" y="220" width="100" height="10" fill="#ea580c" opacity="0.9"/>
+          <text x="450" y="272" text-anchor="middle" fill="#fb923c" font-size="9" font-family="JetBrains Mono">四角 + 上だけ角丸</text>
+        </svg>
+      </div>
+
+      <div class="sec-title">吹き出しシェイプの作り方（手順例）</div>
+      <div class="steps">
+        <div class="step"><div class="step-n" style="background:#059669;">1</div><div class="step-text"><strong>角丸長方形ツール（U）</strong>で本体部分を描く（例：200×80px・角丸12px）</div></div>
+        <div class="step"><div class="step-n" style="background:#059669;">2</div><div class="step-text">同じレイヤーを選択したまま、オプションバーで<strong>「シェイプを合体」</strong>を選択</div></div>
+        <div class="step"><div class="step-n" style="background:#059669;">3</div><div class="step-text"><strong>多角形ツール（U）</strong>で三角形（3辺・先が下を向く）を吹き出しのしっぽになる位置に描く</div></div>
+        <div class="step"><div class="step-n" style="background:#059669;">4</div><div class="step-text">2つのパスが自動で合体して吹き出し形が完成。<strong>パスの位置は後からダイレクト選択ツール（A）で調整できる</strong></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 4: レイヤー統合 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#ea580c,#fb923c);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#ffedd5;">📂</div>
+      <div>
+        <div class="ch-eye" style="color:#ea580c;">CHAPTER 04</div>
+        <div class="ch-title">シェイプレイヤーの統合・結合</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">複数のシェイプレイヤーを1つにまとめる「統合」の方法を覚えましょう。<strong>用途によって使い分け</strong>が重要です。</p>
+
+      <table class="tbl">
+        <thead><tr><th>操作</th><th>方法</th><th>結果</th><th>注意点</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>レイヤーを結合</strong></td>
+            <td>複数レイヤーを選択 → <code>Cmd/Ctrl+E</code></td>
+            <td>選択したレイヤーが1つに統合される（ラスタライズされる）</td>
+            <td>シェイプ情報が失われる。元に戻せない。</td>
+          </tr>
+          <tr>
+            <td><strong>シェイプを結合</strong></td>
+            <td>パスファインダー → 合体ボタン</td>
+            <td>シェイプのまま1つに統合される</td>
+            <td>個別パスに戻せない。</td>
+          </tr>
+          <tr>
+            <td><strong>グループ化</strong></td>
+            <td><code>Cmd/Ctrl+G</code></td>
+            <td>フォルダにまとめるだけ。元のレイヤーは保持。</td>
+            <td>推奨。いつでも解除できる。</td>
+          </tr>
+          <tr>
+            <td><strong>スマートオブジェクト化</strong></td>
+            <td>右クリック → スマートオブジェクトに変換</td>
+            <td>1つにまとめつつ、ダブルクリックで中身を編集できる</td>
+            <td>ファイルサイズが増える。</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="tip" style="background:#ffedd5; border-color:#ea580c;">
+        <p style="color:#7c2d12;"><strong>「グループ化」と「統合」は別物：</strong>グループ化（Cmd/Ctrl+G）はフォルダにまとめるだけで元のレイヤーは残る。統合（Cmd/Ctrl+E）は本当に1つのレイヤーになりシェイプ情報が失われる。<strong>整理目的ならグループ化・書き出し用途なら統合</strong>を使い分ける。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 5: ラスタライズ -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#dc2626,#f87171);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#fee2e2;">⚠️</div>
+      <div>
+        <div class="ch-eye" style="color:#dc2626;">CHAPTER 05</div>
+        <div class="ch-title">ラスタライズ ― 使うタイミングと注意点</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">ラスタライズとは<strong>シェイプ（ベクター）をピクセル画像に変換</strong>すること。一度ラスタライズすると元のシェイプに戻せないので慎重に使います。</p>
+
+      <div class="sec-title">ラスタライズが必要な場面</div>
+      <div class="points">
+        <div class="point">
+          <div class="point-icon">✅</div>
+          <div class="point-text"><strong>フィルターを適用したいとき：</strong>ぼかし・ノイズ・変形などのフィルターはシェイプに直接適用できない。ラスタライズ後に適用する。</div>
+        </div>
+        <div class="point">
+          <div class="point-icon">✅</div>
+          <div class="point-text"><strong>ブラシで直接塗りたいとき：</strong>シェイプに直接ブラシで描くにはラスタライズが必要（クリッピングマスクで代用できる場合も多い）。</div>
+        </div>
+        <div class="point">
+          <div class="point-icon">✅</div>
+          <div class="point-text"><strong>消しゴムツールで一部を消したいとき：</strong>シェイプには消しゴムが使えない。ラスタライズするかマスクを使う。</div>
+        </div>
+      </div>
+
+      <div class="sec-title">ラスタライズの方法</div>
+      <div class="steps">
+        <div class="step"><div class="step-n" style="background:#dc2626;">1</div><div class="step-text">ラスタライズしたいシェイプレイヤーを選択</div></div>
+        <div class="step"><div class="step-n" style="background:#dc2626;">2</div><div class="step-text">レイヤーパネルで右クリック → <strong>「レイヤーをラスタライズ」</strong></div></div>
+        <div class="step"><div class="step-n" style="background:#dc2626;">3</div><div class="step-text">シェイプアイコンが通常の画像アイコンに変わる → ピクセル編集が可能になる</div></div>
+      </div>
+
+      <div style="background:#fee2e2; border-radius:10px; padding:14px 16px; border-left:4px solid #dc2626; margin:12px 0;">
+        <div style="font-size:11px; font-weight:700; color:#b91c1c; font-family:'JetBrains Mono',monospace; margin-bottom:6px;">⚠️ ラスタライズ前に必ずやること</div>
+        <div style="font-size:13px; color:#7f1d1d; line-height:1.8;">
+          ① <strong>コピーを保存する：</strong>ラスタライズ前のシェイプレイヤーを複製（Cmd/Ctrl+J）して非表示にしておく<br>
+          ② <strong>PSDで保存：</strong>ラスタライズ前の状態をPSDで保存しておく<br>
+          ③ <strong>本当に必要か確認：</strong>スマートフィルター・クリッピングマスクで代用できないか確認する
+        </div>
+      </div>
+
+      <div class="tip" style="background:#d1fae5; border-color:#059669;">
+        <p style="color:#064e3b;"><strong>ラスタライズの代わりにスマートオブジェクト＋スマートフィルターを使う：</strong>シェイプをスマートオブジェクトに変換してからフィルターを適用すると「スマートフィルター」になり、後からフィルターを変更・削除できる。ラスタライズより安全。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 6: バナーへの応用 -->
+  <div class="chapter">
+    <div class="ch-bar" style="background:linear-gradient(90deg,#d97706,#fbbf24);"></div>
+    <div class="ch-head">
+      <div class="ch-icon" style="background:#fef3c7;">🎨</div>
+      <div>
+        <div class="ch-eye" style="color:#d97706;">CHAPTER 06</div>
+        <div class="ch-title">バナー制作でのシェイプ統合活用例</div>
+      </div>
+    </div>
+    <div class="ch-body">
+      <p class="desc">実際のバナー制作でブーリアン演算・統合がどう使われるかをまとめます。</p>
+
+      <table class="tbl">
+        <thead><tr><th>バナーパーツ</th><th>使うブーリアン演算</th><th>作り方のポイント</th></tr></thead>
+        <tbody>
+          <tr><td><strong>吹き出しバッジ</strong></td><td>合体</td><td>角丸四角＋三角形（しっぽ）を合体。Lesson16のバナーに登場。</td></tr>
+          <tr><td><strong>ドーナツ型バッジ</strong></td><td>型抜き</td><td>大円から小円を型抜き。輪っか形の装飾に。</td></tr>
+          <tr><td><strong>矢印・帯の端</strong></td><td>合体</td><td>長方形＋三角形を合体。方向性を示すUI要素に。</td></tr>
+          <tr><td><strong>アウトライン文字</strong></td><td>型抜き＋ラスタライズ</td><td>テキストをシェイプ化→外枠から型抜き→境界線のみに。</td></tr>
+          <tr><td><strong>枠だけのボタン</strong></td><td>型抜き</td><td>外側の大きめ角丸四角から内側の小さめ角丸四角を型抜き。枠だけ残る。</td></tr>
+          <tr><td><strong>三日月装飾</strong></td><td>交差</td><td>2つの円を少しずらして交差。Lesson21の幻想的バナーの装飾に。</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ワークシート -->
+  <div class="ws-header">
+    <div class="ws-eye">WORKSHEET · LESSON 23</div>
+    <div class="ws-title">✏️ シェイプ統合 ワークシート（全4問）</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="work-card">
+    <div class="work-head">
+      <div class="work-num" style="background:linear-gradient(135deg,#1e3a5f,#2563eb);">Q1</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#2563eb; margin-bottom:2px;">ブーリアン演算 基礎</div>
+        <div style="font-size:16px; font-weight:700;">4種類のブーリアン演算を全部試そう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:#dbeafe; color:#1e40af;">⏱ 15分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#dbeafe; border-color:#2563eb;">
+        <div class="task-label" style="color:#1e40af;">📋 課題</div>
+        <div class="task-text">新規ドキュメントに2つの円を描き、ブーリアン演算の4種類（合体・型抜き・交差・前面で型抜き）をそれぞれ試して結果を確認してください。</div>
+      </div>
+      <div style="background:#f8fafc; border-radius:8px; padding:12px 14px; margin-bottom:14px; font-size:12px; color:var(--text-sub); line-height:1.8; border:1px solid var(--border);">
+        <strong style="color:var(--text);">手順：</strong>① 楕円形ツールで円を描く → ② 同じレイヤーを選択したままオプションバーで演算種類を変えて2つ目の円を描く → ③ 結果を確認
+      </div>
+      <div class="fill-grid">
+        <div class="fill">
+          <div class="fill-label">合体の結果（どうなったか）</div>
+          <div class="fill-line"></div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">型抜きの結果</div>
+          <div class="fill-line"></div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">交差の結果</div>
+          <div class="fill-line"></div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">前面で型抜きの結果</div>
+          <div class="fill-line"></div>
+        </div>
+      </div>
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#2563eb;"></div><div class="check-text">4種類すべてを試して違いを確認できた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#2563eb;"></div><div class="check-text">ダイレクト選択ツール（A）で後からパスを動かせることを確認した</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="work-card">
+    <div class="work-head">
+      <div class="work-num" style="background:linear-gradient(135deg,#064e3b,#059669);">Q2</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#059669; margin-bottom:2px;">シェイプ作成</div>
+        <div style="font-size:16px; font-weight:700;">吹き出しシェイプを作ろう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:#d1fae5; color:#065f46;">⏱ 15分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#d1fae5; border-color:#059669;">
+        <div class="task-label" style="color:#065f46;">📋 課題</div>
+        <div class="task-text">「合体」を使って、角丸長方形＋三角形の吹き出しシェイプを作ってください。好きな色・サイズでOK。</div>
+      </div>
+      <div class="fill-grid">
+        <div class="fill">
+          <div class="fill-label">使ったシェイプの組み合わせ</div>
+          <div class="fill-line">（例：角丸四角 ＋ 三角形）</div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">吹き出しのサイズ</div>
+          <div class="fill-line">幅：　　px / 高さ：　　px</div>
+        </div>
+      </div>
+      <div class="fill">
+        <div class="fill-label">工夫した点・難しかった点</div>
+        <div class="fill-line"></div>
+        <div class="fill-line"></div>
+      </div>
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#059669;"></div><div class="check-text">合体を使って1つのシェイプとして完成した</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#059669;"></div><div class="check-text">中にテキストを入れてバナーパーツとして使えた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="work-card">
+    <div class="work-head">
+      <div class="work-num" style="background:linear-gradient(135deg,#78350f,#d97706);">Q3</div>
+      <div style="flex:1;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#d97706; margin-bottom:2px;">型抜き応用</div>
+        <div style="font-size:16px; font-weight:700;">ドーナツ型バッジを作ろう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:#fef3c7; color:#92400e;">⏱ 15分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#fef3c7; border-color:#d97706;">
+        <div class="task-label" style="color:#78350f;">📋 課題</div>
+        <div class="task-text">「型抜き」を使ってドーナツ型（リング状）のシェイプを作り、バッジとして使ってください。内側にテキストを配置すること。</div>
+      </div>
+      <div class="fill-grid">
+        <div class="fill">
+          <div class="fill-label">外側の円のサイズ</div>
+          <div class="fill-line">直径：　　px</div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">内側の円のサイズ</div>
+          <div class="fill-line">直径：　　px</div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">バッジに入れたテキスト</div>
+          <div class="fill-line"></div>
+        </div>
+        <div class="fill">
+          <div class="fill-label">使ったカラー</div>
+          <div class="fill-line">カラーコード：</div>
+        </div>
+      </div>
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:4px; font-family:'JetBrains Mono',monospace;">✅ チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#d97706;"></div><div class="check-text">大円から小円を型抜きしてリング型になった</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#d97706;"></div><div class="check-text">テキストをリングの中央に配置してバッジになった</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#d97706;"></div><div class="check-text">レイヤースタイルで立体感（シャドウ等）を加えた</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 総合 -->
+  <div class="work-card" style="border:2px solid #7c3aed;">
+    <div class="work-head" style="background:linear-gradient(135deg,#0f172a,#312e81);">
+      <div class="work-num" style="background:rgba(255,255,255,0.15); border:2px solid rgba(255,255,255,0.3);">Q4</div>
+      <div style="flex:1; color:#fff;">
+        <div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#818cf8; margin-bottom:2px;">総合課題</div>
+        <div style="font-size:16px; font-weight:700;">ブーリアン演算を使ったオリジナルバナーパーツセットを作ろう</div>
+      </div>
+      <span style="font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; font-family:'JetBrains Mono',monospace; background:rgba(255,255,255,0.15); color:#fff;">⏱ 30分</span>
+    </div>
+    <div class="work-body">
+      <div class="task-box" style="background:#ede9fe; border-color:#7c3aed;">
+        <div class="task-label" style="color:#5b21b6;">📋 総合課題</div>
+        <div class="task-text">以下の3つのパーツをブーリアン演算で作り、バナーの一部として使えるセットにまとめてください。</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+        <div style="background:#f8fafc; border-radius:8px; padding:10px 14px; display:flex; gap:10px; align-items:flex-start; border-left:3px solid #2563eb;">
+          <div style="font-size:12px; font-weight:700; color:#2563eb; min-width:60px; font-family:'JetBrains Mono',monospace;">パーツ①</div>
+          <div style="font-size:12px; color:var(--text-sub);">吹き出し（合体）— キャンペーン情報を入れる</div>
+        </div>
+        <div style="background:#f8fafc; border-radius:8px; padding:10px 14px; display:flex; gap:10px; align-items:flex-start; border-left:3px solid #dc2626;">
+          <div style="font-size:12px; font-weight:700; color:#dc2626; min-width:60px; font-family:'JetBrains Mono',monospace;">パーツ②</div>
+          <div style="font-size:12px; color:var(--text-sub);">枠だけのボタン（型抜き）— CTAに使える</div>
+        </div>
+        <div style="background:#f8fafc; border-radius:8px; padding:10px 14px; display:flex; gap:10px; align-items:flex-start; border-left:3px solid #059669;">
+          <div style="font-size:12px; font-weight:700; color:#059669; min-width:60px; font-family:'JetBrains Mono',monospace;">パーツ③</div>
+          <div style="font-size:12px; color:var(--text-sub);">矢印シェイプ（合体）— 方向・強調に使える</div>
+        </div>
+      </div>
+      <div class="fill-grid">
+        <div class="fill"><div class="fill-label">使ったカラーテーマ</div><div class="fill-line"></div></div>
+        <div class="fill"><div class="fill-label">バナーのテーマ・用途</div><div class="fill-line"></div></div>
+      </div>
+      <div class="checklist">
+        <div style="font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:6px; font-family:'JetBrains Mono',monospace;">✅ 完成チェック</div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">3つのパーツをすべてブーリアン演算で作った</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">各パーツのレイヤーに名前をつけた</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">グループ化して整理した（ラスタライズはしていない）</div></div>
+        <div class="check-item"><div class="check-box" style="border-color:#7c3aed;"></div><div class="check-text">PNGで書き出して完成した</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- まとめ -->
+  <div style="background:#0f172a; border-radius:14px; padding:24px;">
+    <div style="font-size:12px; font-weight:700; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:14px; letter-spacing:0.08em;">📚 Lesson23 シェイプの統合 まとめ</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">合体（Unite）</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">複数パスを1つに合体。吹き出し・矢印・複合ロゴに。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">型抜き（Subtract）</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">前面シェイプで背面をくり抜く。ドーナツ・枠・穴あきに。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">交差（Intersect）</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">重なる部分だけ残す。三日月・特殊な形に。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">前面で型抜き（Exclude）</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">重なる部分が透明になる。リング・チェーンに。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">整理の基本</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">まとめるならグループ化（Cmd+G）。統合・ラスタライズは最後の手段。</div></div>
+      <div style="background:rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px;"><div style="font-size:10px; color:#818cf8; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">ラスタライズ</div><div style="font-size:12px; color:#e2e8f0; line-height:1.7;">フィルター適用前に必要。前に複製を作っておく。</div></div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:24px; font-size:12px; color:#94a3b8;">Photoshop · Lesson 23｜シェイプの統合・ブーリアン演算 完全解説</div>
+
+</div>
+</body>
+</html>
